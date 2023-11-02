@@ -9,7 +9,7 @@ public abstract class LogInVistaControlador {
     protected LogInVista vista;
     protected Fachada fachada;
 
-    public LogInVistaControlador(LogInVista vista) {
+    protected LogInVistaControlador(LogInVista vista) {
         this.vista = vista;
         fachada = Fachada.getInstancia();
     }
@@ -17,7 +17,7 @@ public abstract class LogInVistaControlador {
     public void logIn(int ci, String pass) {
         Usuario usuario = logInEspecifico(ci, pass);
         if (usuario == null) {
-            vista.mostrarMensajeError("VERIFICAR QUE DICE ACA");
+            vista.mostrarMensajeError("Credenciales incorrectas");
         } else {
             vista.ejecutarCasoInicial(usuario);
             cerrarVentana();
@@ -26,7 +26,8 @@ public abstract class LogInVistaControlador {
     
     protected abstract Usuario logInEspecifico(int ci, String pass);
 
-    private void cerrarVentana() {
+    protected void cerrarVentana() {
         vista.cerrarVentana();
     }
+    
 }

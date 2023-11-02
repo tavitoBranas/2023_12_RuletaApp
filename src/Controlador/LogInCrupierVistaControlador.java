@@ -20,7 +20,6 @@ public class LogInCrupierVistaControlador extends LogInVistaControlador {
         try {
             crupier = fachada.loginCrupier(ci, pass);
             vista.cerrarVentana();
-            
         } catch (LoginException e) {
             vista.mostrarMensajeError(e.getMessage());
         }

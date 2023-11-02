@@ -11,6 +11,7 @@ public class Dialogo_LogInCrupier extends Dialogo_LogIn {
     public Dialogo_LogInCrupier(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         this.setTitle("Ingrese las credenciales del crupier");
+        
     }
 
     @SuppressWarnings("unchecked")
