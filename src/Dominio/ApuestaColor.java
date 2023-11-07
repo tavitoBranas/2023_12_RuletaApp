@@ -1,12 +1,23 @@
 package Dominio;
 
-public class ApuestaColor extends TipoApuesta {
+import java.util.ArrayList;
 
-    private int factorDePago;
+public final class ApuestaColor extends TipoApuesta {
 
-    public ApuestaColor(String tipo) {
-        super(tipo);
-        factorDePago = 2;
+    private ArrayList<Integer> casillerosApuestaColor;
+
+    public ApuestaColor(int factor) {
+        super("Apuesta a Color", factor);
+        casillerosApuestaColor = new ArrayList<>();
+        setCasilleros();
+    }
+
+    public void setCasilleros() {
+        casillerosApuestaColor = ListaUniversalCasilleros.getApuestaColor();
+    }
+
+    public ArrayList<Integer> getCasillerosApuestaColor() {
+        return casillerosApuestaColor;
     }
 
     public void esValidaApuesta() {
@@ -16,5 +27,4 @@ public class ApuestaColor extends TipoApuesta {
         un jugador apuesta montos a los dos colores en la misma ronda, la restricción anterior no aplica, salvo que haya
         salido el cero.    */
     }
-
 }

@@ -37,7 +37,7 @@ public class Dialogo_GeneralVista extends javax.swing.JDialog {
     }
 
     public void cerrarVentana() {
-        this.dispose();
+        dispose();
     }
 
 }

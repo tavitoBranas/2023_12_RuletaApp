@@ -1,21 +1,24 @@
 package Controlador;
 
+import Dominio.Crupier;
+import Dominio.Mesa;
+import Dominio.TipoApuesta;
 import Logica.Fachada;
-import UI.Dialogo_OperarMesaCrupier;
 import UI.Interface.IniciarMesaVista;
+import java.util.ArrayList;
+import java.util.List;
 
 public class IniciarMesaVistaControlador {
 
     private IniciarMesaVista vista;
     private Fachada fachada;
+    private Crupier crupier;
 
-    public IniciarMesaVistaControlador(IniciarMesaVista vista/*, Mesa modelo*/) {
+    public IniciarMesaVistaControlador(IniciarMesaVista vista, Crupier crupier) {
 
         this.vista = vista;
-
-        //this.modelo = modelo; ES LA FACHADA
+        this.crupier = crupier;
         fachada = Fachada.getInstancia();
-        //controlador se subscribe a los eventos de la fachada: fachada es observable y controlador observador
         inicializarVista();
     }
 
@@ -23,13 +26,29 @@ public class IniciarMesaVistaControlador {
         vista.mostrarTiposApuesta(fachada.tipoApuestaDisponibles());
     }
 
-    public void crearMesa(String mensaje) {
-        fachada.crearMesa(mensaje);
+    public void crearMesa(List<String> apuestas) {
+        String nombre = crupier.getCedula() + "";
+        ArrayList<TipoApuesta> tipoApuestaSeleccionada = new ArrayList<>();
+        for (TipoApuesta tipo : fachada.tipoApuestaDisponibles()) {
 
+            for (String dato : apuestas) {
+                if (tipo.getTipo().equals(dato)) {
+                    tipoApuestaSeleccionada.add(tipo);
+                }
+            }
+        }
+        //try { NO HAY EXCEPCIONES AL CREAR MESA
+        Mesa mesa = new Mesa(nombre, tipoApuestaSeleccionada, crupier);
+        fachada.crearMesa(mesa);
+        vista.ejecutarCasoOperarMesa(mesa);
         vista.cerrarVentana();
-        Dialogo_OperarMesaCrupier operarMesa = new Dialogo_OperarMesaCrupier(new javax.swing.JFrame(), true);
-        operarMesa.setModal(false);
-        operarMesa.setVisible(true);
+        /*} catch (Exception e) {
+            vista.mostrarMensajeError(e.getMessage());
+        }*/
+    }
+
+    public void desloguearUsuario(Crupier crupier) {
+        fachada.desloguearUsuarioCrupier(crupier);
     }
 
 }

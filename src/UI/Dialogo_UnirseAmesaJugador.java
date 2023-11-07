@@ -3,9 +3,11 @@ package UI;
 import Controlador.UnirseAmesaVistaControlador;
 import Dominio.Jugador;
 import Dominio.Mesa;
+import Dominio.Usuario;
 import Excepciones.MesaException;
 import UI.Interface.UnirseMesaVista;
 import java.util.ArrayList;
+import java.util.Collections;
 import javax.swing.JOptionPane;
 
 public class Dialogo_UnirseAmesaJugador extends Dialogo_GeneralVista implements UnirseMesaVista {
@@ -28,6 +30,7 @@ public class Dialogo_UnirseAmesaJugador extends Dialogo_GeneralVista implements 
         cbMesasDisponibles = new javax.swing.JComboBox<>();
         tNombreJugador = new javax.swing.JLabel();
         bUnirseYjugar = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -44,24 +47,28 @@ public class Dialogo_UnirseAmesaJugador extends Dialogo_GeneralVista implements 
             }
         });
 
+        jButton1.setText("Desloguearse");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(73, 73, 73)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(73, 73, 73)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lUnirseAmesa, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lJugador, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cbMesasDisponibles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tNombreJugador, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(144, 144, 144)
-                        .addComponent(bUnirseYjugar)))
+                    .addComponent(lUnirseAmesa, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lJugador, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bUnirseYjugar))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1)
+                    .addComponent(cbMesasDisponibles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tNombreJugador, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(87, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -75,38 +82,67 @@ public class Dialogo_UnirseAmesaJugador extends Dialogo_GeneralVista implements 
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lUnirseAmesa)
                     .addComponent(cbMesasDisponibles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(54, 54, 54)
-                .addComponent(bUnirseYjugar)
-                .addContainerGap(113, Short.MAX_VALUE))
+                .addGap(61, 61, 61)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(bUnirseYjugar)
+                    .addComponent(jButton1))
+                .addContainerGap(106, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void bUnirseYjugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bUnirseYjugarActionPerformed
-        // TODO add your handling code here:
-         String mesaSeleccionada = (String) cbMesasDisponibles.getSelectedItem();
-        controlador.unirseAmesa(mesaSeleccionada);
+        String mesaSeleccionada = (String) cbMesasDisponibles.getSelectedItem();
+        if(mesaSeleccionada.contains("Seleccione")){
+            mostrarMensajeError("Seleccione una mesa para continuar");
+        }else{
+            controlador.unirseAmesa(mesaSeleccionada);
+        }
     }//GEN-LAST:event_bUnirseYjugarActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        controlador.desloguear();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bUnirseYjugar;
     private javax.swing.JComboBox<String> cbMesasDisponibles;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel lJugador;
     private javax.swing.JLabel lUnirseAmesa;
     private javax.swing.JLabel tNombreJugador;
     // End of variables declaration//GEN-END:variables
 
+    @Override
     public void mostrarMesasAbiertas(ArrayList<Mesa> mesas) {
+
+        //ordeno las mesas por string: ojo que aca estamos trabajando con numeros
+        ArrayList<String> mesasString = new ArrayList<>();
+        for(Mesa m:mesas){
+            mesasString.add(m.getNombre());
+        }
+        Collections.sort(mesasString);
+
         cbMesasDisponibles.removeAllItems();
+        cbMesasDisponibles.addItem("<<Seleccione mesa>>");
         for (Mesa mesa : mesas) {
             cbMesasDisponibles.addItem(mesa.getNombre());
         }
+        cbMesasDisponibles.setSelectedIndex(0);
     }
 
+    @Override
     public void datosJugador(Jugador jugador) {
         tNombreJugador.setText(jugador.getNombre());
+    }
+
+    @Override
+    public void ejecutarCasoDeUsoJugar(Mesa mesa, Jugador jugador) {
+        Dialogo_Jugar jugarAmesa = new Dialogo_Jugar(new javax.swing.JFrame(), true, mesa, jugador);
+        jugarAmesa.setModal(false);
+        jugarAmesa.setVisible(true);
     }
 
 }

@@ -16,18 +16,16 @@ public abstract class LogInVistaControlador {
 
     public void logIn(int ci, String pass) {
         Usuario usuario = logInEspecifico(ci, pass);
-        if (usuario == null) {
-            vista.mostrarMensajeError("Credenciales incorrectas");
-        } else {
+        if (usuario != null) {
             vista.ejecutarCasoInicial(usuario);
             cerrarVentana();
         }
     }
-    
+
     protected abstract Usuario logInEspecifico(int ci, String pass);
 
     protected void cerrarVentana() {
         vista.cerrarVentana();
     }
-    
+
 }

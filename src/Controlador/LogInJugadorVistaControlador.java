@@ -18,7 +18,6 @@ public class LogInJugadorVistaControlador extends LogInVistaControlador {
         Jugador jugador = null;
         try {
             jugador = fachada.loginJugador(ci, pass);
-            vista.cerrarVentana();
         } catch (LoginException e) {
             vista.mostrarMensajeError(e.getMessage());
         }

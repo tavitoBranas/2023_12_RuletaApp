@@ -1,15 +1,23 @@
 package Dominio;
 
-public class ApuestaDirecta extends TipoApuesta {
+import java.util.ArrayList;
 
-    private static int factorDePago;
+public final class ApuestaDirecta extends TipoApuesta {
 
-    public ApuestaDirecta(String tipo){
-        super(tipo);
-        factorDePago = 36;
+    private ArrayList<Integer> casillerosApuestaDirecta;
+    
+    public ApuestaDirecta(int factor) {
+        super("Apuesta Directa", factor);
+        casillerosApuestaDirecta = new ArrayList<>();
+        setCasilleros();
     }
 
-    public static int getFactorDePago() {
-        return factorDePago;
+    public void setCasilleros() {
+        casillerosApuestaDirecta = ListaUniversalCasilleros.getApuestaDirecta();
     }
+
+    public ArrayList<Integer> getCasillerosApuestaDirecta() {
+        return casillerosApuestaDirecta;
+    }
+
 }

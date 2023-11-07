@@ -3,6 +3,7 @@ package Logica;
 import Dominio.*;
 import Excepciones.LoginException;
 import Excepciones.MesaException;
+import Excepciones.UsuarioEnMesaException;
 import comun.Observable;
 import comun.Observador;
 import java.util.ArrayList;
@@ -63,16 +64,21 @@ public class Fachada extends Observable implements Observador {
         return servicioMesa.tiposApuestaDisponibles();
     }
 
-    public void crearMesa(String mensaje) {
-        servicioMesa.agregarMesa(new Mesa(mensaje));
+    public ArrayList<Efecto> efectosDisponibles() {
+        return servicioMesa.getEfectosDisponibles();
     }
 
-    public void unirseAmesa(Jugador j, Mesa mesa) throws MesaException {
-        servicioUsuario.unirseAmesa(j, mesa);
+    public void agregarEfecto(Efecto efecto) {
+        servicioMesa.agregarEfecto(efecto);
     }
 
-    public void abandonarAmesa(Jugador j, Mesa mesa) {
-        servicioUsuario.abandonarMesa(j, mesa);
+    public void crearMesa(Mesa mesa) {
+        //la mesa no tiene excepciones?
+        servicioMesa.agregarMesa(mesa);
+    }
+
+    public Mesa traerMesa(String mesa) {
+        return servicioMesa.traerMesa(mesa);
     }
 
     @Override
@@ -83,5 +89,24 @@ public class Fachada extends Observable implements Observador {
         if (Eventos.UnirseAmesa.equals(evento)) {
             avisar(Eventos.UnirseAmesa);
         }
+        if (Eventos.UsuarioDeslogueado.equals(evento)) {
+            avisar(Eventos.UsuarioDeslogueado);
+        }
+        if (Eventos.MesaEliminada.equals(evento)) {
+            avisar(Eventos.MesaEliminada);
+        }
     }
+
+    public void desloguearUsuarioCrupier(Crupier crupier) {
+        servicioUsuario.desloguearUsuarioCrupier(crupier);
+    }
+
+    public void desloguearUsuarioJugador(Jugador jugador) {
+        servicioUsuario.desloguearUsuarioJugador(jugador);
+    }
+
+    public void desloguearJugadordeMesas(Jugador jugador) {
+        servicioMesa.desloguearJugadordeMesas(jugador);
+    }
+
 }

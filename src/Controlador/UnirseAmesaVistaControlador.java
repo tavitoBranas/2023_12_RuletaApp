@@ -4,6 +4,7 @@ import Dominio.Eventos;
 import Dominio.Jugador;
 import Dominio.Mesa;
 import Excepciones.MesaException;
+import Excepciones.UsuarioEnMesaException;
 import Logica.Fachada;
 import UI.Dialogo_Jugar;
 import UI.Dialogo_UnirseAmesaJugador;
@@ -15,12 +16,12 @@ import java.util.ArrayList;
 public class UnirseAmesaVistaControlador implements Observador {
 
     //private Mesa modelo;
-    private UnirseMesaVista vistaMesa;
+    private UnirseMesaVista vista;
     private Fachada fachada;
     private Jugador jugador;
-
-    public UnirseAmesaVistaControlador(UnirseMesaVista vista, Jugador jugador/*, Mesa modelo*/) {
-        vistaMesa = vista;
+    
+    public UnirseAmesaVistaControlador(UnirseMesaVista vista, Jugador jugador) {
+        this.vista = vista;
         this.jugador = jugador;
         //this.modelo = modelo; ES LA FACHADA
         fachada = Fachada.getInstancia();
@@ -32,31 +33,32 @@ public class UnirseAmesaVistaControlador implements Observador {
     //unirseAmesa.mostrarMesasAbiertas();
     @Override
     public void actualizar(Observable origen, Object evento) {
-        if (Eventos.MesaAgregada.equals(evento)) {
-            vistaMesa.mostrarMesasAbiertas(fachada.mesasDisponibles());
+        if (Eventos.MesaAgregada.equals(evento) || Eventos.MesaEliminada.equals(evento) ) {
+            vista.mostrarMesasAbiertas(fachada.mesasDisponibles());
+        }
+    }
+    
+    private void inicializarVista() {
+        ArrayList<Mesa> mesasDisponibles = fachada.mesasDisponibles();
+        vista.mostrarMesasAbiertas(mesasDisponibles);
+        vista.datosJugador(jugador);
+    }
+    
+    public void unirseAmesa(String mesa) {
+        try {
+            //SI NO EXISTE LA MESA QUE PASA? NO HAY LANZAMIENTO DE EXCEPCIONES
+            Mesa retornoMesa = fachada.traerMesa(mesa);
+            retornoMesa.ingresarAmesa(jugador);
+            vista.ejecutarCasoDeUsoJugar(retornoMesa, jugador);
+        } catch (UsuarioEnMesaException e) {
+            vista.mostrarMensajeError(e.getMessage());
         }
     }
 
-    private void inicializarVista() {
-        vistaMesa.mostrarMesasAbiertas(fachada.mesasDisponibles());
-        vistaMesa.datosJugador(jugador);
-    }
-    
-    public void unirseAmesa(String mesa){
-        try{
-            Mesa retornoMesa = null;
-            ArrayList<Mesa> mesas = fachada.mesasDisponibles();
-            for(int i=0; i<mesas.size() && retornoMesa == null; i++){
-                if(mesas.get(i).getNombre().equals(mesa)){
-                    retornoMesa = mesas.get(i);
-                }
-            }
-            fachada.unirseAmesa(jugador, retornoMesa);
-            Dialogo_Jugar jugarAmesa = new Dialogo_Jugar(new javax.swing.JFrame(), true, retornoMesa);
-            jugarAmesa.setModal(false);
-            jugarAmesa.setVisible(true);
-        }catch(MesaException e){
-            vistaMesa.mostrarMensajeError(e.getMessage());
-        }
+    public void desloguear() {
+        
+        //analizar cuando un usuario se deloguea que pasa de las mesas en las que esta
+        fachada.desloguearUsuarioJugador(this.jugador);
+        vista.cerrarVentana();
     }
 }

@@ -2,6 +2,7 @@ package UI;
 
 import Controlador.LogInCrupierVistaControlador;
 import Controlador.LogInVistaControlador;
+import Dominio.Crupier;
 import Dominio.Usuario;
 
 public class Dialogo_LogInCrupier extends Dialogo_LogIn {
@@ -39,7 +40,7 @@ public class Dialogo_LogInCrupier extends Dialogo_LogIn {
     // End of variables declaration//GEN-END:variables
     @Override
     public void ejecutarCasoInicial(Usuario usuario) {
-        Dialogo_IniciarMesaCrupier iniciarMesa = new Dialogo_IniciarMesaCrupier(new javax.swing.JFrame(), true);
+        Dialogo_IniciarMesaCrupier iniciarMesa = new Dialogo_IniciarMesaCrupier(new javax.swing.JFrame(), true, (Crupier) usuario);
         iniciarMesa.setModal(false);
         iniciarMesa.setVisible(true);
     }
