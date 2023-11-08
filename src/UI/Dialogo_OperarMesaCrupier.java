@@ -10,6 +10,7 @@ import UI.Interface.JugarVista;
 import UI.Interface.OperarMesaVista;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,11 +49,12 @@ public class Dialogo_OperarMesaCrupier extends Dialogo_GeneralVista implements O
         tApuestas = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         tMonto = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        bLanzar = new javax.swing.JButton();
         tUltimoNumeroSorteado = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         tUltimosLanzamientos = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
+        bPagar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -85,10 +87,10 @@ public class Dialogo_OperarMesaCrupier extends Dialogo_GeneralVista implements O
 
         tMonto.setText("0");
 
-        jButton1.setText("Lanzar / Pagar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        bLanzar.setText("Lanzar");
+        bLanzar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                bLanzarActionPerformed(evt);
             }
         });
 
@@ -97,6 +99,13 @@ public class Dialogo_OperarMesaCrupier extends Dialogo_GeneralVista implements O
         jLabel5.setText("Ultimos lanzamientos");
 
         tUltimosLanzamientos.setText("0");
+
+        bPagar.setText("Pagar");
+        bPagar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bPagarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -129,9 +138,11 @@ public class Dialogo_OperarMesaCrupier extends Dialogo_GeneralVista implements O
                 .addComponent(tMonto, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(78, 78, 78)
                 .addComponent(cbEfecto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(40, 40, 40)
+                .addComponent(bLanzar)
+                .addGap(18, 18, 18)
+                .addComponent(bPagar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(62, 62, 62)
                 .addComponent(tUltimoNumeroSorteado, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(67, 67, 67))
             .addGroup(layout.createSequentialGroup()
@@ -169,8 +180,9 @@ public class Dialogo_OperarMesaCrupier extends Dialogo_GeneralVista implements O
                     .addComponent(tApuestas)
                     .addComponent(jLabel4)
                     .addComponent(tMonto)
-                    .addComponent(jButton1)
-                    .addComponent(tUltimoNumeroSorteado))
+                    .addComponent(bLanzar)
+                    .addComponent(tUltimoNumeroSorteado)
+                    .addComponent(bPagar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 218, Short.MAX_VALUE)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -192,21 +204,30 @@ public class Dialogo_OperarMesaCrupier extends Dialogo_GeneralVista implements O
         controlador.cerrarMesa();
     }//GEN-LAST:event_bCerrarMesaActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void bLanzarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bLanzarActionPerformed
         // TODO add your handling code here:
-        /*
-                if(efectoSeleccionado.contains("Efecto")){
-            mostrarMensajeError("Seleccione una mesa para continuar");
-        }else{
-            controlador.unirseAmesa(mesaSeleccionada);
-        }*/
-    }//GEN-LAST:event_jButton1ActionPerformed
+        String efectoSeleccionado = (String) cbEfecto.getSelectedItem();
+        
+        //arrayList de casilleros seleccionados
+        ArrayList<Integer> casillerosSeleccionados = new ArrayList<>(Arrays.asList(1, 5, 18, 41, 42));
+        
+        if (efectoSeleccionado.contains("Efecto")) {
+            mostrarMensajeError("Seleccione un efecto para continuar");
+        } else {
+            controlador.lanzar(efectoSeleccionado,casillerosSeleccionados);
+        }
+    }//GEN-LAST:event_bLanzarActionPerformed
+
+    private void bPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bPagarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_bPagarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bCerrarMesa;
+    private javax.swing.JButton bLanzar;
+    private javax.swing.JButton bPagar;
     private javax.swing.JComboBox<String> cbEfecto;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

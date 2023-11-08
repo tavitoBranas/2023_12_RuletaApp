@@ -2,7 +2,7 @@ package Dominio;
 
 import java.util.ArrayList;
 
-class Estadistica {
+public class Estadistica {
 
     private ArrayList<Integer> numerosSorteados;
     private int historicoRojo;

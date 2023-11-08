@@ -4,11 +4,15 @@ import java.util.ArrayList;
 
 public class Ronda {
 
-    private Mesa mesa;
+    private final Mesa mesa;
+    private final Efecto efecto;
+    private final ArrayList<Integer> casillerosSeleccionados;
     private ArrayList<Apuesta> apuestas;
 
-    public Ronda(Mesa mesa) {
+    public Ronda(Efecto ef, ArrayList<Integer> casilleros, Mesa mesa) {
         this.mesa = mesa;
+        efecto = ef;
+        casillerosSeleccionados = casilleros;
     }
 
     public Mesa getMesa() {
@@ -18,11 +22,27 @@ public class Ronda {
     public ArrayList<Integer> apuestaDerecta() {
         ArrayList<Integer> retorno = new ArrayList<>();
 
-        for (Apuesta a : apuestas) {
-            if (a.getCasillero() >= 0 && a.getCasillero() <= 36 && !retorno.contains(a.getCasillero())) {
-                retorno.add(a.getCasillero());
+        for (int a : getCasillerosSeleccionados()) {
+            if (a >= 0 && a <= 36 && !retorno.contains(a)) {
+                retorno.add(a);
             }
         }
         return retorno;
+    }
+
+    public Efecto getEfecto() {
+        return efecto;
+    }
+
+    public ArrayList<Apuesta> getApuestas() {
+        return apuestas;
+    }
+
+    public ArrayList<Integer> getCasillerosSeleccionados() {
+        return casillerosSeleccionados;
+    }
+    
+    public void lanzar(){
+        this.getEfecto().lanzar();
     }
 }

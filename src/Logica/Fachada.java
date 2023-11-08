@@ -109,4 +109,16 @@ public class Fachada extends Observable implements Observador {
         servicioMesa.desloguearJugadordeMesas(jugador);
     }
 
+    public Efecto buscarEfecto(String efectoSeleccionado) {
+        ArrayList<Efecto> efectos = servicioMesa.getEfectosDisponibles();
+        
+        Efecto retorno = null;
+        for(int i=0; i< efectos.size() &&retorno == null; i++){
+            if(efectos.get(i).getNombre().equals(efectoSeleccionado)){
+                retorno = efectos.get(i);
+            }
+        }
+        return retorno;
+    }
+
 }

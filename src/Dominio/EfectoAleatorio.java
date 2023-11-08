@@ -8,7 +8,7 @@ public class EfectoAleatorio extends Efecto {
 
     //la bola determina un valor 100% aleatorio en cada ronda.
     @Override
-    protected void numeroSorteado() {
+    public void lanzar() {
         int numero = seleccionarNumero();
 
         setearCasilleroGanador(numero);

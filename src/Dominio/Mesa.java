@@ -103,11 +103,23 @@ public class Mesa extends Observable {
         }
     }
 
-    /**
-     * @return the estadistica
-     */
     public Estadistica getEstadistica() {
         return estadistica;
     }
 
+    public int numeroGanador() {
+        int i = -1;
+        if (!estadistica.getNumerosSorteados().isEmpty()) {
+            i = estadistica.getNumerosSorteados().get(0);
+        }
+        return i;
+    }
+
+    public void lanzar() {
+        ronda.lanzar();
+    }
+
+    public void setRonda(Ronda nuevaRonda) {
+        this.ronda = nuevaRonda;
+    }
 }

@@ -35,9 +35,14 @@ public abstract class Efecto {
         return ronda;
     }
 
-    protected abstract void numeroSorteado();
+    public void setRonda(Ronda ronda) {
+        this.ronda = ronda;
+    }
+
+    protected abstract void lanzar();
 
     protected void setearCasilleroGanador(int resultado) {
+        getCasillerosGanadores().clear();
         getCasillerosGanadores().add(resultado);
 
         casilleroGanadorColor(resultado);
@@ -87,15 +92,15 @@ public abstract class Efecto {
     }
 
     protected void seteoEstaditicaNumero(int numeroGanador) {
-        ronda.getMesa().getEstadistica().ingresarNumeroSorteado(numeroGanador);
+        getRonda().getMesa().getEstadistica().ingresarNumeroSorteado(numeroGanador);
     }
 
     protected void seteoEstaditicaColor(String color) {
         if (!color.isEmpty()) {
             if (color.equals("Rojo")) {
-                ronda.getMesa().getEstadistica().setHistoricoRojo();
+                getRonda().getMesa().getEstadistica().setHistoricoRojo();
             } else {
-                ronda.getMesa().getEstadistica().setHistoricoNegro();
+                getRonda().getMesa().getEstadistica().setHistoricoNegro();
             }
         }
     }
@@ -104,15 +109,16 @@ public abstract class Efecto {
         if (!docena.isEmpty()) {
             switch (docena) {
                 case "Primera":
-                    ronda.getMesa().getEstadistica().setHistoricoPrimeraDocena();
+                    getRonda().getMesa().getEstadistica().setHistoricoPrimeraDocena();
                     break;
                 case "Segunda":
-                    ronda.getMesa().getEstadistica().setHistoricoSegundaDocena();
+                    getRonda().getMesa().getEstadistica().setHistoricoSegundaDocena();
                     break;
                 default:
-                    ronda.getMesa().getEstadistica().setHistoricoTerceraDocena();
+                    getRonda().getMesa().getEstadistica().setHistoricoTerceraDocena();
                     break;
             }
         }
     }
+
 }
