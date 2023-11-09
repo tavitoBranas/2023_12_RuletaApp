@@ -43,7 +43,7 @@ public class ServicioMesa extends Observable {
 
     public void agregarMesa(Mesa mesa) {
         //martillo la directa porque me lo piden
-        mesa.apuestaDirectaObligatoria();
+        //mesa.apuestaDirectaObligatoria();
         listaMesas.add(mesa);
         avisar(Eventos.MesaAgregada);
     }

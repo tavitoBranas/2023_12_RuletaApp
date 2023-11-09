@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class Estadistica extends Observable {
+public class Estadistica {
 
     private final ArrayList<Integer> numerosSorteados;
     private int numeroDeRonda;
@@ -16,8 +16,9 @@ public class Estadistica extends Observable {
     private int historicoSegundaDocena;
     private int historicoTerceraDocena;
     private HashMap<Integer, Integer> frecuenciaDeNumerosSorteados;
+    private Mesa mesa;
 
-    public Estadistica() {
+    public Estadistica(Mesa mesa) {
         numerosSorteados = new ArrayList<>();
         numeroDeRonda = 1;
         historicoRojo = 0;
@@ -25,6 +26,7 @@ public class Estadistica extends Observable {
         historicoPrimeraDocena = 0;
         historicoSegundaDocena = 0;
         historicoTerceraDocena = 0;
+        this.mesa = mesa;
         inicializarEstadisticaNumerosSorteados();
     }
 
@@ -54,7 +56,7 @@ public class Estadistica extends Observable {
         //seteo la estadistica del numero
         frecuenciaDeNumerosSorteados.put(numero, frecuenciaDeNumerosSorteados.get(numero) + 1);
         numeroDeRonda += 1;
-        avisar(Eventos.NumeroGanador);
+
     }
 
     public ArrayList<Integer> getNumerosSorteados() {
@@ -108,29 +110,35 @@ public class Estadistica extends Observable {
     public Map<String, Integer> estadisticasDeLaMesa() {
 
         Map<String, Integer> estadisticasRetorno = new LinkedHashMap<>();
+        int porcentaje;
 
         //cargo porcentaje de colores
-        int porcentaje = (int) Math.ceil(this.historicoRojo * 100.0f / numeroDeRonda);
-        estadisticasRetorno.put("Rojo", porcentaje);
+        if (mesa.getTipoApuesta().stream().anyMatch(apuesta -> apuesta instanceof ApuestaColor)) {
+            porcentaje = (int) Math.ceil(this.historicoRojo * 100.0f / numeroDeRonda);
+            estadisticasRetorno.put("Rojo", porcentaje);
 
-        porcentaje = (int) Math.ceil(this.historicoNegro * 100.0f / numeroDeRonda);
-        estadisticasRetorno.put("Negro", porcentaje);
+            porcentaje = (int) Math.ceil(this.historicoNegro * 100.0f / numeroDeRonda);
+            estadisticasRetorno.put("Negro", porcentaje);
+        }
 
         //cargo porcentajes de docenas
-        porcentaje = (int) Math.ceil(this.historicoPrimeraDocena * 100.0f / numeroDeRonda);
-        estadisticasRetorno.put("Primera", porcentaje);
+        if (mesa.getTipoApuesta().stream().anyMatch(apuesta -> apuesta instanceof ApuestaDocena)) {
+            porcentaje = (int) Math.ceil(this.historicoPrimeraDocena * 100.0f / numeroDeRonda);
+            estadisticasRetorno.put("Primera", porcentaje);
 
-        porcentaje = (int) Math.ceil(this.historicoSegundaDocena * 100.0f / numeroDeRonda);
-        estadisticasRetorno.put("Segunda", porcentaje);
+            porcentaje = (int) Math.ceil(this.historicoSegundaDocena * 100.0f / numeroDeRonda);
+            estadisticasRetorno.put("Segunda", porcentaje);
 
-        porcentaje = (int) Math.ceil(this.historicoTerceraDocena * 100.0f / numeroDeRonda);
-        estadisticasRetorno.put("Tercera", porcentaje);
+            porcentaje = (int) Math.ceil(this.historicoTerceraDocena * 100.0f / numeroDeRonda);
+            estadisticasRetorno.put("Tercera", porcentaje);
+        }
 
         //cargo porcentaje de numeros sorteados
-        for (int i = 0; i < 37; i++) {
-            int frecuencia = this.frecuenciaDeNumerosSorteados.get(i);
-            porcentaje = (int) Math.ceil(this.frecuenciaDeNumerosSorteados.get(i) * 100.0f / numeroDeRonda);
-            estadisticasRetorno.put(i + "", porcentaje);
+        if (mesa.getTipoApuesta().stream().anyMatch(apuesta -> apuesta instanceof ApuestaDirecta)) {
+            for (int i = 0; i < 37; i++) {
+                porcentaje = (int) Math.ceil(this.frecuenciaDeNumerosSorteados.get(i) * 100.0f / numeroDeRonda);
+                estadisticasRetorno.put(i + "", porcentaje);
+            }
         }
         return estadisticasRetorno;
     }

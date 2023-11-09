@@ -35,10 +35,10 @@ public class Dialogo_Jugar extends Dialogo_GeneralVista implements JugarVista {
         tRonda = new javax.swing.JLabel();
         tMensaje = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
-        r = new componente.PanelRuleta();
         lNombreUsuario1 = new javax.swing.JLabel();
         tNumeroSorteado = new javax.swing.JLabel();
         tPanel = new javax.swing.JPanel();
+        panelRuleta1 = new componente.PanelRuleta();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -105,12 +105,6 @@ public class Dialogo_Jugar extends Dialogo_GeneralVista implements JugarVista {
                 .addComponent(tPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lNombreUsuario1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(tNumeroSorteado, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(25, 25, 25))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -118,11 +112,20 @@ public class Dialogo_Jugar extends Dialogo_GeneralVista implements JugarVista {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 2, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(r, javax.swing.GroupLayout.PREFERRED_SIZE, 840, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(bAbandonar))))))
+                                .addGap(0, 753, Short.MAX_VALUE)
+                                .addComponent(bAbandonar)))))
                 .addGap(20, 20, 20))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(lNombreUsuario1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(tNumeroSorteado, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(25, 25, 25))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(panelRuleta1, javax.swing.GroupLayout.PREFERRED_SIZE, 813, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(33, 33, 33))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -142,8 +145,8 @@ public class Dialogo_Jugar extends Dialogo_GeneralVista implements JugarVista {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lNombreUsuario1)
                     .addComponent(tNumeroSorteado))
-                .addGap(9, 9, 9)
-                .addComponent(r, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(panelRuleta1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 9, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
@@ -171,7 +174,7 @@ public class Dialogo_Jugar extends Dialogo_GeneralVista implements JugarVista {
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JLabel lNombreUsuario;
     private javax.swing.JLabel lNombreUsuario1;
-    private componente.PanelRuleta r;
+    private componente.PanelRuleta panelRuleta1;
     private javax.swing.JLabel tMensaje;
     private javax.swing.JLabel tMesa;
     private javax.swing.JLabel tNombreJugador;
@@ -196,26 +199,7 @@ public class Dialogo_Jugar extends Dialogo_GeneralVista implements JugarVista {
         controlador.mensajeAceptado();
     }
 
-    @Override
-    public void inhabilitarApuestasEspecificas(ArrayList<String> apuestas) {
 
-        //seteo todo en false
-        r.setVisible(PanelRuleta.ROJO, false);
-        r.setVisible(PanelRuleta.NEGRO, false);
-        r.setVisible(PanelRuleta.PRIMERA_DOCENA, false);
-        r.setVisible(PanelRuleta.SEGUNDA_DOCENA, false);
-        r.setVisible(PanelRuleta.TERCERA_DOCENA, false);
-
-        if (apuestas.contains("Color")) {
-            r.setVisible(PanelRuleta.ROJO, true);
-            r.setVisible(PanelRuleta.NEGRO, true);
-        }
-        if (apuestas.contains("Docena")) {
-            r.setVisible(PanelRuleta.PRIMERA_DOCENA, true);
-            r.setVisible(PanelRuleta.SEGUNDA_DOCENA, true);
-            r.setVisible(PanelRuleta.TERCERA_DOCENA, true);
-        }
-    }
 
     @Override
     public void mostrarNumeroGanador(int numeroGanador) {
@@ -230,5 +214,10 @@ public class Dialogo_Jugar extends Dialogo_GeneralVista implements JugarVista {
     @Override
     public void actualizarNumerosYronda(Estadistica estadistica) {
         tRonda.setText(estadistica.getNumeroDeRonda() + "");
+    }
+
+    @Override
+    public void inhabilitarApuestasEspecificas(ArrayList<String> apuestas) {
+   
     }
 }

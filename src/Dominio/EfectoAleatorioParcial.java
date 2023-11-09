@@ -10,10 +10,10 @@ public class EfectoAleatorioParcial extends Efecto {
     public void lanzar() {
         int resultado;
         do {
-            resultado = seleccionarNumero();
+            resultado = numeroGanador();
             //la bola determina un valor aleatorio, pero asegurando de no repetir los últimos 3 valores. 
         } while (getRonda().getMesa().getEstadistica().getUltimosTresNumerosSorteados().contains(resultado));
 
-        setearCasilleroGanador(resultado);
+        setearNumeroGanador(resultado);
     }
 }

@@ -1,5 +1,6 @@
 package Controlador;
 
+import Dominio.ApuestaDirecta;
 import Dominio.Crupier;
 import Dominio.Mesa;
 import Dominio.TipoApuesta;
@@ -28,9 +29,9 @@ public class IniciarMesaVistaControlador {
 
     public void crearMesa(List<String> apuestas) {
         String nombre = crupier.getCedula() + "";
-        ArrayList<TipoApuesta> tipoApuestaSeleccionada = new ArrayList<>();
-        for (TipoApuesta tipo : fachada.tipoApuestaDisponibles()) {
+        ArrayList<TipoApuesta> tipoApuestaSeleccionada = obligatoriedadApuestaDirecta();
 
+        for (TipoApuesta tipo : fachada.tipoApuestaDisponibles()) {
             for (String dato : apuestas) {
                 if (tipo.getTipo().equals(dato)) {
                     tipoApuestaSeleccionada.add(tipo);
@@ -51,4 +52,16 @@ public class IniciarMesaVistaControlador {
         fachada.desloguearUsuarioCrupier(crupier);
     }
 
+    private ArrayList<TipoApuesta> obligatoriedadApuestaDirecta() {
+
+        ArrayList<TipoApuesta> tipoApuestaSeleccionada = new ArrayList<>();
+        ArrayList<TipoApuesta> tiposDisponibles = fachada.tipoApuestaDisponibles();
+        
+        for (int i=0; i< tiposDisponibles.size() && tipoApuestaSeleccionada.isEmpty(); i++) {
+            if (tiposDisponibles.get(i) instanceof ApuestaDirecta) {
+                tipoApuestaSeleccionada.add(tiposDisponibles.get(i));
+            }
+        }
+        return tipoApuestaSeleccionada;
+    }
 }

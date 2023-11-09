@@ -34,7 +34,7 @@ public class OperarMesaVistaControlador implements Observador {
     }
 
     public void cerrarMesa() {
-        modelo.setEstado(new EstadoMesaCerrar());
+        modelo.setEstado(new EstadoMesaCerrar(modelo));
         modelo.setMensaje("La mesa se va a cerrar");
 
         cerrarMesaExpulsarUsuarios();
@@ -69,7 +69,7 @@ public class OperarMesaVistaControlador implements Observador {
     }
 
     public void lanzar(String efectoSeleccionado, ArrayList<Integer> casillerosSeleccionados) {
-        //seteo el estado de la mesa
+        //seteo el estado de la mesa, no permite que nadie ingrese o salga o apueste
         modelo.setEstado(new EstadoMesaLanzar());
         //obtengo efecto, lo asocio a la ronda y lanzo
         Efecto efecto = buscarEfecto(efectoSeleccionado);
@@ -85,7 +85,7 @@ public class OperarMesaVistaControlador implements Observador {
 
     public void pagar() {
         generacionNuevaRonda();
-        modelo.setEstado(new EstadoMesaAbierta());
+        modelo.setEstado(new EstadoMesaAbierta(modelo));
         ocultarNumeroGanador();
         actualizarNumerosYronda();
         estadoBotonLanzar(true);
@@ -105,7 +105,6 @@ public class OperarMesaVistaControlador implements Observador {
 
     private void actualizarNumerosYronda() {
         vista.actualizarNumerosYronda(modelo.getEstadistica());
-        System.out.println(modelo.getEstadistica().estadisticasDeLaMesa());
     }
 
     private void estadoBotonLanzar(boolean estado) {

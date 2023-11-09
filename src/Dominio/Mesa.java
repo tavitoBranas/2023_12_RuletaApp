@@ -6,7 +6,7 @@ import comun.Observable;
 import comun.Observador;
 import java.util.ArrayList;
 
-public class Mesa extends Observable implements Observador {
+public class Mesa extends Observable {
 
     private String nombre;
     private ArrayList<TipoApuesta> tipoApuesta;
@@ -24,9 +24,8 @@ public class Mesa extends Observable implements Observador {
         ronda = new Ronda(this);
         listaJugadores = new ArrayList<Jugador>();
         this.mensaje = "";
-        estadistica = new Estadistica();
-        estadistica.agregar(this);
-        estado = new EstadoMesaAbierta();
+        estadistica = new Estadistica(this);
+        estado = new EstadoMesaAbierta(this);
 
     }
 
@@ -72,7 +71,7 @@ public class Mesa extends Observable implements Observador {
 
     public void setEstado(EstadoMesa estado) {
         this.estado = estado;
-        if(estado instanceof EstadoMesaAbierta){
+        if (estado instanceof EstadoMesaAbierta) {
             avisar(Eventos.Pagar);
         }
     }
@@ -98,6 +97,7 @@ public class Mesa extends Observable implements Observador {
         avisar(Eventos.CierraMesa);
     }
 
+    /*
     public void apuestaDirectaObligatoria() {
         boolean poseeApuestaDirecta = false;
         TipoApuesta directa = null;
@@ -119,21 +119,16 @@ public class Mesa extends Observable implements Observador {
             this.getTipoApuesta().add(directa);
         }
     }
-
+     */
     public Estadistica getEstadistica() {
         return estadistica;
     }
 
-    public int numeroGanador() {
-        int i = -1;
-        if (!estadistica.getNumerosSorteados().isEmpty()) {
-            i = estadistica.getNumerosSorteados().get(0);
-        }
-        return i;
-    }
-
     public void lanzar() {
         ronda.lanzar();
+        estado.accionar(this);
+                System.out.println(estadistica.estadisticasDeLaMesa());
+        avisar(Eventos.NumeroGanador);
     }
 
     public void setRonda(Ronda nuevaRonda) {
@@ -142,13 +137,6 @@ public class Mesa extends Observable implements Observador {
 
     public Ronda getRonda() {
         return ronda;
-    }
-
-    @Override
-    public void actualizar(Observable origen, Object evento) {
-        if (Eventos.NumeroGanador.equals(evento)) {
-            avisar(Eventos.NumeroGanador);
-        }
     }
 
 }

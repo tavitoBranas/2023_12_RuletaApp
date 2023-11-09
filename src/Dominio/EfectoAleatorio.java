@@ -9,9 +9,8 @@ public class EfectoAleatorio extends Efecto {
     //la bola determina un valor 100% aleatorio en cada ronda.
     @Override
     public void lanzar() {
-        int numero = seleccionarNumero();
-
-        setearCasilleroGanador(numero);
+        int numero = numeroGanador();
+        setearNumeroGanador(numero);
     }
 
 }

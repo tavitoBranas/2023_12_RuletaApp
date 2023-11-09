@@ -11,11 +11,11 @@ public class EfectoSimulador extends Efecto {
 
         int resultado;
         do {
-            resultado = seleccionarNumero();
+            resultado = numeroGanador();
             //la bola sortea únicamente entre los números que tienen Apuesta Directa, más el cero
         } while (!getRonda().apuestaDerecta().contains(resultado)
                 || resultado == 0);
 
-        setearCasilleroGanador(resultado);
+        setearNumeroGanador(resultado);
     }
 }

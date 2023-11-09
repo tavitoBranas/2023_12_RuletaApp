@@ -1,7 +1,9 @@
 
 package Dominio;
 
-public abstract class EstadoMesa {
+import comun.Observable;
+
+public abstract class EstadoMesa{
     private boolean jugadoresIngresanMesa;
     private boolean jugadoresAbandonanMesa;
     private boolean jugadoresApuestan;
@@ -33,4 +35,6 @@ public abstract class EstadoMesa {
     public void setJugadoresApuestan(boolean jugadoresApuestan) {
         this.jugadoresApuestan = jugadoresApuestan;
     }
+    
+    protected abstract void accionar(Mesa mesa);
 }
