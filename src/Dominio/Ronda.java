@@ -5,14 +5,13 @@ import java.util.ArrayList;
 public class Ronda {
 
     private final Mesa mesa;
-    private final Efecto efecto;
-    private final ArrayList<Integer> casillerosSeleccionados;
+    private Efecto efecto;
+    private ArrayList<Integer> casillerosSeleccionados;
     private ArrayList<Apuesta> apuestas;
 
-    public Ronda(Efecto ef, ArrayList<Integer> casilleros, Mesa mesa) {
+    public Ronda(Mesa mesa) {
         this.mesa = mesa;
-        efecto = ef;
-        casillerosSeleccionados = casilleros;
+        mesa.setRonda(this);
     }
 
     public Mesa getMesa() {
@@ -41,8 +40,26 @@ public class Ronda {
     public ArrayList<Integer> getCasillerosSeleccionados() {
         return casillerosSeleccionados;
     }
-    
-    public void lanzar(){
+
+    public void setCasillerosSeleccionados(ArrayList<Integer> casillerosSeleccionados) {
+        this.casillerosSeleccionados = casillerosSeleccionados;
+    }
+
+    public void lanzar() {
         this.getEfecto().lanzar();
     }
+
+    public void setEfecto(Efecto efecto) {
+        this.efecto = efecto;
+        efecto.setRonda(this);
+    }
+    /*
+    public void setCasillerosSeleccionados(ArrayList<Integer> casillerosSeleccionados) {
+        this.casillerosSeleccionados = casillerosSeleccionados;
+    }
+
+    public void setApuestas(ArrayList<Apuesta> apuestas) {
+        this.apuestas = apuestas;
+    }*/
+
 }

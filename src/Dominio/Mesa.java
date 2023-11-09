@@ -3,9 +3,10 @@ package Dominio;
 import Excepciones.UsuarioEnMesaException;
 import Logica.Fachada;
 import comun.Observable;
+import comun.Observador;
 import java.util.ArrayList;
 
-public class Mesa extends Observable {
+public class Mesa extends Observable implements Observador {
 
     private String nombre;
     private ArrayList<TipoApuesta> tipoApuesta;
@@ -14,14 +15,19 @@ public class Mesa extends Observable {
     private Estadistica estadistica;
     private Crupier crupier;
     private String mensaje;
+    private EstadoMesa estado;
 
     public Mesa(String nombre, ArrayList<TipoApuesta> tipo, Crupier crupier) {
         this.nombre = nombre;
         tipoApuesta = tipo;
         this.crupier = crupier;
+        ronda = new Ronda(this);
         listaJugadores = new ArrayList<Jugador>();
         this.mensaje = "";
         estadistica = new Estadistica();
+        estadistica.agregar(this);
+        estado = new EstadoMesaAbierta();
+
     }
 
     public String getNombre() {
@@ -58,6 +64,17 @@ public class Mesa extends Observable {
 
     public Crupier getCrupier() {
         return crupier;
+    }
+
+    public EstadoMesa getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoMesa estado) {
+        this.estado = estado;
+        if(estado instanceof EstadoMesaAbierta){
+            avisar(Eventos.Pagar);
+        }
     }
 
     public Mesa ingresarAmesa(Jugador jugador) throws UsuarioEnMesaException {
@@ -122,4 +139,16 @@ public class Mesa extends Observable {
     public void setRonda(Ronda nuevaRonda) {
         this.ronda = nuevaRonda;
     }
+
+    public Ronda getRonda() {
+        return ronda;
+    }
+
+    @Override
+    public void actualizar(Observable origen, Object evento) {
+        if (Eventos.NumeroGanador.equals(evento)) {
+            avisar(Eventos.NumeroGanador);
+        }
+    }
+
 }

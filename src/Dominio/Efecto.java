@@ -6,14 +6,13 @@ import java.util.Random;
 
 public abstract class Efecto {
 
-    //private Ronda rondaDeApuesta;
     private final String nombre;
     private Ronda ronda;
-    private final ArrayList<Integer> casillerosGanadores;
+    private final HashMap casillerosGanadores;
 
     public Efecto(String nombre) {
         this.nombre = nombre;
-        casillerosGanadores = new ArrayList<>();
+        casillerosGanadores = new HashMap<String, Integer>();
         // rondaDeApuesta = ronda;
     }
 
@@ -21,7 +20,7 @@ public abstract class Efecto {
         return nombre;
     }
 
-    public ArrayList<Integer> getCasillerosGanadores() {
+    public HashMap getCasillerosGanadores() {
         return casillerosGanadores;
     }
 
@@ -43,24 +42,25 @@ public abstract class Efecto {
 
     protected void setearCasilleroGanador(int resultado) {
         getCasillerosGanadores().clear();
-        getCasillerosGanadores().add(resultado);
+        casillerosGanadores.put("Numero", resultado);
 
         casilleroGanadorColor(resultado);
         casilleroGanadorDocena(resultado);
 
         //seteo estadistica
         seteoEstaditicaNumero(resultado);
+        
     }
 
-    protected void casilleroGanadorColor(int numero) {
+    private void casilleroGanadorColor(int numero) {
         String color = "";
         //determino el color
         if (numero != 0) {
             if (ListaUniversalCasilleros.numerosRojos().contains(numero)) {
-                this.getCasillerosGanadores().add(ListaUniversalCasilleros.casilleroRojo());
+                casillerosGanadores.put("Color", ListaUniversalCasilleros.casilleroRojo());
                 color = "Rojo";
             } else {
-                this.getCasillerosGanadores().add(ListaUniversalCasilleros.casilleroNegro());
+                casillerosGanadores.put("Color", ListaUniversalCasilleros.casilleroNegro());
                 color = "Negro";
             }
         }
@@ -68,22 +68,22 @@ public abstract class Efecto {
         seteoEstaditicaColor(color);
     }
 
-    protected void casilleroGanadorDocena(int numero) {
+    private void casilleroGanadorDocena(int numero) {
         String retornoDocena = "";
         if (numero != 0) {
-            HashMap docenas = ListaUniversalCasilleros.apuestasDocena();
+            HashMap docenas = ListaUniversalCasilleros.casillerosDocena();
 
             ArrayList primera = (ArrayList) docenas.get("Primera");
             ArrayList segunda = (ArrayList) docenas.get("Segunda");
 
             if (primera.contains(numero)) {
-                this.getCasillerosGanadores().add(ListaUniversalCasilleros.primeraDocena());
+                casillerosGanadores.put("Docena", ListaUniversalCasilleros.casilleroPrimeraDocena());
                 retornoDocena = "Primera";
             } else if (segunda.contains(numero)) {
-                this.getCasillerosGanadores().add(ListaUniversalCasilleros.segundaDocena());
+
                 retornoDocena = "Segunda";
             } else {
-                this.getCasillerosGanadores().add(ListaUniversalCasilleros.terceraDocena());
+                casillerosGanadores.put("Docena", ListaUniversalCasilleros.casilleroTerceraDocena());
                 retornoDocena = "Tercera";
             }
         }
@@ -91,11 +91,11 @@ public abstract class Efecto {
         seteoEstaditicaDocena(retornoDocena);
     }
 
-    protected void seteoEstaditicaNumero(int numeroGanador) {
+    private void seteoEstaditicaNumero(int numeroGanador) {
         getRonda().getMesa().getEstadistica().ingresarNumeroSorteado(numeroGanador);
     }
 
-    protected void seteoEstaditicaColor(String color) {
+    private void seteoEstaditicaColor(String color) {
         if (!color.isEmpty()) {
             if (color.equals("Rojo")) {
                 getRonda().getMesa().getEstadistica().setHistoricoRojo();
@@ -105,7 +105,7 @@ public abstract class Efecto {
         }
     }
 
-    protected void seteoEstaditicaDocena(String docena) {
+    private void seteoEstaditicaDocena(String docena) {
         if (!docena.isEmpty()) {
             switch (docena) {
                 case "Primera":

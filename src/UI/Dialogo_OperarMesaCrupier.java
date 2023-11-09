@@ -1,23 +1,15 @@
 package UI;
 
-import Controlador.JugarVistaControlador;
 import Controlador.OperarMesaVistaControlador;
 import Dominio.Efecto;
+import Dominio.Estadistica;
 import Dominio.Jugador;
 import Dominio.Mesa;
 import java.util.ArrayList;
-import UI.Interface.JugarVista;
 import UI.Interface.OperarMesaVista;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import componente.PanelRuleta;
+
 import java.util.Arrays;
-import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.DefaultListModel;
-import javax.swing.JDialog;
-import javax.swing.JOptionPane;
-import javax.swing.Timer;
 
 public class Dialogo_OperarMesaCrupier extends Dialogo_GeneralVista implements OperarMesaVista {
 
@@ -27,13 +19,16 @@ public class Dialogo_OperarMesaCrupier extends Dialogo_GeneralVista implements O
         super(parent, modal);
         initComponents();
         controlador = new OperarMesaVistaControlador(this, mesa);
-
+        tUltimosLanzamientos.setText("");
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        r = new componente.PanelRuleta();
+        lNombreUsuario1 = new javax.swing.JLabel();
+        tNumeroSorteado = new javax.swing.JLabel();
         lNombreUsuario = new javax.swing.JLabel();
         bCerrarMesa = new javax.swing.JButton();
         tSaldoMesa = new javax.swing.JLabel();
@@ -50,11 +45,17 @@ public class Dialogo_OperarMesaCrupier extends Dialogo_GeneralVista implements O
         jLabel4 = new javax.swing.JLabel();
         tMonto = new javax.swing.JLabel();
         bLanzar = new javax.swing.JButton();
-        tUltimoNumeroSorteado = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         tUltimosLanzamientos = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         bPagar = new javax.swing.JButton();
+        r1 = new componente.PanelRuleta();
+        lNombreUsuario2 = new javax.swing.JLabel();
+        tNumeroSorteado1 = new javax.swing.JLabel();
+
+        lNombreUsuario1.setText("Numero sorteado");
+
+        tNumeroSorteado.setText("**");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -67,7 +68,7 @@ public class Dialogo_OperarMesaCrupier extends Dialogo_GeneralVista implements O
             }
         });
 
-        tSaldoMesa.setText("**");
+        tSaldoMesa.setText("$ 0");
 
         jLabel2.setText("Mesa:");
 
@@ -94,8 +95,6 @@ public class Dialogo_OperarMesaCrupier extends Dialogo_GeneralVista implements O
             }
         });
 
-        tUltimoNumeroSorteado.setText("0");
-
         jLabel5.setText("Ultimos lanzamientos");
 
         tUltimosLanzamientos.setText("0");
@@ -107,19 +106,21 @@ public class Dialogo_OperarMesaCrupier extends Dialogo_GeneralVista implements O
             }
         });
 
+        lNombreUsuario2.setText("Numero sorteado");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(32, 32, 32)
-                .addComponent(lNombreUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(tSaldoMesa, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(79, 79, 79)
+                .addComponent(lNombreUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(tSaldoMesa, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(46, 46, 46)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(tRonda, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
+                .addComponent(tRonda, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(50, 50, 50)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -143,21 +144,27 @@ public class Dialogo_OperarMesaCrupier extends Dialogo_GeneralVista implements O
                 .addGap(18, 18, 18)
                 .addComponent(bPagar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(tUltimoNumeroSorteado, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(67, 67, 67))
+                .addComponent(lNombreUsuario2, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tNumeroSorteado1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(22, 22, 22))
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSeparator2)
-                    .addComponent(jSeparator1)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tUltimosLanzamientos, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(tUltimosLanzamientos, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jSeparator1))
                 .addGap(20, 20, 20))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jSeparator2)
+                    .addComponent(r1, javax.swing.GroupLayout.DEFAULT_SIZE, 791, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -172,29 +179,31 @@ public class Dialogo_OperarMesaCrupier extends Dialogo_GeneralVista implements O
                     .addComponent(tMesa)
                     .addComponent(bCerrarMesa, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cbEfecto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3)
-                    .addComponent(tApuestas)
-                    .addComponent(jLabel4)
-                    .addComponent(tMonto)
-                    .addComponent(bLanzar)
-                    .addComponent(tUltimoNumeroSorteado)
-                    .addComponent(bPagar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 218, Short.MAX_VALUE)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(cbEfecto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel3)
+                        .addComponent(tApuestas)
+                        .addComponent(jLabel4)
+                        .addComponent(tMonto)
+                        .addComponent(bLanzar)
+                        .addComponent(bPagar))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(lNombreUsuario2)
+                        .addComponent(tNumeroSorteado1)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                .addComponent(r1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
-                            .addComponent(tUltimosLanzamientos))
-                        .addGap(96, 96, 96))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel5)
+                        .addComponent(tUltimosLanzamientos, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(14, 14, 14))
         );
 
         pack();
@@ -207,19 +216,21 @@ public class Dialogo_OperarMesaCrupier extends Dialogo_GeneralVista implements O
     private void bLanzarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bLanzarActionPerformed
         // TODO add your handling code here:
         String efectoSeleccionado = (String) cbEfecto.getSelectedItem();
-        
+
         //arrayList de casilleros seleccionados
         ArrayList<Integer> casillerosSeleccionados = new ArrayList<>(Arrays.asList(1, 5, 18, 41, 42));
-        
+
         if (efectoSeleccionado.contains("Efecto")) {
             mostrarMensajeError("Seleccione un efecto para continuar");
         } else {
-            controlador.lanzar(efectoSeleccionado,casillerosSeleccionados);
+            controlador.lanzar(efectoSeleccionado, casillerosSeleccionados);
         }
     }//GEN-LAST:event_bLanzarActionPerformed
 
     private void bPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bPagarActionPerformed
         // TODO add your handling code here:
+        controlador.pagar();
+
     }//GEN-LAST:event_bPagarActionPerformed
 
 
@@ -238,25 +249,30 @@ public class Dialogo_OperarMesaCrupier extends Dialogo_GeneralVista implements O
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JList lJugadores;
     private javax.swing.JLabel lNombreUsuario;
+    private javax.swing.JLabel lNombreUsuario1;
+    private javax.swing.JLabel lNombreUsuario2;
+    private componente.PanelRuleta r;
+    private componente.PanelRuleta r1;
     private javax.swing.JLabel tApuestas;
     private javax.swing.JLabel tMesa;
     private javax.swing.JLabel tMonto;
+    private javax.swing.JLabel tNumeroSorteado;
+    private javax.swing.JLabel tNumeroSorteado1;
     private javax.swing.JLabel tRonda;
     private javax.swing.JLabel tSaldoMesa;
-    private javax.swing.JLabel tUltimoNumeroSorteado;
     private javax.swing.JLabel tUltimosLanzamientos;
     // End of variables declaration//GEN-END:variables
 
     @Override
     public void cargarDatosMesa(Mesa mesa) {
         tMesa.setText(mesa.getNombre());
-        tRonda.setText("A DETERMINAR");
+        tRonda.setText(mesa.getEstadistica().getNumeroDeRonda() + "");
     }
 
     @Override
     public void cargarDatosJugadores(ArrayList<Jugador> jugadores) {
 
-        ArrayList<String> datosAmostrar = new ArrayList<String>();
+        ArrayList<String> datosAmostrar = new ArrayList<>();
 
         for (Jugador jugador : jugadores) {
             datosAmostrar.add(jugador.getNombre() + " -- SALDO: " + jugador.getSaldo());
@@ -274,4 +290,53 @@ public class Dialogo_OperarMesaCrupier extends Dialogo_GeneralVista implements O
         cbEfecto.setSelectedIndex(0);
     }
 
+    @Override
+    public void inhabilitarApuestasEspecificas(ArrayList<String> apuestas) {
+
+        //seteo todo en false
+        r.setVisible(PanelRuleta.ROJO, false);
+        r.setVisible(PanelRuleta.NEGRO, false);
+        r.setVisible(PanelRuleta.PRIMERA_DOCENA, false);
+        r.setVisible(PanelRuleta.SEGUNDA_DOCENA, false);
+        r.setVisible(PanelRuleta.TERCERA_DOCENA, false);
+
+        if (apuestas.contains("Color")) {
+            r.setVisible(PanelRuleta.ROJO, true);
+            r.setVisible(PanelRuleta.NEGRO, true);
+        }
+        if (apuestas.contains("Docena")) {
+            r.setVisible(PanelRuleta.PRIMERA_DOCENA, true);
+            r.setVisible(PanelRuleta.SEGUNDA_DOCENA, true);
+            r.setVisible(PanelRuleta.TERCERA_DOCENA, true);
+        }
+    }
+
+    @Override
+    public void mostrarNumeroGanador(int numeroGanador) {
+        tNumeroSorteado1.setText(numeroGanador + "");
+    }
+
+    @Override
+    public void ocultarNumeroGanador() {
+        tNumeroSorteado1.setText("");
+    }
+
+    @Override
+    public void actualizarNumerosYronda(Estadistica estadistica) {
+        tRonda.setText(estadistica.getNumeroDeRonda() + "");
+
+        String numerosSorteados = "";
+        // se muestran los ultimos 15 numeros
+        for (int i = 0; i < estadistica.getNumerosSorteados().size() && i < 15; i++) {
+            numerosSorteados += estadistica.getNumerosSorteados().get(i) + "   ";
+        }
+        tUltimosLanzamientos.setText(numerosSorteados);
+    }
+
+    @Override
+    public void estadoBotonLanzar(boolean estado) {
+        
+        bLanzar.setEnabled(estado);
+        bPagar.setEnabled(!estado);
+    }
 }

@@ -1,6 +1,9 @@
 package Controlador;
 
 import Dominio.Efecto;
+import Dominio.EstadoMesaAbierta;
+import Dominio.EstadoMesaCerrar;
+import Dominio.EstadoMesaLanzar;
 import Dominio.Eventos;
 import Dominio.Mesa;
 import Dominio.Ronda;
@@ -24,13 +27,16 @@ public class OperarMesaVistaControlador implements Observador {
     }
 
     private void inicializarVista() {
+        estadoBotonLanzar(true);
         vista.cargarDatosMesa(modelo);
         vista.cargarDatosJugadores(modelo.getListaJugadores());
         vista.cargarEfectos(Fachada.getInstancia().efectosDisponibles());
     }
 
     public void cerrarMesa() {
+        modelo.setEstado(new EstadoMesaCerrar());
         modelo.setMensaje("La mesa se va a cerrar");
+
         cerrarMesaExpulsarUsuarios();
         eliminarMesaDeDisponibles();
         Fachada.getInstancia().desloguearUsuarioCrupier(modelo.getCrupier());
@@ -56,28 +62,53 @@ public class OperarMesaVistaControlador implements Observador {
                 || Eventos.UsuarioDeslogueado.equals(evento)) {
             vista.cargarDatosJugadores(modelo.getListaJugadores());
         }
+        if (Eventos.NumeroGanador.equals(evento)) {
+            mostrarNumeroGanador(modelo.getEstadistica().getNumerosSorteados().get(0));
+        }
 
     }
 
     public void lanzar(String efectoSeleccionado, ArrayList<Integer> casillerosSeleccionados) {
+        //seteo el estado de la mesa
+        modelo.setEstado(new EstadoMesaLanzar());
+        //obtengo efecto, lo asocio a la ronda y lanzo
         Efecto efecto = buscarEfecto(efectoSeleccionado);
-        Ronda nuevaRonda = new Ronda(efecto, casillerosSeleccionados, modelo);
-        modelo.setRonda(nuevaRonda);
-        efecto.setRonda(nuevaRonda);
+        modelo.getRonda().setEfecto(efecto);
+        modelo.getRonda().setCasillerosSeleccionados(casillerosSeleccionados);
         modelo.lanzar();
-        modelo.numeroGanador();
-        nuevaRonda.getEfecto().getCasillerosGanadores();
-        System.out.println(modelo.getEstadistica().getUltimosTresNumerosSorteados());
-        System.out.println(modelo.getEstadistica().getHistoricoNegro());
-        System.out.println(modelo.getEstadistica().getHistoricoRojo());
-        System.out.println(modelo.getEstadistica().getHistoricoPrimeraDocena());
-        System.out.println(modelo.getEstadistica().getHistoricoSegundaDocena());
-        System.out.println(modelo.getEstadistica().getHistoricoTerceraDocena());
-
+        estadoBotonLanzar(false);
     }
 
     private Efecto buscarEfecto(String efectoSeleccionado) {
         return Fachada.getInstancia().buscarEfecto(efectoSeleccionado);
     }
 
+    public void pagar() {
+        generacionNuevaRonda();
+        modelo.setEstado(new EstadoMesaAbierta());
+        ocultarNumeroGanador();
+        actualizarNumerosYronda();
+        estadoBotonLanzar(true);
+    }
+
+    private void generacionNuevaRonda() {
+        new Ronda(modelo);
+    }
+
+    private void mostrarNumeroGanador(int numeroGanador) {
+        vista.mostrarNumeroGanador(numeroGanador);
+    }
+
+    private void ocultarNumeroGanador() {
+        vista.ocultarNumeroGanador();
+    }
+
+    private void actualizarNumerosYronda() {
+        vista.actualizarNumerosYronda(modelo.getEstadistica());
+        System.out.println(modelo.getEstadistica().estadisticasDeLaMesa());
+    }
+
+    private void estadoBotonLanzar(boolean estado) {
+        vista.estadoBotonLanzar(estado);
+    }
 }

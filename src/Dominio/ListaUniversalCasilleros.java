@@ -5,48 +5,48 @@ import java.util.HashMap;
 
 public class ListaUniversalCasilleros {
 
-    private static ArrayList<Integer> apuestaDirecta;
-    private static ArrayList<Integer> apuestaColor;
-    private static ArrayList<Integer> apuestaDocena;
+    private static ArrayList<Integer> casillerosApuestaDirecta;
+    private static ArrayList<Integer> casillerosApuestaColor;
+    private static ArrayList<Integer> casillerosApuestaDocena;
 
     public ListaUniversalCasilleros() {
-        setApuestaDirecta();
-        setApuestaColor();
-        setApuestaDocena();
+        setCasillerosApuestaDirecta();
+        setCasillerosApuestaColor();
+        setCasillerosApuestaDocena();
     }
 
-    public static ArrayList<Integer> getApuestaDirecta() {
-        return apuestaDirecta;
+    public static ArrayList<Integer> getCasillerosApuestaDirecta() {
+        return casillerosApuestaDirecta;
     }
 
-    private static void setApuestaDirecta() {
+    private static void setCasillerosApuestaDirecta() {
         int i = 0;
         while (i < 37) {
-            apuestaDirecta.add(i);
+            casillerosApuestaDirecta.add(i);
             i++;
         }
     }
 
-    public static ArrayList<Integer> getApuestaColor() {
-        return apuestaColor;
+    public static ArrayList<Integer> getCasillerosApuestaColor() {
+        return casillerosApuestaColor;
     }
 
-    private void setApuestaColor() {
+    private void setCasillerosApuestaColor() {
         int i = 43;
         while (i < 45) {
-            apuestaColor.add(i);
+            casillerosApuestaColor.add(i);
             i++;
         }
     }
 
-    public static ArrayList<Integer> getApuestaDocena() {
-        return apuestaDocena;
+    public static ArrayList<Integer> getCasillerosApuestaDocena() {
+        return casillerosApuestaDocena;
     }
 
-    private void setApuestaDocena() {
+    private void setCasillerosApuestaDocena() {
         int i = 40;
         while (i < 43) {
-            apuestaDocena.add(i);
+            casillerosApuestaDocena.add(i);
             i++;
         }
     }
@@ -76,7 +76,7 @@ public class ListaUniversalCasilleros {
         return numerosRojos;
     }
 
-    public static HashMap apuestasDocena() {
+    public static HashMap casillerosDocena() {
         HashMap<String, ArrayList<Integer>> docenas = new HashMap<>();
 
         ArrayList<Integer> primeraDocena = new ArrayList<>();
@@ -108,15 +108,15 @@ public class ListaUniversalCasilleros {
         return 44;
     }
 
-    public static int primeraDocena() {
+    public static int casilleroPrimeraDocena() {
         return 40;
     }
 
-    public static int segundaDocena() {
+    public static int casilleroSegundaDocena() {
         return 41;
     }
 
-    public static int terceraDocena() {
+    public static int casilleroTerceraDocena() {
         return 42;
     }
 }

@@ -13,7 +13,7 @@ public final class ApuestaDirecta extends TipoApuesta {
     }
 
     public void setCasilleros() {
-        casillerosApuestaDirecta = ListaUniversalCasilleros.getApuestaDirecta();
+        casillerosApuestaDirecta = ListaUniversalCasilleros.getCasillerosApuestaDirecta();
     }
 
     public ArrayList<Integer> getCasillerosApuestaDirecta() {

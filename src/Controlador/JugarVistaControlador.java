@@ -1,5 +1,6 @@
 package Controlador;
 
+import Dominio.Estadistica;
 import Dominio.Eventos;
 import Dominio.Jugador;
 import Dominio.Mesa;
@@ -35,8 +36,15 @@ public class JugarVistaControlador implements Observador {
         if (Eventos.CierraMesa.equals(evento)) {
             vista.cargarMensaje(modelo);
         }
-        if(Eventos.UsuarioAbandonaMesa.equals(evento)){
+        if (Eventos.UsuarioAbandonaMesa.equals(evento)) {
             vista.cerrarVentana();
+        }
+        if (Eventos.NumeroGanador.equals(evento)) {
+            numeroGanador(modelo.getEstadistica().getNumerosSorteados().get(0));
+        }
+        if (Eventos.Pagar.equals(evento)) {
+            ocultarNumeroGanador();
+            actualizarNumerosYronda(modelo.getEstadistica());
         }
     }
 
@@ -48,7 +56,18 @@ public class JugarVistaControlador implements Observador {
     public void mensajeAceptado() {
         //aca ver que se espera antes de ejecutar 
         //que este todo pronto para cerrar digamos
-         vista.cerrarVentana();
+        vista.cerrarVentana();
     }
 
+    public void numeroGanador(int numero) {
+        vista.mostrarNumeroGanador(numero);
+    }
+
+    private void ocultarNumeroGanador() {
+        vista.ocultarNumeroGanador();
+    }
+
+    private void actualizarNumerosYronda(Estadistica estadistica) {
+        vista.actualizarNumerosYronda(estadistica);
+    }
 }

@@ -13,7 +13,7 @@ public final class ApuestaColor extends TipoApuesta {
     }
 
     public void setCasilleros() {
-        casillerosApuestaColor = ListaUniversalCasilleros.getApuestaColor();
+        casillerosApuestaColor = ListaUniversalCasilleros.getCasillerosApuestaColor();
     }
 
     public ArrayList<Integer> getCasillerosApuestaColor() {
