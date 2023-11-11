@@ -7,12 +7,12 @@ public class EfectoAleatorioParcial extends Efecto {
     }
 
     @Override
-    public void lanzar() {
+    public void lanzar(Ronda ronda) {
         int resultado;
         do {
             resultado = numeroGanador();
             //la bola determina un valor aleatorio, pero asegurando de no repetir los últimos 3 valores. 
-        } while (getRonda().getMesa().getEstadistica().getUltimosTresNumerosSorteados().contains(resultado));
+        } while (ronda.getMesa().getEstadistica().getUltimosTresNumerosSorteados().contains(resultado));
 
         setearNumeroGanador(resultado);
     }

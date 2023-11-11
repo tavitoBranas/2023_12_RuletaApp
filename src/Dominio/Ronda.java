@@ -55,12 +55,11 @@ public class Ronda {
     }
 
     public void lanzar() {
-        this.getEfecto().lanzar();
+        this.getEfecto().lanzar(this);
     }
 
     public void setEfecto(Efecto efecto) {
         this.efecto = efecto;
-        efecto.setRonda(this);
     }
 
     public int getCantidadApuestas() {
@@ -101,7 +100,7 @@ public class Ronda {
         //se actualiza monto total apostado y cantidad apuestas de la ronda
         this.cantidadApuestas += 1;
         this.montoTotalApostado += apuesta.getMontoApostado();
-        apuesta.getJugador().avisarAmesasDeApuesta();
+        apuesta.getJugador().avisar(Eventos.ApuestaRealizada);
     }
 
 }

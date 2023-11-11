@@ -9,7 +9,7 @@ import comun.Observable;
 import comun.Observador;
 import java.util.ArrayList;
 
-public class Mesa extends Observable implements Observador{
+public class Mesa extends Observable implements Observador {
 
     private String nombre;
     private ArrayList<TipoApuesta> tipoApuesta;
@@ -102,17 +102,25 @@ public class Mesa extends Observable implements Observador{
             }
         }
         listaJugadores.add(jugador);
+        jugador.agregarMesa(this);
+        jugador.agregar(this);
         avisar(Eventos.UsuarioAgregado);
         return this;
     }
 
     public void desloguearJugadordeMesa(Jugador jugador) throws MesaAbandonoException {
-        habilitadoAvandono();
+        habilitadoAvandono(jugador);
         listaJugadores.remove(jugador);
+        jugador.remover(this);
+        jugador.eliminarMesa(this);
         avisar(Eventos.UsuarioAbandonaMesa);
     }
 
     public void expulsarJugadores() {
+        for (Jugador j : listaJugadores) {
+            j.eliminarMesa(this);
+            j.remover(this);
+        }
         listaJugadores.clear();
         avisar(Eventos.CierraMesa);
     }
@@ -140,12 +148,15 @@ public class Mesa extends Observable implements Observador{
         }
     }
 
-    private void habilitadoAvandono() throws MesaAbandonoException {
+    private void habilitadoAvandono(Jugador jugador) throws MesaAbandonoException {
         if (this.estado instanceof EstadoMesaLanzar) {
             throw new MesaAbandonoException("No se puede avandonar mesa. La misma esta pagando");
         }
         if (this.estado instanceof EstadoMesaCerrar) {
             throw new MesaAbandonoException("No se puede avandonar mesa. La misma esta pagando");
+        }
+        if (ronda.getApuestas().containsKey(jugador)) {
+            throw new MesaAbandonoException("No puede abandonar hasta completar la ronda");
         }
     }
 
@@ -162,12 +173,12 @@ public class Mesa extends Observable implements Observador{
         validacionDeCasillero(apuesta.getCasillero());
         //valido que la jugada anterior permita apuesta de color
         if (tipoApuesta.stream().anyMatch(tipo -> tipo instanceof ApuestaColor)
-                && apuestaInvolucraColor(apuesta)) {
+                && ListaUniversalCasilleros.apuestaInvolucraColor(apuesta)) {
             validacionConUltimaJugada(apuesta.getJugador(), apuesta);
         }
         //valido que solo se permita una sola apuesta a docena
         if (tipoApuesta.stream().anyMatch(tipo -> tipo instanceof ApuestaDocena)
-                && apuestaInvolucraDocena(apuesta)) {
+                && ListaUniversalCasilleros.apuestaInvolucraDocena(apuesta)) {
             validacionCantidadApuestasDocena(apuesta.getJugador(), apuesta);
         }
     }
@@ -197,8 +208,8 @@ public class Mesa extends Observable implements Observador{
             for (int k = 0; k < apuestasJugador.size(); k++) {
                 for (int t = 0; t < ListaUniversalCasilleros.getCasillerosApuestaDocena().size(); t++) {
                     if (apuestasJugador.get(k).getCasillero()
-                            == ListaUniversalCasilleros.getCasillerosApuestaDocena().get(t) &&
-                            apuesta.getCasillero() != apuestasJugador.get(k).getCasillero()) {
+                            == ListaUniversalCasilleros.getCasillerosApuestaDocena().get(t)
+                            && apuesta.getCasillero() != apuestasJugador.get(k).getCasillero()) {
                         throw new ApuestaInvalidaException("No se puede apostar a mas de una docena por ronda");
                     }
                 }
@@ -217,7 +228,7 @@ public class Mesa extends Observable implements Observador{
             //analizo restricciones basado en el ultimo ganador
             if (!apuestasAanalizar.isEmpty()) {
                 if (ultimoGanador != 0) {
-                    int colorBuscado = colorCasillero(ultimoGanador);
+                    int colorBuscado = ListaUniversalCasilleros.colorCasillero(ultimoGanador);
                     //el color que se aposto anteriormente no gano?
                     if (apuestasAanalizar.size() == 1 && apuestasAanalizar.get(0).getCasillero() != colorBuscado) {
                         //la apuesta es al mismo color que se aposto anteriormente Y apuesto por un monto mayor
@@ -243,6 +254,7 @@ public class Mesa extends Observable implements Observador{
         }
     }
 
+    /*
     private int colorCasillero(int ultimoGanador) {
         int retorno;
         if (ListaUniversalCasilleros.numerosRojos().stream().anyMatch(l -> l == ultimoGanador)) {
@@ -256,7 +268,7 @@ public class Mesa extends Observable implements Observador{
     private boolean apuestaInvolucraColor(Apuesta apuesta) {
         return ListaUniversalCasilleros.getCasillerosApuestaColor().stream().anyMatch(a -> a == apuesta.getCasillero());
     }
-
+     */
     private ArrayList<Apuesta> jugadorApostoColorEnRondaAnterior(ArrayList<Apuesta> apuestas) {
         ArrayList<Apuesta> retorno = new ArrayList<>();
         ArrayList<Integer> casillerosColores = ListaUniversalCasilleros.getCasillerosApuestaColor();
@@ -273,18 +285,16 @@ public class Mesa extends Observable implements Observador{
         return retorno;
     }
 
+    /*
     private boolean apuestaInvolucraDocena(Apuesta apuesta) {
         return ListaUniversalCasilleros.getCasillerosApuestaDocena().stream().anyMatch(a -> a == apuesta.getCasillero());
     }
-
+     */
     @Override
     public void actualizar(Observable origen, Object evento) {
-        if(Eventos.ApuestaRealizada.equals(evento)){
+        if (Eventos.ApuestaRealizada.equals(evento)) {
             avisar(Eventos.ApuestaRealizada);
         }
     }
-    
-    public void jugadorAvisaDeApuestaRealizada(){
-        avisar(Eventos.ApuestaRealizada);
-    }
+
 }

@@ -8,10 +8,10 @@ public final class ApuestaDocena extends TipoApuesta {
     
     public ApuestaDocena(int factor) {
         super("Apuesta a Docena", factor);
-        casillerosApuestaDocena = new ArrayList<>();
-        setCasilleros();
+        //casillerosApuestaDocena = new ArrayList<>();
+        //setCasilleros();
     }
-
+/*
    public void setCasilleros() {
         casillerosApuestaDocena = ListaUniversalCasilleros.getCasillerosApuestaDocena();
     }
@@ -23,6 +23,6 @@ public final class ApuestaDocena extends TipoApuesta {
     public void esValidaApuesta() {
         //TODO
         /*  Apostar a un grupo de 12 números (1-12, 13-24, 25-36).
-        Restricciones: no se puede apostar a más de una docena por ronda.   */
-    }
+        Restricciones: no se puede apostar a más de una docena por ronda.   
+    }*/
 }

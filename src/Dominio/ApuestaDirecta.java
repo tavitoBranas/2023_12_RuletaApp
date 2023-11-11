@@ -8,10 +8,10 @@ public final class ApuestaDirecta extends TipoApuesta {
     
     public ApuestaDirecta(int factor) {
         super("Apuesta Directa", factor);
-        casillerosApuestaDirecta = new ArrayList<>();
-        setCasilleros();
+        //casillerosApuestaDirecta = new ArrayList<>();
+       // setCasilleros();
     }
-
+/*
     public void setCasilleros() {
         casillerosApuestaDirecta = ListaUniversalCasilleros.getCasillerosApuestaDirecta();
     }
@@ -19,5 +19,7 @@ public final class ApuestaDirecta extends TipoApuesta {
     public ArrayList<Integer> getCasillerosApuestaDirecta() {
         return casillerosApuestaDirecta;
     }
-
+*/
+    
+    
 }

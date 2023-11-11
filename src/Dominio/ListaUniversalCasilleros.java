@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 public class ListaUniversalCasilleros {
 
-
     public static ArrayList<Integer> getCasillerosApuestaDirecta() {
         ArrayList<Integer> casillerosApuestaDirecta = new ArrayList<>();
         int i = 0;
@@ -104,5 +103,23 @@ public class ListaUniversalCasilleros {
 
     public static int casilleroTerceraDocena() {
         return 42;
+    }
+
+    public static boolean apuestaInvolucraDocena(Apuesta apuesta) {
+        return getCasillerosApuestaDocena().stream().anyMatch(a -> a == apuesta.getCasillero());
+    }
+
+    public static boolean apuestaInvolucraColor(Apuesta apuesta) {
+        return ListaUniversalCasilleros.getCasillerosApuestaColor().stream().anyMatch(a -> a == apuesta.getCasillero());
+    }
+    
+    public static int colorCasillero(int ultimoGanador) {
+        int retorno;
+        if (numerosRojos().stream().anyMatch(l -> l == ultimoGanador)) {
+            retorno = casilleroRojo();
+        } else {
+            retorno = casilleroNegro();
+        }
+        return retorno;
     }
 }

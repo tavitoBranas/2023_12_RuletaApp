@@ -7,13 +7,13 @@ public class EfectoSimulador extends Efecto {
     }
 
     @Override
-    public void lanzar() {
+    public void lanzar(Ronda ronda) {
 
         int resultado;
         do {
             resultado = numeroGanador();
             //la bola sortea únicamente entre los números que tienen Apuesta Directa, más el cero
-        } while (!getRonda().apuestaDerecta().contains(resultado)
+        } while (!ronda.apuestaDerecta().contains(resultado)
                 || resultado == 0);
 
         setearNumeroGanador(resultado);

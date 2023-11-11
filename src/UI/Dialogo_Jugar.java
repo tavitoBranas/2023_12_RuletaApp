@@ -246,13 +246,13 @@ public class Dialogo_Jugar extends Dialogo_GeneralVista implements JugarVista {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         //controlador.eliminar();
-        controlador.apostar(44, 100);
+        controlador.apostar(40, 100);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         //controlador.eliminar();
-        controlador.apostar(43, 100);
+        controlador.apostar(41, 100);
     }//GEN-LAST:event_jButton2ActionPerformed
 
 
