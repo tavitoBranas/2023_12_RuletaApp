@@ -41,5 +41,6 @@ public abstract class TipoApuesta {
         final TipoApuesta other = (TipoApuesta) obj;
         return Objects.equals(this.tipo, other.tipo);
     }
+   
 
 }
