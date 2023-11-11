@@ -3,7 +3,9 @@ package Controlador;
 import Dominio.Eventos;
 import Dominio.Jugador;
 import Dominio.Mesa;
+import Excepciones.MesaAbandonoException;
 import Excepciones.MesaException;
+import Excepciones.MesaNoDisponibleException;
 import Excepciones.UsuarioEnMesaException;
 import Logica.Fachada;
 import UI.Dialogo_Jugar;
@@ -12,6 +14,8 @@ import UI.Interface.UnirseMesaVista;
 import comun.Observable;
 import comun.Observador;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class UnirseAmesaVistaControlador implements Observador {
 
@@ -50,15 +54,19 @@ public class UnirseAmesaVistaControlador implements Observador {
             Mesa retornoMesa = fachada.traerMesa(mesa);
             retornoMesa.ingresarAmesa(jugador);
             vista.ejecutarCasoDeUsoJugar(retornoMesa, jugador);
-        } catch (UsuarioEnMesaException e) {
+        } catch (UsuarioEnMesaException | MesaNoDisponibleException e) {
             vista.mostrarMensajeError(e.getMessage());
         }
     }
 
     public void desloguear() {
         
-        //analizar cuando un usuario se deloguea que pasa de las mesas en las que esta
-        fachada.desloguearUsuarioJugador(this.jugador);
+        try {
+            //analizar cuando un usuario se deloguea que pasa de las mesas en las que esta
+            fachada.desloguearUsuarioJugador(this.jugador);
+        } catch (MesaNoDisponibleException | MesaAbandonoException ex) {
+            vista.mostrarMensajeError(ex.getMessage());
+        }
         vista.cerrarVentana();
     }
 }

@@ -18,6 +18,10 @@ public final class EstadoMesaLanzar extends EstadoMesa {
 
     @Override
     public void accionar(Mesa mesa) {
+
+        mesa.setMensaje("La mesa esta bloqueada. No se puede apostar ni abandonar la misma");
+        mesa.getRonda().lanzar();
+        
         //seteo casilleros ganadores
         casillerosGanadores.clear();
         int numeroGanador = mesa.getRonda().getEfecto().numeroGanador();

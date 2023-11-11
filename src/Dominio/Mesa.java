@@ -1,9 +1,10 @@
 package Dominio;
 
+import Excepciones.MesaAbandonoException;
+import Excepciones.MesaEstadoException;
+import Excepciones.MesaNoDisponibleException;
 import Excepciones.UsuarioEnMesaException;
-import Logica.Fachada;
 import comun.Observable;
-import comun.Observador;
 import java.util.ArrayList;
 
 public class Mesa extends Observable {
@@ -16,6 +17,7 @@ public class Mesa extends Observable {
     private Crupier crupier;
     private String mensaje;
     private EstadoMesa estado;
+    //private PanelRuleta panel;
 
     public Mesa(String nombre, ArrayList<TipoApuesta> tipo, Crupier crupier) {
         this.nombre = nombre;
@@ -25,10 +27,19 @@ public class Mesa extends Observable {
         listaJugadores = new ArrayList<Jugador>();
         this.mensaje = "";
         estadistica = new Estadistica(this);
-        estado = new EstadoMesaAbierta(this);
+        estado = new EstadoMesaAbiertaPagar(this);
 
     }
 
+    /*
+    public PanelRuleta getPanel() {
+        return panel;
+    }
+
+    public void setPanel(PanelRuleta panel) {
+        this.panel = panel;
+    }
+     */
     public String getNombre() {
         return nombre;
     }
@@ -69,14 +80,21 @@ public class Mesa extends Observable {
         return estado;
     }
 
-    public void setEstado(EstadoMesa estado) {
+    public void setEstado(EstadoMesa estado) throws MesaEstadoException {
+        //evaluo si la  mesa puede cerrarse
+        habilitadoCierreDeMesa(estado);
         this.estado = estado;
-        if (estado instanceof EstadoMesaAbierta) {
-            avisar(Eventos.Pagar);
+        if (estado instanceof EstadoMesaAbiertaPagar) {
+            pagar();
         }
+        if (estado instanceof EstadoMesaLanzar) {
+            lanzar();
+        }
+
     }
 
-    public Mesa ingresarAmesa(Jugador jugador) throws UsuarioEnMesaException {
+    public Mesa ingresarAmesa(Jugador jugador) throws UsuarioEnMesaException, MesaNoDisponibleException {
+        habilitadoIngreso();
         for (Jugador jugadorEnLista : listaJugadores) {
             if (jugadorEnLista.equals(jugador)) {
                 throw new UsuarioEnMesaException("El jugador ya participa de esta mesa");
@@ -87,7 +105,8 @@ public class Mesa extends Observable {
         return this;
     }
 
-    public void desloguearJugadordeMesa(Jugador jugador) {
+    public void desloguearJugadordeMesa(Jugador jugador) throws MesaAbandonoException {
+        habilitadoAvandono();
         listaJugadores.remove(jugador);
         avisar(Eventos.UsuarioAbandonaMesa);
     }
@@ -97,38 +116,18 @@ public class Mesa extends Observable {
         avisar(Eventos.CierraMesa);
     }
 
-    /*
-    public void apuestaDirectaObligatoria() {
-        boolean poseeApuestaDirecta = false;
-        TipoApuesta directa = null;
-        ArrayList<TipoApuesta> tipoApuestaDisponibles = Fachada.getInstancia().tipoApuestaDisponibles();
-
-        //busco en la lista generada por el controlador si existe la directa 
-        for (int i = 0; i < this.getTipoApuesta().size() && !poseeApuestaDirecta; i++) {
-            //comparo con la lista de tipo de apuesta disponibles
-            for (int j = 0; j < tipoApuestaDisponibles.size() && !poseeApuestaDirecta; j++) {
-                if (tipoApuestaDisponibles.get(j).getTipo().equals("Apuesta Directa")) {
-                    if (this.getTipoApuesta().get(i).equals(tipoApuestaDisponibles.get(j))) {
-                        poseeApuestaDirecta = true;
-                    }
-                    directa = tipoApuestaDisponibles.get(j);
-                }
-            }
-        }
-        if (!poseeApuestaDirecta) {
-            this.getTipoApuesta().add(directa);
-        }
-    }
-     */
     public Estadistica getEstadistica() {
         return estadistica;
     }
 
     public void lanzar() {
-        ronda.lanzar();
         estado.accionar(this);
-                System.out.println(estadistica.estadisticasDeLaMesa());
-        avisar(Eventos.NumeroGanador);
+        avisar(Eventos.Lanzar);
+    }
+
+    private void pagar() {
+        estado.accionar(this);
+        avisar(Eventos.Pagar);
     }
 
     public void setRonda(Ronda nuevaRonda) {
@@ -137,6 +136,32 @@ public class Mesa extends Observable {
 
     public Ronda getRonda() {
         return ronda;
+    }
+
+    private void habilitadoIngreso() throws MesaNoDisponibleException {
+        if (this.estado instanceof EstadoMesaLanzar) {
+            throw new MesaNoDisponibleException("Esta mesa se encuentra pagando. Intente nuevamente en unos segundos");
+        }
+        if (this.estado instanceof EstadoMesaCerrar) {
+            throw new MesaNoDisponibleException("Esta mesa esta cerrando. No es posible su acceso");
+        }
+    }
+
+    private void habilitadoAvandono() throws MesaAbandonoException {
+        if (this.estado instanceof EstadoMesaLanzar) {
+            throw new MesaAbandonoException("No se puede avandonar mesa. La misma esta pagando");
+        }
+        if (this.estado instanceof EstadoMesaCerrar) {
+            throw new MesaAbandonoException("No se puede avandonar mesa. La misma esta pagando");
+        }
+    }
+
+    private void habilitadoCierreDeMesa(EstadoMesa estado) throws MesaEstadoException {
+        if (this.estado instanceof EstadoMesaAbiertaPagar
+                && estado instanceof EstadoMesaCerrar) {
+            throw new MesaEstadoException("No se puede cerrar la mesa. Para ello la misma debe de estar "
+                    + "bloqueada");
+        }
     }
 
 }

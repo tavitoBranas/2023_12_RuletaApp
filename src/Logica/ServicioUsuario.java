@@ -7,7 +7,9 @@ import Dominio.Mesa;
 import Dominio.Sesion;
 import Dominio.Usuario;
 import Excepciones.LoginException;
+import Excepciones.MesaAbandonoException;
 import Excepciones.MesaException;
+import Excepciones.MesaNoDisponibleException;
 import Excepciones.UsuarioEnMesaException;
 import comun.Observable;
 import java.util.ArrayList;
@@ -107,7 +109,7 @@ class ServicioUsuario extends Observable {
         return usuarioEncontrado;
     }
 
-    void desloguearUsuarioJugador(Jugador jugador) {
+    void desloguearUsuarioJugador(Jugador jugador) throws MesaNoDisponibleException, MesaAbandonoException {
         boolean encontrado = false;
         if (listaJugadores.contains(jugador)) {
             for (int i = 0; i < listaSesionJugadores.size() && !encontrado; i++) {

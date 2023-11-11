@@ -2,7 +2,9 @@ package Logica;
 
 import Dominio.*;
 import Excepciones.LoginException;
+import Excepciones.MesaAbandonoException;
 import Excepciones.MesaException;
+import Excepciones.MesaNoDisponibleException;
 import Excepciones.UsuarioEnMesaException;
 import comun.Observable;
 import comun.Observador;
@@ -101,11 +103,11 @@ public class Fachada extends Observable implements Observador {
         servicioUsuario.desloguearUsuarioCrupier(crupier);
     }
 
-    public void desloguearUsuarioJugador(Jugador jugador) {
+    public void desloguearUsuarioJugador(Jugador jugador) throws MesaNoDisponibleException, MesaAbandonoException {
         servicioUsuario.desloguearUsuarioJugador(jugador);
     }
 
-    public void desloguearJugadordeMesas(Jugador jugador) {
+    public void desloguearJugadordeMesas(Jugador jugador) throws MesaNoDisponibleException, MesaAbandonoException {
         servicioMesa.desloguearJugadordeMesas(jugador);
     }
 

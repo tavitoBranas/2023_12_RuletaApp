@@ -1,9 +1,10 @@
 package Controlador;
 
-import Dominio.Estadistica;
 import Dominio.Eventos;
 import Dominio.Jugador;
 import Dominio.Mesa;
+import Excepciones.MesaAbandonoException;
+import Excepciones.MesaNoDisponibleException;
 import Logica.Fachada;
 import comun.Observable;
 import comun.Observador;
@@ -34,28 +35,32 @@ public class JugarVistaControlador implements Observador {
     @Override
     public void actualizar(Observable origen, Object evento) {
         if (Eventos.CierraMesa.equals(evento)) {
-            vista.cargarMensaje(modelo);
+            vista.cargarMensajeCierre(modelo.getMensaje());
         }
         if (Eventos.UsuarioAbandonaMesa.equals(evento)) {
             vista.cerrarVentana();
         }
-        if (Eventos.NumeroGanador.equals(evento)) {
-            numeroGanador(modelo.getEstadistica().getNumerosSorteados().get(0));
-        }
         if (Eventos.Pagar.equals(evento)) {
             ocultarNumeroGanador();
-            actualizarNumerosYronda(modelo.getEstadistica());
+            actualizarEstadisticaYronda(modelo);
+            reactivarApuestasYAbandono();
+        }
+        if (Eventos.Lanzar.equals(evento)) {
+            numeroGanador(modelo.getEstadistica().getNumerosSorteados().get(0));
+            bloqueoApuestasYAbandono();
         }
     }
 
     public void abandonarMesa() {
-        modelo.desloguearJugadordeMesa(this.jugador);
-        vista.cerrarVentana();
+        try {
+            modelo.desloguearJugadordeMesa(this.jugador);
+            vista.cerrarVentana();
+        } catch (MesaAbandonoException ex) {
+            vista.mostrarMensajeError(ex.getMessage());
+        }
     }
 
     public void mensajeAceptado() {
-        //aca ver que se espera antes de ejecutar 
-        //que este todo pronto para cerrar digamos
         vista.cerrarVentana();
     }
 
@@ -67,7 +72,15 @@ public class JugarVistaControlador implements Observador {
         vista.ocultarNumeroGanador();
     }
 
-    private void actualizarNumerosYronda(Estadistica estadistica) {
-        vista.actualizarNumerosYronda(estadistica);
+    private void actualizarEstadisticaYronda(Mesa mesa) {
+        vista.actualizarEstadisticaYronda(mesa);
+    }
+
+    private void bloqueoApuestasYAbandono() {
+        vista.bloqueoApuestasYAbandono(modelo.getMensaje());
+    }
+
+    private void reactivarApuestasYAbandono() {
+        vista.reactivarApuestasYAbandono(modelo.getMensaje());
     }
 }

@@ -1,6 +1,5 @@
 package Dominio;
 
-import comun.Observable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -15,7 +14,10 @@ public class Estadistica {
     private int historicoPrimeraDocena;
     private int historicoSegundaDocena;
     private int historicoTerceraDocena;
+    //aca tengo un hasmap con los numeros y la frecuencia que se obtuvieron
     private HashMap<Integer, Integer> frecuenciaDeNumerosSorteados;
+    //aca tengo un arrayList de los balances de la mesa
+    private final ArrayList<BalanceMesa> historicoBalance;
     private Mesa mesa;
 
     public Estadistica(Mesa mesa) {
@@ -26,6 +28,7 @@ public class Estadistica {
         historicoPrimeraDocena = 0;
         historicoSegundaDocena = 0;
         historicoTerceraDocena = 0;
+        historicoBalance = new ArrayList<>();
         this.mesa = mesa;
         inicializarEstadisticaNumerosSorteados();
     }
@@ -107,6 +110,21 @@ public class Estadistica {
         return numeroDeRonda;
     }
 
+    public ArrayList<BalanceMesa> getHistoricoBalance() {
+        return historicoBalance;
+    }
+
+    public void setHistoricoBalance(BalanceMesa balance) {
+        balance.setRonda(numeroDeRonda - 1);
+        if (!historicoBalance.isEmpty()) {
+            balance.setBalanceAnterior(historicoBalance.get(0).getBalancePosterior());
+            balance.setBalancePosterior();
+            this.historicoBalance.add(0, balance);
+        } else {
+            this.historicoBalance.add(0, balance);
+        }
+    }
+
     public Map<String, Integer> estadisticasDeLaMesa() {
 
         Map<String, Integer> estadisticasRetorno = new LinkedHashMap<>();
@@ -143,4 +161,7 @@ public class Estadistica {
         return estadisticasRetorno;
     }
 
+    public int getSaldo() {
+        return historicoBalance.get(0).getBalancePosterior();
+    }
 }

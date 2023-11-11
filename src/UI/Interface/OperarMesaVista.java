@@ -12,5 +12,7 @@ public interface OperarMesaVista extends SeteoInicialMesa {
     public void cargarEfectos(ArrayList<Efecto> efectos);
     public void estadoBotonLanzar(boolean estado);
 
+    public void habilitarCerrarMesa(boolean b);
+
 
 }

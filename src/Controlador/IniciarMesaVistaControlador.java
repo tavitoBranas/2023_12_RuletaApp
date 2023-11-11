@@ -38,9 +38,14 @@ public class IniciarMesaVistaControlador {
                 }
             }
         }
+
         //try { NO HAY EXCEPCIONES AL CREAR MESA
         Mesa mesa = new Mesa(nombre, tipoApuestaSeleccionada, crupier);
         fachada.crearMesa(mesa);
+
+        //nuevo panel
+        //PanelRuletaJuego panel = new PanelRuletaJuego(mesa);
+
         vista.ejecutarCasoOperarMesa(mesa);
         vista.cerrarVentana();
         /*} catch (Exception e) {
@@ -56,8 +61,8 @@ public class IniciarMesaVistaControlador {
 
         ArrayList<TipoApuesta> tipoApuestaSeleccionada = new ArrayList<>();
         ArrayList<TipoApuesta> tiposDisponibles = fachada.tipoApuestaDisponibles();
-        
-        for (int i=0; i< tiposDisponibles.size() && tipoApuestaSeleccionada.isEmpty(); i++) {
+
+        for (int i = 0; i < tiposDisponibles.size() && tipoApuestaSeleccionada.isEmpty(); i++) {
             if (tiposDisponibles.get(i) instanceof ApuestaDirecta) {
                 tipoApuestaSeleccionada.add(tiposDisponibles.get(i));
             }

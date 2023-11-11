@@ -16,7 +16,7 @@ import javax.swing.JLabel;
 public class PanelRuleta extends javax.swing.JPanel {
 
     private List<Escuchador> handlers;
-    private final Map<Integer, Cell> cells;
+    protected final Map<Integer, Cell> cells;
 
     public static final int TERCERA_COLUMNA = 37;
     public static final int SEGUNDA_COLUMNA = 38;
@@ -39,9 +39,13 @@ public class PanelRuleta extends javax.swing.JPanel {
         this.cells = buildCellSet();
         this.limpiar();
         this.reanudar();
+
+        for (int i = 37; i < 51; i++) {
+            cells.get(i).button.setVisible(false);
+        }
     }
 
-    private class Cell {
+    protected class Cell {
 
         public JLabel coin;
         public JButton button;

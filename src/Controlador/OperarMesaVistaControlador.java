@@ -1,17 +1,19 @@
 package Controlador;
 
 import Dominio.Efecto;
-import Dominio.EstadoMesaAbierta;
+import Dominio.EstadoMesaAbiertaPagar;
 import Dominio.EstadoMesaCerrar;
 import Dominio.EstadoMesaLanzar;
 import Dominio.Eventos;
 import Dominio.Mesa;
-import Dominio.Ronda;
+import Excepciones.MesaEstadoException;
 import Logica.Fachada;
 import UI.Interface.OperarMesaVista;
 import comun.Observable;
 import comun.Observador;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class OperarMesaVistaControlador implements Observador {
 
@@ -31,10 +33,16 @@ public class OperarMesaVistaControlador implements Observador {
         vista.cargarDatosMesa(modelo);
         vista.cargarDatosJugadores(modelo.getListaJugadores());
         vista.cargarEfectos(Fachada.getInstancia().efectosDisponibles());
+        habilitarCerrarMesa(false);
     }
 
     public void cerrarMesa() {
-        modelo.setEstado(new EstadoMesaCerrar(modelo));
+        
+        try {
+            modelo.setEstado(new EstadoMesaCerrar(modelo));
+        } catch (MesaEstadoException ex) {
+           vista.mostrarMensajeError(ex.getMessage());
+        }
         modelo.setMensaje("La mesa se va a cerrar");
 
         cerrarMesaExpulsarUsuarios();
@@ -62,21 +70,31 @@ public class OperarMesaVistaControlador implements Observador {
                 || Eventos.UsuarioDeslogueado.equals(evento)) {
             vista.cargarDatosJugadores(modelo.getListaJugadores());
         }
-        if (Eventos.NumeroGanador.equals(evento)) {
+        if (Eventos.Lanzar.equals(evento)) {
             mostrarNumeroGanador(modelo.getEstadistica().getNumerosSorteados().get(0));
+            //habilitarCerrarMesa(true);
+        }
+        if (Eventos.Pagar.equals(evento)) {
+           // actualizarNumerosYronda();
+            //habilitarCerrarMesa(false);
         }
 
     }
 
     public void lanzar(String efectoSeleccionado, ArrayList<Integer> casillerosSeleccionados) {
-        //seteo el estado de la mesa, no permite que nadie ingrese o salga o apueste
-        modelo.setEstado(new EstadoMesaLanzar());
         //obtengo efecto, lo asocio a la ronda y lanzo
         Efecto efecto = buscarEfecto(efectoSeleccionado);
         modelo.getRonda().setEfecto(efecto);
         modelo.getRonda().setCasillerosSeleccionados(casillerosSeleccionados);
-        modelo.lanzar();
+
+        try {
+            //seteo el estado de la mesa, no permite que nadie ingrese o salga o apueste
+            modelo.setEstado(new EstadoMesaLanzar());
+        } catch (MesaEstadoException ex) {
+            vista.mostrarMensajeError(ex.getMessage());
+        }
         estadoBotonLanzar(false);
+        habilitarCerrarMesa(true);
     }
 
     private Efecto buscarEfecto(String efectoSeleccionado) {
@@ -84,15 +102,15 @@ public class OperarMesaVistaControlador implements Observador {
     }
 
     public void pagar() {
-        generacionNuevaRonda();
-        modelo.setEstado(new EstadoMesaAbierta(modelo));
+        try {
+            modelo.setEstado(new EstadoMesaAbiertaPagar(modelo));
+        } catch (MesaEstadoException ex) {
+           vista.mostrarMensajeError(ex.getMessage());
+        }
         ocultarNumeroGanador();
         actualizarNumerosYronda();
         estadoBotonLanzar(true);
-    }
-
-    private void generacionNuevaRonda() {
-        new Ronda(modelo);
+        habilitarCerrarMesa(false);
     }
 
     private void mostrarNumeroGanador(int numeroGanador) {
@@ -104,10 +122,14 @@ public class OperarMesaVistaControlador implements Observador {
     }
 
     private void actualizarNumerosYronda() {
-        vista.actualizarNumerosYronda(modelo.getEstadistica());
+        vista.actualizarEstadisticaYronda(modelo);
     }
 
     private void estadoBotonLanzar(boolean estado) {
         vista.estadoBotonLanzar(estado);
+    }
+
+    private void habilitarCerrarMesa(boolean b) {
+        vista.habilitarCerrarMesa(b);
     }
 }

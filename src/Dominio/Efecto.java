@@ -26,14 +26,14 @@ public abstract class Efecto {
         return ronda;
     }
 
-     protected void setRonda(Ronda ronda) {
+    protected void setRonda(Ronda ronda) {
         this.ronda = ronda;
     }
 
-    protected void setearNumeroGanador(int numero){
+    protected void setearNumeroGanador(int numero) {
         numeroGanador = numero;
     }
-    
+
     protected abstract void lanzar();
 
 }

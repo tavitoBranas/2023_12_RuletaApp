@@ -1,6 +1,8 @@
 package Logica;
 
 import Dominio.*;
+import Excepciones.MesaAbandonoException;
+import Excepciones.MesaNoDisponibleException;
 import Excepciones.UsuarioEnMesaException;
 import comun.Observable;
 import java.util.ArrayList;
@@ -42,8 +44,6 @@ public class ServicioMesa extends Observable {
     }
 
     public void agregarMesa(Mesa mesa) {
-        //martillo la directa porque me lo piden
-        //mesa.apuestaDirectaObligatoria();
         listaMesas.add(mesa);
         avisar(Eventos.MesaAgregada);
     }
@@ -65,7 +65,7 @@ public class ServicioMesa extends Observable {
         getTiposDeApuesta().remove(tipo);
     }
 
-    public Mesa unirseAmesa(Jugador jugador, String mesa) throws UsuarioEnMesaException {
+    public Mesa unirseAmesa(Jugador jugador, String mesa) throws UsuarioEnMesaException, MesaNoDisponibleException {
         //aca el servicio busca que exista la mesa
         Mesa mesaBuscada = traerMesa(mesa);
         //trae la mesa y le otorga la responsabilidad a la mesa a que agregue el jugador
@@ -82,7 +82,7 @@ public class ServicioMesa extends Observable {
         return mesaRetorno;
     }
 
-    void desloguearJugadordeMesas(Jugador jugador) {
+    void desloguearJugadordeMesas(Jugador jugador) throws MesaAbandonoException {
         //aca el usuario se va de la aplicacion entonces se cierran todas las mesas en las que este
         for(Mesa m: listaMesas){
             if(m.getListaJugadores().stream().anyMatch(lista -> lista.equals(jugador))){
