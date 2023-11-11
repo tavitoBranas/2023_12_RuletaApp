@@ -1,10 +1,16 @@
 package Dominio;
 
-class Apuesta {
+public class Apuesta {
     private Jugador jugador;
     private int montoApostado;
     private int casillero;
 
+    public Apuesta(Jugador j, int monto, int casillero){
+        this.jugador = j;
+        this.montoApostado = monto;
+        this.casillero = casillero;
+    }
+    
     public Jugador getJugador() {
         return jugador;
     }
@@ -28,6 +34,4 @@ class Apuesta {
     public void setCasillero(int casillero) {
         this.casillero = casillero;
     }
-    
-    
 }

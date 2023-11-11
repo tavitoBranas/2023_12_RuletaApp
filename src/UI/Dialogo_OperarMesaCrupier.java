@@ -407,4 +407,11 @@ public class Dialogo_OperarMesaCrupier extends Dialogo_GeneralVista implements O
     public void habilitarCerrarMesa(boolean b) {
         bCerrarMesa.setEnabled(b);
     }
+
+    @Override
+    public void apuestaRealizada(Mesa mesa) {
+        tApuestas.setText(mesa.getRonda().getCantidadApuestas() + "");
+        tMonto.setText(mesa.getRonda().getMontoTotalApostado() + "");
+        cargarDatosJugadores(mesa.getListaJugadores());
+    }
 }

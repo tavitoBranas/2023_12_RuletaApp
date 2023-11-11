@@ -78,6 +78,9 @@ public class OperarMesaVistaControlador implements Observador {
            // actualizarNumerosYronda();
             //habilitarCerrarMesa(false);
         }
+        if(Eventos.ApuestaRealizada.equals(evento)){
+            vista.apuestaRealizada(modelo);
+        }
 
     }
 

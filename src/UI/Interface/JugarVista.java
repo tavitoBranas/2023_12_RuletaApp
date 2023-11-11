@@ -13,5 +13,5 @@ public interface JugarVista extends SeteoInicialMesa {
     public void reactivarApuestasYAbandono(String mensaje);
 
     public void cargarMensajeCierre(String mensaje);
-    
+        public void apuestaRealizada(Jugador jugador);
 }

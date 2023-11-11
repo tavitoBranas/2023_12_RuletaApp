@@ -11,5 +11,6 @@ public enum Eventos {
     CierraMesa, //crupier cierra la mesa ??
     NumeroGanador, //se determina el numero ganador
     Pagar, //la mesa engtra en estado pagar
-    Lanzar,
+    Lanzar, 
+    ApuestaRealizada,  //se ingresa una apuesta en la ronda
 }

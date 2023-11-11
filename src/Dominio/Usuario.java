@@ -1,8 +1,9 @@
 package Dominio;
 
 import Excepciones.LoginException;
+import comun.Observable;
 
-public abstract class Usuario {
+public abstract class Usuario extends Observable {
 
     private int cedula;
     private String password;

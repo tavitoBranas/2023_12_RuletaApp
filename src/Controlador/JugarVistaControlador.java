@@ -1,14 +1,18 @@
 package Controlador;
 
+import Dominio.Apuesta;
 import Dominio.Eventos;
 import Dominio.Jugador;
 import Dominio.Mesa;
+import Excepciones.ApuestaInvalidaException;
 import Excepciones.MesaAbandonoException;
 import Excepciones.MesaNoDisponibleException;
+import Excepciones.MontoInsuficienteException;
 import Logica.Fachada;
 import comun.Observable;
 import comun.Observador;
 import UI.Interface.JugarVista;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,6 +30,7 @@ public class JugarVistaControlador implements Observador {
         this.jugador = jugador;
         inicializarVista();
         mesa.agregar(this);
+        jugador.agregar(this);
     }
 
     private void inicializarVista() {
@@ -48,6 +53,9 @@ public class JugarVistaControlador implements Observador {
         if (Eventos.Lanzar.equals(evento)) {
             numeroGanador(modelo.getEstadistica().getNumerosSorteados().get(0));
             bloqueoApuestasYAbandono();
+        }
+        if(Eventos.ApuestaRealizada.equals(evento)){
+            apuestaRealizada(jugador);
         }
     }
 
@@ -82,5 +90,28 @@ public class JugarVistaControlador implements Observador {
 
     private void reactivarApuestasYAbandono() {
         vista.reactivarApuestasYAbandono(modelo.getMensaje());
+    }
+
+    public void apostar(int numeroApostado, int monto) {
+        Apuesta apuesta = new Apuesta(jugador, monto, numeroApostado);
+        try {
+            jugador.validaMontoApuesta(monto);
+            modelo.getRonda().apostar(apuesta);
+        } catch (ApuestaInvalidaException | MontoInsuficienteException ex) {
+            vista.mostrarMensajeError(ex.getMessage());
+        }
+    }
+
+    /*public void eliminar() {
+        ArrayList<Apuesta> color = new ArrayList<>();
+        color.add(new Apuesta(jugador, 100, 43));
+        color.add(new Apuesta(jugador, 100, 44));
+        modelo.getEstadistica().getNumerosSorteados().add(0);
+
+        jugador.setUltimasApuestas(color);
+    }*/
+
+    private void apuestaRealizada(Jugador jugador) {
+       vista.apuestaRealizada(jugador);
     }
 }
