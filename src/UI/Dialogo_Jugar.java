@@ -378,14 +378,6 @@ public class Dialogo_Jugar extends Dialogo_GeneralVista implements JugarVista {
     }
 
     @Override
-    public void cargarMensajeCierre(String mensaje) {
-        cargarMensaje(mensaje);
-        //TODO ver que este mensaje me deje hacer otras cosas
-        JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.WARNING_MESSAGE);
-        controlador.mensajeAceptado();
-    }
-
-    @Override
     public void apuestaRealizada(Jugador jugador) {
         tSaldo.setText(jugador.getSaldo() + "");
     }
@@ -409,6 +401,14 @@ public class Dialogo_Jugar extends Dialogo_GeneralVista implements JugarVista {
             fila++;
         }
         tblResumenJugador.setModel(estadisticas);
+    }
+
+    @Override
+    public void avisarMesaEstaPorCerrar(String mensaje) {
+        cargarMensaje(mensaje);
+        //TODO ver que este mensaje me deje hacer otras cosas
+        JOptionPane.showMessageDialog(this, mensaje, "Aviso", JOptionPane.WARNING_MESSAGE);
+        controlador.mensajeAceptado();
     }
 
 }

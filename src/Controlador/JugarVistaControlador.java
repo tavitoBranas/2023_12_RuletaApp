@@ -35,9 +35,6 @@ public class JugarVistaControlador implements Observador {
 
     @Override
     public void actualizar(Observable origen, Object evento) {
-        if (Eventos.CierraMesa.equals(evento)) {
-            vista.cargarMensajeCierre(modelo.getMensaje());
-        }
         if (Eventos.UsuarioAbandonaMesa.equals(evento)) {
             vista.cerrarVentana();
         }
@@ -53,6 +50,12 @@ public class JugarVistaControlador implements Observador {
         }
         if(Eventos.ApuestaRealizada.equals(evento) || Eventos.ActualizacionSaldo.equals(evento)){
             apuestaRealizada(jugador);
+        }
+        if(Eventos.MesaPorCerrar.equals(evento)){
+            avisarMesaEstaPorCerrar();
+        }
+        if(Eventos.CierraMesa.equals(evento)){
+            vista.cerrarVentana();
         }
     }
 
@@ -113,5 +116,9 @@ public class JugarVistaControlador implements Observador {
 
     private void actualizarBalanceJugador(Jugador jugador) {
        vista.actualizarBalanceJugador(jugador);
+    }
+
+    private void avisarMesaEstaPorCerrar() {
+        vista.avisarMesaEstaPorCerrar(modelo.getMensaje());
     }
 }

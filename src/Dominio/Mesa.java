@@ -82,16 +82,22 @@ public class Mesa extends Observable implements Observador {
 
     public void setEstado(EstadoMesa estado) throws MesaEstadoException {
         //evaluo si la  mesa puede cerrarse
-        habilitadoCierreDeMesa(estado);
-        this.estado = estado;
+
         if (estado instanceof EstadoMesaAbiertaPagar) {
+            this.estado = estado;
             pagar();
         }
         if (estado instanceof EstadoMesaLanzar) {
+            this.estado = estado;
             lanzar();
         }
-        //ver cuando se cierre la mesa que se hace
+        if (estado instanceof EstadoMesaCerrar) {
+            habilitadoCierreDeMesa(estado);
+            this.estado = estado;
+            cerrar();
+        }
 
+        //ver cuando se cierre la mesa que se hace
     }
 
     public Mesa ingresarAmesa(Jugador jugador) throws UsuarioEnMesaException, MesaNoDisponibleException {
@@ -122,7 +128,6 @@ public class Mesa extends Observable implements Observador {
             j.remover(this);
         }
         listaJugadores.clear();
-        avisar(Eventos.CierraMesa);
     }
 
     public Estadistica getEstadistica() {
@@ -137,6 +142,11 @@ public class Mesa extends Observable implements Observador {
     private void pagar() {
         estado.accionar(this);
         avisar(Eventos.Pagar);
+    }
+    
+    private void cerrar(){
+        estado.accionar(this);
+        avisar(Eventos.CierraMesa);
     }
 
     private void habilitadoIngreso() throws MesaNoDisponibleException {

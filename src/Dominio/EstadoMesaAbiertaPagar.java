@@ -1,8 +1,6 @@
 package Dominio;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 
 public final class EstadoMesaAbiertaPagar extends EstadoMesa {
@@ -33,7 +31,7 @@ public final class EstadoMesaAbiertaPagar extends EstadoMesa {
         Ronda nuevaronda = new Ronda(mesa);
         mesa.setRonda(nuevaronda);
     }
-
+/*
     private void pagarJugadores(Mesa mesa, BalanceMesa balanceMesa) {
         int numeroGanador = mesa.getEstadistica().getNumerosSorteados().get(0);
         int colorGanador = 0;
@@ -98,7 +96,7 @@ public final class EstadoMesaAbiertaPagar extends EstadoMesa {
         //la liquidacion se establece al pagarle al jugador
         mesa.getEstadistica().setHistoricoBalance(balance);
     }
-
+*/
     private void actualizarUltimaJugadaJugadores(Mesa mesa) {
 
         Map<Jugador, ArrayList<Apuesta>> apuestas = mesa.getRonda().getApuestas();
@@ -111,7 +109,7 @@ public final class EstadoMesaAbiertaPagar extends EstadoMesa {
             jugador.setUltimasApuestas(listaApuestas);
         }
     }
-
+/*
     private void pagarAlJugadorApuestaLiquidacionMesa(Jugador jugador, Apuesta apuesta, TipoApuesta tipo,
             BalanceMesa balanceMesa, BalanceJugador balanceJugador) {
         int saldoAnterior = jugador.getSaldo();
@@ -131,5 +129,5 @@ public final class EstadoMesaAbiertaPagar extends EstadoMesa {
         int perdido = balanceJugador.getPerdido();
         balanceJugador.setPerdido(perdido + apuesta.getMontoApostado());
     }
-
+*/
 }

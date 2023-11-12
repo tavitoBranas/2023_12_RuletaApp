@@ -40,23 +40,21 @@ public class OperarMesaVistaControlador implements Observador {
         } catch (MesaEstadoException ex) {
             vista.mostrarMensajeError(ex.getMessage());
         }
-        modelo.setMensaje("La mesa se va a cerrar");
         //revisar este codigo porque me parece  que iria dentro del estado de la mesa
-        cerrarMesaExpulsarUsuarios();
-        eliminarMesaDeDisponibles();
-        Fachada.getInstancia().desloguearUsuarioCrupier(modelo.getCrupier());
-        Fachada.getInstancia().eliminarMesa(modelo);
+        //cerrarMesaExpulsarUsuarios();
+       // eliminarMesaDeDisponibles();
+        //Fachada.getInstancia().desloguearUsuarioCrupier(modelo.getCrupier());
         cerrarVentana();
     }
     
-    private void eliminarMesaDeDisponibles() {
+   /* private void eliminarMesaDeDisponibles() {
         Fachada.getInstancia().eliminarMesa(modelo);
     }
     
     private void cerrarMesaExpulsarUsuarios() {
         modelo.expulsarJugadores();
     }
-    
+    */
     protected void cerrarVentana() {
         vista.cerrarVentana();
     }
