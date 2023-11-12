@@ -58,8 +58,6 @@ public class Estadistica {
         numerosSorteados.add(0, numero);
         //seteo la estadistica del numero
         frecuenciaDeNumerosSorteados.put(numero, frecuenciaDeNumerosSorteados.get(numero) + 1);
-        numeroDeRonda += 1;
-
     }
 
     public ArrayList<Integer> getNumerosSorteados() {
@@ -110,17 +108,21 @@ public class Estadistica {
         return numeroDeRonda;
     }
 
+    public void setNumeroDeRonda() {
+        numeroDeRonda += 1;
+    }
+
     public ArrayList<BalanceMesa> getHistoricoBalance() {
         return historicoBalance;
     }
 
     public void setHistoricoBalance(BalanceMesa balance) {
-        balance.setRonda(numeroDeRonda - 1);
         if (!historicoBalance.isEmpty()) {
             balance.setBalanceAnterior(historicoBalance.get(0).getBalancePosterior());
             balance.setBalancePosterior();
             this.historicoBalance.add(0, balance);
         } else {
+            balance.setBalancePosterior();
             this.historicoBalance.add(0, balance);
         }
     }

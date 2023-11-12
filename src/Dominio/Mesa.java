@@ -155,9 +155,9 @@ public class Mesa extends Observable implements Observador {
         if (this.estado instanceof EstadoMesaCerrar) {
             throw new MesaAbandonoException("No se puede avandonar mesa. La misma esta pagando");
         }
-        if(ronda.getApuestas().containsKey(jugador)){
+        if (ronda.getApuestas().containsKey(jugador)) {
             throw new MesaAbandonoException("No puede abandonar hasta completar la ronda");
-            }
+        }
     }
 
     private void habilitadoCierreDeMesa(EstadoMesa estado) throws MesaEstadoException {
@@ -253,7 +253,8 @@ public class Mesa extends Observable implements Observador {
             }
         }
     }
-/*
+
+    /*
     private int colorCasillero(int ultimoGanador) {
         int retorno;
         if (ListaUniversalCasilleros.numerosRojos().stream().anyMatch(l -> l == ultimoGanador)) {
@@ -267,7 +268,7 @@ public class Mesa extends Observable implements Observador {
     private boolean apuestaInvolucraColor(Apuesta apuesta) {
         return ListaUniversalCasilleros.getCasillerosApuestaColor().stream().anyMatch(a -> a == apuesta.getCasillero());
     }
-*/
+     */
     private ArrayList<Apuesta> jugadorApostoColorEnRondaAnterior(ArrayList<Apuesta> apuestas) {
         ArrayList<Apuesta> retorno = new ArrayList<>();
         ArrayList<Integer> casillerosColores = ListaUniversalCasilleros.getCasillerosApuestaColor();
@@ -283,15 +284,19 @@ public class Mesa extends Observable implements Observador {
         }
         return retorno;
     }
-/*
+
+    /*
     private boolean apuestaInvolucraDocena(Apuesta apuesta) {
         return ListaUniversalCasilleros.getCasillerosApuestaDocena().stream().anyMatch(a -> a == apuesta.getCasillero());
     }
-*/
+     */
     @Override
     public void actualizar(Observable origen, Object evento) {
         if (Eventos.ApuestaRealizada.equals(evento)) {
             avisar(Eventos.ApuestaRealizada);
+        }
+        if (Eventos.ActualizacionSaldo.equals(evento)) {
+            avisar(Eventos.ActualizacionSaldo);
         }
     }
 

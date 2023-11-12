@@ -12,5 +12,7 @@ public enum Eventos {
     NumeroGanador, //se determina el numero ganador
     Pagar, //la mesa engtra en estado pagar
     Lanzar, 
-    ApuestaRealizada,  //se ingresa una apuesta en la ronda
+    ApuestaRealizada, //se ingresa una apuesta en la ronda
+    ActualizacionSaldo, //se actualiza el saldo del jugador
+    RondaTerminada, //se termina la ronda y se actualiza saldo del jugador, balance de mesa etc 
 }

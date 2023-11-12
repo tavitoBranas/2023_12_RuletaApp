@@ -2,6 +2,7 @@ package Dominio;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class ListaUniversalCasilleros {
 
@@ -112,13 +113,44 @@ public class ListaUniversalCasilleros {
     public static boolean apuestaInvolucraColor(Apuesta apuesta) {
         return ListaUniversalCasilleros.getCasillerosApuestaColor().stream().anyMatch(a -> a == apuesta.getCasillero());
     }
-    
+
     public static int colorCasillero(int ultimoGanador) {
-        int retorno;
+        int retorno = -1; //si es cero no se determina color
         if (numerosRojos().stream().anyMatch(l -> l == ultimoGanador)) {
             retorno = casilleroRojo();
         } else {
             retorno = casilleroNegro();
+        }
+        return retorno;
+    }
+
+    static int docenaCasillero(int numeroGanador) {
+        int retorno = -1; //si el ganador es cero entonces no tiene docena
+        Map<String, ArrayList<Integer>> docenas = casillerosDocena();
+        for (Map.Entry<String, ArrayList<Integer>> elemento : docenas.entrySet()) {
+            String docena = elemento.getKey();
+            ArrayList<Integer> numerosDeDocena = elemento.getValue();
+
+            if (numerosDeDocena.stream().anyMatch(d -> d == numeroGanador)) {
+                retorno = numeroDocena(docena);
+            }
+        }
+        return retorno;
+    }
+
+    private static int numeroDocena(String docena) {
+        int retorno;  
+
+        switch (docena) {
+            case "Primera":
+                retorno = casilleroPrimeraDocena();
+                break;
+            case "Segunda":
+                retorno = casilleroSegundaDocena();
+                break;
+           default:
+                retorno = casilleroTerceraDocena();
+                break;
         }
         return retorno;
     }

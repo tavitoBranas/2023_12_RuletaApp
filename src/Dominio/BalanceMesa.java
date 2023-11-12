@@ -4,27 +4,29 @@ public class BalanceMesa {
 
     private int ronda;
     private int balanceAnterior;
-    private final int apuestas;  //total apostado
-    private final int recoleccion; // apuestas perdidas --> lo que se lleva la casa
-    private final int liquidacion; //apuestas pagadas MONTO TOTAL segun la jugada
+    private int apuestas;  //total apostado
+    private int recoleccion; // apuestas perdidas --> lo que se lleva la casa
+    private int liquidacion; //apuestas pagadas MONTO TOTAL segun la jugada
     private int balancePosterior;
 
-    public BalanceMesa(int apuestas, int recoleccion, int liquidacion) {
-        this.apuestas = apuestas;
-        this.recoleccion = recoleccion;
-        this.liquidacion = liquidacion;
+    public BalanceMesa(int ronda) {
+        this.ronda = ronda;
+        this.apuestas = 0;
+        this.recoleccion = 0;
+        this.liquidacion = 0;
         balanceAnterior = 0;
-        balancePosterior = apuestas + recoleccion - liquidacion;
+        balancePosterior = 0;
     }
 
     public int getRonda() {
         return ronda;
     }
 
+    /*
     public void setRonda(int ronda) {
         this.ronda = ronda;
     }
-
+     */
     public int getBalanceAnterior() {
         return balanceAnterior;
     }
@@ -50,7 +52,23 @@ public class BalanceMesa {
     }
 
     public void setBalancePosterior() {
-        this.balancePosterior = apuestas + recoleccion - liquidacion + balanceAnterior;
+        this.setBalancePosterior(apuestas - liquidacion + balanceAnterior);
+    }
+
+    public void setApuestas(int apuestas) {
+        this.apuestas = apuestas;
+    }
+
+    public void setRecoleccion(int recoleccion) {
+        this.recoleccion = recoleccion;
+    }
+
+    public void setLiquidacion(int liquidacion) {
+        this.liquidacion = liquidacion;
+    }
+
+    public void setBalancePosterior(int balancePosterior) {
+        this.balancePosterior = balancePosterior;
     }
 
 }

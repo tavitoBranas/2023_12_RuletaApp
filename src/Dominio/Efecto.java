@@ -25,6 +25,10 @@ public abstract class Efecto {
         numeroGanador = numero;
     }
 
+    public int getNumeroGanador() {
+        return numeroGanador;
+    }
+
     protected abstract void lanzar(Ronda ronda);
 
 }

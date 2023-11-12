@@ -24,7 +24,7 @@ public final class EstadoMesaLanzar extends EstadoMesa {
         
         //seteo casilleros ganadores
         casillerosGanadores.clear();
-        int numeroGanador = mesa.getRonda().getEfecto().numeroGanador();
+        int numeroGanador = mesa.getRonda().getEfecto().getNumeroGanador();
         ArrayList<TipoApuesta> tipoApuestas = mesa.getTipoApuesta();
 
         if (tipoApuestas.stream().anyMatch(apuesta -> apuesta instanceof ApuestaDirecta)) {

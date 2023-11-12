@@ -12,14 +12,12 @@ import UI.Interface.OperarMesaVista;
 import comun.Observable;
 import comun.Observador;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class OperarMesaVistaControlador implements Observador {
-
-    private OperarMesaVista vista;
-    private Mesa modelo;
-
+    
+    private final OperarMesaVista vista;
+    private final Mesa modelo;
+    
     public OperarMesaVistaControlador(OperarMesaVista vista, Mesa mesa) {
         this.vista = vista;
         this.modelo = mesa;
@@ -27,7 +25,7 @@ public class OperarMesaVistaControlador implements Observador {
         modelo.agregar(this);
         Fachada.getInstancia().agregar(this);
     }
-
+    
     private void inicializarVista() {
         estadoBotonLanzar(true);
         vista.cargarDatosMesa(modelo);
@@ -35,35 +33,34 @@ public class OperarMesaVistaControlador implements Observador {
         vista.cargarEfectos(Fachada.getInstancia().efectosDisponibles());
         habilitarCerrarMesa(false);
     }
-
+    
     public void cerrarMesa() {
-        
         try {
             modelo.setEstado(new EstadoMesaCerrar(modelo));
         } catch (MesaEstadoException ex) {
-           vista.mostrarMensajeError(ex.getMessage());
+            vista.mostrarMensajeError(ex.getMessage());
         }
         modelo.setMensaje("La mesa se va a cerrar");
-
+        //revisar este codigo porque me parece  que iria dentro del estado de la mesa
         cerrarMesaExpulsarUsuarios();
         eliminarMesaDeDisponibles();
         Fachada.getInstancia().desloguearUsuarioCrupier(modelo.getCrupier());
         Fachada.getInstancia().eliminarMesa(modelo);
         cerrarVentana();
     }
-
+    
     private void eliminarMesaDeDisponibles() {
         Fachada.getInstancia().eliminarMesa(modelo);
     }
-
+    
     private void cerrarMesaExpulsarUsuarios() {
         modelo.expulsarJugadores();
     }
-
+    
     protected void cerrarVentana() {
         vista.cerrarVentana();
     }
-
+    
     @Override
     public void actualizar(Observable origen, Object evento) {
         if (Eventos.UsuarioAgregado.equals(evento) || Eventos.UsuarioAbandonaMesa.equals(evento)
@@ -75,21 +72,20 @@ public class OperarMesaVistaControlador implements Observador {
             //habilitarCerrarMesa(true);
         }
         if (Eventos.Pagar.equals(evento)) {
-           // actualizarNumerosYronda();
-            //habilitarCerrarMesa(false);
+            vista.actualizarEstadisticaYronda(modelo);
+            vista.resetearApuestasMonto();
         }
-        if(Eventos.ApuestaRealizada.equals(evento)){
+        if (Eventos.ApuestaRealizada.equals(evento) || Eventos.ActualizacionSaldo.equals(evento)) {
             vista.apuestaRealizada(modelo);
         }
-
     }
-
+    
     public void lanzar(String efectoSeleccionado, ArrayList<Integer> casillerosSeleccionados) {
         //obtengo efecto, lo asocio a la ronda y lanzo
         Efecto efecto = buscarEfecto(efectoSeleccionado);
         modelo.getRonda().setEfecto(efecto);
         modelo.getRonda().setCasillerosSeleccionados(casillerosSeleccionados);
-
+        
         try {
             //seteo el estado de la mesa, no permite que nadie ingrese o salga o apueste
             modelo.setEstado(new EstadoMesaLanzar());
@@ -99,39 +95,39 @@ public class OperarMesaVistaControlador implements Observador {
         estadoBotonLanzar(false);
         habilitarCerrarMesa(true);
     }
-
+    
     private Efecto buscarEfecto(String efectoSeleccionado) {
         return Fachada.getInstancia().buscarEfecto(efectoSeleccionado);
     }
-
+    
     public void pagar() {
         try {
             modelo.setEstado(new EstadoMesaAbiertaPagar(modelo));
         } catch (MesaEstadoException ex) {
-           vista.mostrarMensajeError(ex.getMessage());
+            vista.mostrarMensajeError(ex.getMessage());
         }
         ocultarNumeroGanador();
         actualizarNumerosYronda();
         estadoBotonLanzar(true);
         habilitarCerrarMesa(false);
     }
-
+    
     private void mostrarNumeroGanador(int numeroGanador) {
         vista.mostrarNumeroGanador(numeroGanador);
     }
-
+    
     private void ocultarNumeroGanador() {
         vista.ocultarNumeroGanador();
     }
-
+    
     private void actualizarNumerosYronda() {
         vista.actualizarEstadisticaYronda(modelo);
     }
-
+    
     private void estadoBotonLanzar(boolean estado) {
         vista.estadoBotonLanzar(estado);
     }
-
+    
     private void habilitarCerrarMesa(boolean b) {
         vista.habilitarCerrarMesa(b);
     }

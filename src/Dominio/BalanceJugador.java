@@ -2,17 +2,18 @@ package Dominio;
 
 public final class BalanceJugador {
 
-    private int ronda;
+    private final int ronda;
     private int totalApostado;
-    private final int ganado;
+    private int ganado;
     private int perdido;
     private int balance;
 
-    public BalanceJugador(int ronda, int totalApostado, int ganado) {
+    public BalanceJugador(int ronda) {
         this.ronda = ronda;
-        this.totalApostado = totalApostado;
-        this.ganado = ganado;
-        setPerdido();
+        this.totalApostado = 0;
+        this.ganado = 0;
+        this.perdido = 0;
+        balance = 0;
     }
 
     public int getRonda() {
@@ -23,28 +24,36 @@ public final class BalanceJugador {
         return totalApostado;
     }
 
+    public void setTotalApostado(int total) {
+        totalApostado = total;
+    }
+
     public int getBalance() {
         return balance;
     }
-
-    public void setBalanceInicial(int monto){
+/*
+    public void setBalanceInicial(int monto) {
         balance = monto;
-    }
+    }*/
     
-    public void setBalance(int balanceAnterior){
-        balance = balanceAnterior + ganado - perdido;
+    public void setBalance(int balanceAnterior) {
+        balance = balanceAnterior + ganado - totalApostado;
     }
-    
+
     public int getGanado() {
         return ganado;
+    }
+
+    public void setGanado(int ganado) {
+        this.ganado = ganado;
     }
 
     public int getPerdido() {
         return perdido;
     }
 
-    public void setPerdido() {
-        perdido = ganado - totalApostado;
+    public void setPerdido(int perdido) {
+        this.perdido = perdido;
     }
 
 }

@@ -15,4 +15,6 @@ public interface OperarMesaVista extends SeteoInicialMesa {
     public void habilitarCerrarMesa(boolean b);
     public void apuestaRealizada(Mesa mesa);
 
+    public void resetearApuestasMonto();
+
 }

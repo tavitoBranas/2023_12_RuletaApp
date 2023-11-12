@@ -14,4 +14,6 @@ public interface JugarVista extends SeteoInicialMesa {
 
     public void cargarMensajeCierre(String mensaje);
         public void apuestaRealizada(Jugador jugador);
+
+    public void actualizarBalanceJugador(Jugador jugador);
 }

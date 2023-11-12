@@ -256,7 +256,7 @@ public class Dialogo_OperarMesaCrupier extends Dialogo_GeneralVista implements O
         String efectoSeleccionado = (String) cbEfecto.getSelectedItem();
 
         //arrayList de casilleros seleccionados
-        ArrayList<Integer> casillerosSeleccionados = new ArrayList<>(Arrays.asList(1, 5, 18, 41, 42));
+        ArrayList<Integer> casillerosSeleccionados = new ArrayList<>(Arrays.asList(40,41, 42, 1));
 
         if (efectoSeleccionado.contains("Efecto")) {
             mostrarMensajeError("Seleccione un efecto para continuar");
@@ -413,5 +413,11 @@ public class Dialogo_OperarMesaCrupier extends Dialogo_GeneralVista implements O
         tApuestas.setText(mesa.getRonda().getCantidadApuestas() + "");
         tMonto.setText(mesa.getRonda().getMontoTotalApostado() + "");
         cargarDatosJugadores(mesa.getListaJugadores());
+    }
+
+    @Override
+    public void resetearApuestasMonto() {
+        tApuestas.setText("");
+        tMonto.setText("");
     }
 }

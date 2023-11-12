@@ -6,21 +6,17 @@ import Dominio.Jugador;
 import Dominio.Mesa;
 import Excepciones.ApuestaInvalidaException;
 import Excepciones.MesaAbandonoException;
-import Excepciones.MesaNoDisponibleException;
 import Excepciones.MontoInsuficienteException;
 import Logica.Fachada;
 import comun.Observable;
 import comun.Observador;
 import UI.Interface.JugarVista;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class JugarVistaControlador implements Observador {
 
-    private JugarVista vista;
-    private Jugador jugador;
-    private Mesa modelo;
+    private final JugarVista vista;
+    private final Jugador jugador;
+    private final Mesa modelo;
 
     public Fachada fachada;
 
@@ -48,13 +44,14 @@ public class JugarVistaControlador implements Observador {
         if (Eventos.Pagar.equals(evento)) {
             ocultarNumeroGanador();
             actualizarEstadisticaYronda(modelo);
+            actualizarBalanceJugador(jugador);
             reactivarApuestasYAbandono();
         }
         if (Eventos.Lanzar.equals(evento)) {
             numeroGanador(modelo.getEstadistica().getNumerosSorteados().get(0));
             bloqueoApuestasYAbandono();
         }
-        if(Eventos.ApuestaRealizada.equals(evento)){
+        if(Eventos.ApuestaRealizada.equals(evento) || Eventos.ActualizacionSaldo.equals(evento)){
             apuestaRealizada(jugador);
         }
     }
@@ -95,7 +92,6 @@ public class JugarVistaControlador implements Observador {
     public void apostar(int numeroApostado, int monto) {
         Apuesta apuesta = new Apuesta(jugador, monto, numeroApostado);
         try {
-            jugador.validaMontoApuesta(monto);
             modelo.getRonda().apostar(apuesta);
         } catch (ApuestaInvalidaException | MontoInsuficienteException ex) {
             vista.mostrarMensajeError(ex.getMessage());
@@ -113,5 +109,9 @@ public class JugarVistaControlador implements Observador {
 
     private void apuestaRealizada(Jugador jugador) {
        vista.apuestaRealizada(jugador);
+    }
+
+    private void actualizarBalanceJugador(Jugador jugador) {
+       vista.actualizarBalanceJugador(jugador);
     }
 }

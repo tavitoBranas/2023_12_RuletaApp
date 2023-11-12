@@ -1,16 +1,18 @@
 package Dominio;
 
 import Excepciones.ApuestaInvalidaException;
+import Excepciones.MontoInsuficienteException;
 import comun.Observable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Ronda {
 
     private final Mesa mesa;
     private Efecto efecto;
     private ArrayList<Integer> casillerosSeleccionados;
-    private final HashMap<Jugador, ArrayList<Apuesta>> apuestas;
+    private final Map<Jugador, ArrayList<Apuesta>> apuestas;
     private int cantidadApuestas;
     private int montoTotalApostado;
 
@@ -42,7 +44,7 @@ public class Ronda {
         return efecto;
     }
 
-    public HashMap<Jugador, ArrayList<Apuesta>> getApuestas() {
+    public Map<Jugador, ArrayList<Apuesta>> getApuestas() {
         return apuestas;
     }
 
@@ -70,21 +72,20 @@ public class Ronda {
         return montoTotalApostado;
     }
 
-    public void apostar(Apuesta apuesta) throws ApuestaInvalidaException {
-        //1er se valida apuesta
-        mesa.validarApuesta(apuesta);
+    public void apostar(Apuesta apuesta) throws ApuestaInvalidaException, MontoInsuficienteException {
+        //1er valido si jugador puede apostar
+        apuesta.getJugador().validaMontoApuesta(apuesta.getMontoApostado());
 
-        //se actualiza saldo del jugador
-        int nuevoSaldo = apuesta.getJugador().getSaldo() - apuesta.getMontoApostado();
-        apuesta.getJugador().setSaldo(nuevoSaldo);
+        //2er se valida apuesta a nivel de la mesa
+        mesa.validarApuesta(apuesta);
 
         //se ingresa al hasmap de apuestas de la ronda
         Jugador jugador = apuesta.getJugador();
-        ArrayList<Apuesta> apuestasJugador = apuestas.getOrDefault(jugador, new ArrayList<>());
+        ArrayList<Apuesta> apuestasJugador = getApuestas().getOrDefault(jugador, new ArrayList<>());
         //veo si ya existe una apuesta anterior al mismo casillero
         if (apuestasJugador.stream().anyMatch(a -> a.getCasillero() == apuesta.getCasillero())) {
+            //si existe actualizo la apuesta anterior con el monto actual
             boolean encontrado = false;
-            //actualizo la apuesta anterior con el monto actual
             for (int i = 0; i < apuestasJugador.size() && !encontrado; i++) {
                 if (apuestasJugador.get(i).getCasillero() == apuesta.getCasillero()) {
                     int nuevoMonto = apuesta.getMontoApostado() + apuestasJugador.get(i).getMontoApostado();
@@ -94,8 +95,12 @@ public class Ronda {
             }
         } else {
             apuestasJugador.add(apuesta);
-            apuestas.put(jugador, apuestasJugador);
+           apuestas.put(jugador, apuestasJugador);
         }
+
+        //se actualiza saldo del jugador
+        int nuevoSaldo = apuesta.getJugador().getSaldo() - apuesta.getMontoApostado();
+        apuesta.getJugador().setSaldo(nuevoSaldo);
 
         //se actualiza monto total apostado y cantidad apuestas de la ronda
         this.cantidadApuestas += 1;

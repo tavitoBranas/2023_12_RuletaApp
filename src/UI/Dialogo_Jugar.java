@@ -3,6 +3,7 @@ package UI;
 import Controlador.JugarVistaControlador;
 import Dominio.ApuestaColor;
 import Dominio.ApuestaDocena;
+import Dominio.BalanceJugador;
 import Dominio.Estadistica;
 import Dominio.Jugador;
 import Dominio.Mesa;
@@ -52,6 +53,7 @@ public class Dialogo_Jugar extends Dialogo_GeneralVista implements JugarVista {
         tMensajeMesa = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -128,17 +130,24 @@ public class Dialogo_Jugar extends Dialogo_GeneralVista implements JugarVista {
 
         tMensajeMesa.setText("**");
 
-        jButton1.setText("Eliminar");
+        jButton1.setText("1");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Eliminar 2");
+        jButton2.setText("2");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setText("3");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
             }
         });
 
@@ -175,18 +184,20 @@ public class Dialogo_Jugar extends Dialogo_GeneralVista implements JugarVista {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jSeparator1)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 560, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createSequentialGroup()
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                         .addGap(6, 6, 6)
-                                        .addComponent(tMensajeMesa, javax.swing.GroupLayout.PREFERRED_SIZE, 394, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(tMensajeMesa, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jButton3)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(jButton2)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jButton1)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGap(18, 18, 18)
                                         .addComponent(bAbandonar))
                                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(jSeparator2))
@@ -230,7 +241,8 @@ public class Dialogo_Jugar extends Dialogo_GeneralVista implements JugarVista {
                     .addComponent(bAbandonar)
                     .addComponent(tMensajeMesa)
                     .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(jButton2)
+                    .addComponent(jButton3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(tMensaje)
                 .addContainerGap())
@@ -246,20 +258,27 @@ public class Dialogo_Jugar extends Dialogo_GeneralVista implements JugarVista {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         //controlador.eliminar();
-        controlador.apostar(40, 100);
+        controlador.apostar(40, 1);
+        controlador.apostar(1, 1);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         //controlador.eliminar();
-        controlador.apostar(41, 100);
+        controlador.apostar(41, 1);
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        controlador.apostar(42, 1);
+    }//GEN-LAST:event_jButton3ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bAbandonar;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
@@ -311,8 +330,6 @@ public class Dialogo_Jugar extends Dialogo_GeneralVista implements JugarVista {
 
     @Override
     public void actualizarEstadisticaYronda(Mesa mesa) {
-        //tRonda.setText(mesa.getEstadistica().getNumeroDeRonda() + "");
-        //tSaldo.setText(jugador.getSaldo() + "");
         actualizarEstadistica(mesa.getEstadistica().estadisticasDeLaMesa());
     }
 
@@ -371,6 +388,27 @@ public class Dialogo_Jugar extends Dialogo_GeneralVista implements JugarVista {
     @Override
     public void apuestaRealizada(Jugador jugador) {
         tSaldo.setText(jugador.getSaldo() + "");
+    }
+
+    @Override
+    public void actualizarBalanceJugador(Jugador jugador) {
+        DefaultTableModel estadisticas = new DefaultTableModel();
+        estadisticas.addColumn("Ronda");
+        estadisticas.addColumn("Total apostado");
+        estadisticas.addColumn("Ganado");
+        estadisticas.addColumn("Perdido");
+        estadisticas.addColumn("Balance");
+        estadisticas.setRowCount(jugador.getHistoricoBalanceJugador().size());
+        int fila = 0;
+        for (BalanceJugador balance : jugador.getHistoricoBalanceJugador()) {
+            estadisticas.setValueAt(balance.getRonda(), fila, 0);
+            estadisticas.setValueAt(balance.getTotalApostado(), fila, 1);
+            estadisticas.setValueAt(balance.getGanado(), fila, 2);
+            estadisticas.setValueAt(balance.getPerdido(), fila, 3);
+            estadisticas.setValueAt(balance.getBalance(), fila, 4);
+            fila++;
+        }
+        tblResumenJugador.setModel(estadisticas);
     }
 
 }
