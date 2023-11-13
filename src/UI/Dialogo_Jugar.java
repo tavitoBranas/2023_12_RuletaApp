@@ -1,17 +1,13 @@
 package UI;
 
 import Controlador.JugarVistaControlador;
-import Dominio.Apuesta;
 import Dominio.ApuestaColor;
 import Dominio.ApuestaDocena;
 import Dominio.BalanceJugador;
-import Dominio.Estadistica;
 import Dominio.Jugador;
 import Dominio.Mesa;
-import java.util.ArrayList;
 import UI.Interface.JugarVista;
 import componente.PanelRuleta;
-import java.util.Arrays;
 import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -394,7 +390,7 @@ public class Dialogo_Jugar extends Dialogo_GeneralVista implements JugarVista {
     @Override
     public void avisarMesaEstaPorCerrar(String mensaje) {
         cargarMensaje(mensaje);
-        //TODO ver que este mensaje me deje hacer otras cosas
+        //TODO ver que este mensaje no bloquee acciones
         JOptionPane.showMessageDialog(this, mensaje, "Aviso", JOptionPane.WARNING_MESSAGE);
         controlador.mensajeAceptado();
     }
@@ -403,5 +399,4 @@ public class Dialogo_Jugar extends Dialogo_GeneralVista implements JugarVista {
     public void aceptarApuesta(int monto, int casillero) {
         panelRuleta2.setApuesta(casillero, monto);
     }
-
 }

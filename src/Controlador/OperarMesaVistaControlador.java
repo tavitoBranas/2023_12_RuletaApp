@@ -1,18 +1,10 @@
 package Controlador;
 
-import Dominio.Apuesta;
-import Dominio.Efecto;
-import Dominio.EstadoMesaAbiertaPagar;
-import Dominio.EstadoMesaCerrar;
-import Dominio.EstadoMesaLanzar;
-import Dominio.Eventos;
-import Dominio.ListaUniversalCasilleros;
-import Dominio.Mesa;
+import Dominio.*;
 import Excepciones.MesaEstadoException;
 import Logica.Fachada;
 import UI.Interface.OperarMesaVista;
-import comun.Observable;
-import comun.Observador;
+import comun.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -39,15 +31,6 @@ public class OperarMesaVistaControlador implements Observador {
         vista.cargarEfectos(Fachada.getInstancia().efectosDisponibles());
     }
 
-    public void cerrarMesa() {
-        try {
-            modelo.setEstado(new EstadoMesaCerrar(modelo));
-        } catch (MesaEstadoException ex) {
-            vista.mostrarMensajeError(ex.getMessage());
-        }
-        vista.cerrarVentana();
-    }
-
     @Override
     public void actualizar(Observable origen, Object evento) {
         if (Eventos.UsuarioAgregado.equals(evento) || Eventos.UsuarioAbandonaMesa.equals(evento)
@@ -55,8 +38,7 @@ public class OperarMesaVistaControlador implements Observador {
             vista.cargarDatosJugadores(modelo.getListaJugadores());
         }
         if (Eventos.Lanzar.equals(evento)) {
-            mostrarNumeroGanador(modelo.getEstadistica().getNumerosSorteados().get(0));
-            //habilitarCerrarMesa(true);
+            vista.mostrarNumeroGanador(modelo.getEstadistica().getNumerosSorteados().get(0));
         }
         if (Eventos.Pagar.equals(evento)) {
             vista.actualizarEstadisticaYronda(modelo);
@@ -67,7 +49,7 @@ public class OperarMesaVistaControlador implements Observador {
         }
         if (Eventos.ApuestaRealizada.equals(evento)) {
             vista.apuestaRealizada(modelo);
-            mostrarApuestas();
+            vista.mostrarApuesta(mostrarApuestas());
         }
     }
 
@@ -76,7 +58,6 @@ public class OperarMesaVistaControlador implements Observador {
         Efecto efecto = buscarEfecto(efectoSeleccionado);
         modelo.getRonda().setEfecto(efecto);
         modelo.getRonda().setCasillerosSeleccionados();
-
         try {
             //seteo el estado de la mesa, no permite que nadie ingrese o salga o apueste
             modelo.setEstado(new EstadoMesaLanzar());
@@ -87,32 +68,25 @@ public class OperarMesaVistaControlador implements Observador {
         habilitarCerrarMesa(true);
     }
 
-    private Efecto buscarEfecto(String efectoSeleccionado) {
-        return Fachada.getInstancia().buscarEfecto(efectoSeleccionado);
-    }
-
     public void pagar() {
         try {
             modelo.setEstado(new EstadoMesaAbiertaPagar(modelo));
         } catch (MesaEstadoException ex) {
             vista.mostrarMensajeError(ex.getMessage());
         }
-        ocultarNumeroGanador();
-        actualizarNumerosYronda();
+        vista.ocultarNumeroGanador();
+        vista.actualizarEstadisticaYronda(modelo);
         estadoBotonLanzar(true);
         habilitarCerrarMesa(false);
     }
 
-    private void mostrarNumeroGanador(int numeroGanador) {
-        vista.mostrarNumeroGanador(numeroGanador);
-    }
-
-    private void ocultarNumeroGanador() {
-        vista.ocultarNumeroGanador();
-    }
-
-    private void actualizarNumerosYronda() {
-        vista.actualizarEstadisticaYronda(modelo);
+    public void cerrarMesa() {
+        try {
+            modelo.setEstado(new EstadoMesaCerrar(modelo));
+        } catch (MesaEstadoException ex) {
+            vista.mostrarMensajeError(ex.getMessage());
+        }
+        vista.cerrarVentana();
     }
 
     private void estadoBotonLanzar(boolean estado) {
@@ -123,7 +97,11 @@ public class OperarMesaVistaControlador implements Observador {
         vista.habilitarCerrarMesa(b);
     }
 
-    private void mostrarApuestas() {
+    private Efecto buscarEfecto(String efectoSeleccionado) {
+        return Fachada.getInstancia().buscarEfecto(efectoSeleccionado);
+    }
+
+    private Map<Integer, Integer> mostrarApuestas() {
         Map<Integer, Integer> resumenApuestas = new HashMap<>();
         ArrayList<Integer> universalCellCodes = ListaUniversalCasilleros.casillerosDisponibles();
         Collection<ArrayList<Apuesta>> apuestas = modelo.getRonda().getApuestas().values();
@@ -138,6 +116,6 @@ public class OperarMesaVistaControlador implements Observador {
             }
             resumenApuestas.put(code, monto);
         }
-        vista.mostrarApuesta(resumenApuestas);
+        return resumenApuestas;
     }
 }

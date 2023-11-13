@@ -7,7 +7,6 @@ import Dominio.Mesa;
 import Excepciones.ApuestaInvalidaException;
 import Excepciones.MesaAbandonoException;
 import Excepciones.MontoInsuficienteException;
-import Logica.Fachada;
 import comun.Observable;
 import comun.Observador;
 import UI.Interface.JugarVista;
@@ -19,8 +18,6 @@ public class JugarVistaControlador implements Observador {
     private final JugarVista vista;
     private final Jugador jugador;
     private final Mesa modelo;
-
-    public Fachada fachada;
 
     public JugarVistaControlador(JugarVista vistaJugar, Mesa mesa, Jugador jugador) {
         this.vista = vistaJugar;
@@ -41,20 +38,20 @@ public class JugarVistaControlador implements Observador {
             vista.cerrarVentana();
         }
         if (Eventos.Pagar.equals(evento)) {
-            ocultarNumeroGanador();
-            actualizarEstadisticaYronda(modelo);
-            actualizarBalanceJugador(jugador);
-            reactivarApuestasYAbandono();
+            vista.ocultarNumeroGanador();
+            vista.actualizarEstadisticaYronda(modelo);
+            vista.actualizarBalanceJugador(jugador);
+            vista.reactivarApuestasYAbandono(modelo.getMensaje());
         }
         if (Eventos.Lanzar.equals(evento)) {
-            numeroGanador(modelo.getEstadistica().getNumerosSorteados().get(0));
-            bloqueoApuestasYAbandono();
+            vista.mostrarNumeroGanador(modelo.getEstadistica().getNumerosSorteados().get(0));
+            vista.bloqueoApuestasYAbandono(modelo.getMensaje());
         }
         if (Eventos.ApuestaRealizada.equals(evento) || Eventos.ActualizacionSaldo.equals(evento)) {
-            apuestaRealizada(jugador);
+            vista.apuestaRealizada(jugador);
         }
         if (Eventos.MesaPorCerrar.equals(evento)) {
-            avisarMesaEstaPorCerrar();
+            vista.avisarMesaEstaPorCerrar(modelo.getMensaje());
         }
         if (Eventos.CierraMesa.equals(evento)) {
             vista.cerrarVentana();
@@ -74,26 +71,6 @@ public class JugarVistaControlador implements Observador {
         vista.cerrarVentana();
     }
 
-    public void numeroGanador(int numero) {
-        vista.mostrarNumeroGanador(numero);
-    }
-
-    private void ocultarNumeroGanador() {
-        vista.ocultarNumeroGanador();
-    }
-
-    private void actualizarEstadisticaYronda(Mesa mesa) {
-        vista.actualizarEstadisticaYronda(mesa);
-    }
-
-    private void bloqueoApuestasYAbandono() {
-        vista.bloqueoApuestasYAbandono(modelo.getMensaje());
-    }
-
-    private void reactivarApuestasYAbandono() {
-        vista.reactivarApuestasYAbandono(modelo.getMensaje());
-    }
-
     public void apostar(int numeroApostado, int monto) {
         Apuesta apuesta = new Apuesta(jugador, monto, numeroApostado);
         try {
@@ -102,34 +79,6 @@ public class JugarVistaControlador implements Observador {
         } catch (ApuestaInvalidaException | MontoInsuficienteException ex) {
             vista.mostrarMensajeError(ex.getMessage());
         }
-    }
-
-    /*public void eliminar() {
-        ArrayList<Apuesta> color = new ArrayList<>();
-        color.add(new Apuesta(jugador, 100, 43));
-        color.add(new Apuesta(jugador, 100, 44));
-        modelo.getEstadistica().getNumerosSorteados().add(0);
-
-        jugador.setUltimasApuestas(color);
-    }*/
-    private void apuestaRealizada(Jugador jugador) {
-        vista.apuestaRealizada(jugador);
-    }
-
-    private void actualizarBalanceJugador(Jugador jugador) {
-        vista.actualizarBalanceJugador(jugador);
-    }
-
-    private void avisarMesaEstaPorCerrar() {
-        vista.avisarMesaEstaPorCerrar(modelo.getMensaje());
-    }
-
-    public void montoAapostar(int apuesta) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    public void casillero(int universalCellCode) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     private void actualizarApuesta(int casillero) {

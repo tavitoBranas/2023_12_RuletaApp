@@ -6,9 +6,9 @@ public enum Eventos {
     UsuarioAgregado, //se agrega un usuario a la mesa
     UsuarioAbandonaMesa, //usuario abandona mesa
     UsuarioDeslogueado, //un usuario se desloguea
-    CierraMesa, //crupier cierra la mesa ??
+    CierraMesa, //crupier cierra la mesa 
     NumeroGanador, //se determina el numero ganador
-    Pagar, //la mesa engtra en estado pagar
+    Pagar, //la mesa entra en estado pagar
     Lanzar, 
     ApuestaRealizada, //se ingresa una apuesta en la ronda
     ActualizacionSaldo, //se actualiza el saldo del jugador
