@@ -3,7 +3,6 @@ package Controlador;
 import Dominio.Jugador;
 import Dominio.Usuario;
 import Excepciones.LoginException;
-import UI.Dialogo_UnirseAmesaJugador;
 import UI.Interface.LogInVista;
 
 public class LogInJugadorVistaControlador extends LogInVistaControlador {
@@ -23,5 +22,4 @@ public class LogInJugadorVistaControlador extends LogInVistaControlador {
         }
         return jugador;
     }
-
 }

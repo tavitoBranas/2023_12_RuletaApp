@@ -3,7 +3,6 @@ package UI;
 import Controlador.LogInVistaControlador;
 import Dominio.Usuario;
 import UI.Interface.LogInVista;
-import javax.swing.JOptionPane;
 
 public abstract class Dialogo_LogIn extends Dialogo_GeneralVista implements LogInVista {
 
@@ -80,7 +79,6 @@ public abstract class Dialogo_LogIn extends Dialogo_GeneralVista implements LogI
         this.ingresar();
     }//GEN-LAST:event_bIngresarActionPerformed
 
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bIngresar;
     private javax.swing.JLabel jLabel1;
@@ -95,7 +93,7 @@ public abstract class Dialogo_LogIn extends Dialogo_GeneralVista implements LogI
         try {
             int ciNumerica = Integer.parseInt(ci);
             controlador.logIn(ciNumerica, password);
-        } catch (NumberFormatException e) {  //exception del parse
+        } catch (NumberFormatException e) {  
             mostrarMensajeError("La cedula de identidad debe de ser numerica");
         }
     }

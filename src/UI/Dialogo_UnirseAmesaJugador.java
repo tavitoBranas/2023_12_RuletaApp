@@ -3,12 +3,8 @@ package UI;
 import Controlador.UnirseAmesaVistaControlador;
 import Dominio.Jugador;
 import Dominio.Mesa;
-import Dominio.Usuario;
-import Excepciones.MesaException;
 import UI.Interface.UnirseMesaVista;
 import java.util.ArrayList;
-import java.util.Collections;
-import javax.swing.JOptionPane;
 
 public class Dialogo_UnirseAmesaJugador extends Dialogo_GeneralVista implements UnirseMesaVista {
 
@@ -105,7 +101,6 @@ public class Dialogo_UnirseAmesaJugador extends Dialogo_GeneralVista implements 
         controlador.desloguear();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bUnirseYjugar;
     private javax.swing.JComboBox<String> cbMesasDisponibles;
@@ -116,15 +111,7 @@ public class Dialogo_UnirseAmesaJugador extends Dialogo_GeneralVista implements 
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public void mostrarMesasAbiertas(ArrayList<Mesa> mesas) {
-
-        //ordeno las mesas por string: ojo que aca estamos trabajando con numeros
-        ArrayList<String> mesasString = new ArrayList<>();
-        for(Mesa m:mesas){
-            mesasString.add(m.getNombre());
-        }
-        Collections.sort(mesasString);
-
+    public void mostrarMesasAbiertas(ArrayList<Mesa> mesas) {      
         cbMesasDisponibles.removeAllItems();
         cbMesasDisponibles.addItem("<<Seleccione mesa>>");
         for (Mesa mesa : mesas) {
@@ -144,5 +131,4 @@ public class Dialogo_UnirseAmesaJugador extends Dialogo_GeneralVista implements 
         jugarAmesa.setModal(false);
         jugarAmesa.setVisible(true);
     }
-
 }

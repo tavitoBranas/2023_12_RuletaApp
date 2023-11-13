@@ -49,8 +49,8 @@ public class ServicioMesa extends Observable {
     }
 
     public void eliminarMesa(Mesa mesa) {
-        avisar(Eventos.MesaEliminada);
        listaMesas.remove(mesa);
+       avisar(Eventos.MesaEliminada);
     }
 
     public ArrayList<TipoApuesta> tiposApuestaDisponibles() {

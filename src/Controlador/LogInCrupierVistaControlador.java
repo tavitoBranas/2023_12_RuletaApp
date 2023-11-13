@@ -3,8 +3,6 @@ package Controlador;
 import Dominio.Crupier;
 import Dominio.Usuario;
 import Excepciones.LoginException;
-import Logica.Fachada;
-import UI.Dialogo_IniciarMesaCrupier;
 import UI.Interface.LogInVista;
 
 public class LogInCrupierVistaControlador extends LogInVistaControlador {

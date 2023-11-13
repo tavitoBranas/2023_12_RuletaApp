@@ -8,7 +8,6 @@ import UI.Interface.IniciarMesaVista;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Dialogo_IniciarMesaCrupier extends Dialogo_GeneralVista implements IniciarMesaVista {
 
@@ -19,7 +18,6 @@ public class Dialogo_IniciarMesaCrupier extends Dialogo_GeneralVista implements 
         initComponents();
         controlador = new IniciarMesaVistaControlador(this, crupier);
         this.setTitle("Aplicacion Crupier: Iniciar mesa");
-
         //AVISO QUE LA VENTANA SE CERRO
         addWindowListener(new WindowAdapter() {
             @Override
@@ -103,10 +101,8 @@ public class Dialogo_IniciarMesaCrupier extends Dialogo_GeneralVista implements 
     }// </editor-fold>//GEN-END:initComponents
 
     private void bIniciarMesaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bIniciarMesaActionPerformed
-        // TODO add your handling code here:
         controlador.crearMesa(jlTiposApuesta.getSelectedValuesList());
     }//GEN-LAST:event_bIniciarMesaActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bIniciarMesa;
@@ -121,7 +117,7 @@ public class Dialogo_IniciarMesaCrupier extends Dialogo_GeneralVista implements 
     public void mostrarTiposApuesta(ArrayList<TipoApuesta> tipos) {
         ArrayList<String> tiposApuestas = new ArrayList<>();
         for (TipoApuesta tipo : tipos) {
-            tiposApuestas.add(tipo.getTipo());
+            tiposApuestas.add(tipo.getNombreTipo());
         }
         jlTiposApuesta.setListData(tiposApuestas.toArray());
     }

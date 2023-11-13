@@ -1,6 +1,5 @@
 package Controlador;
 
-import Dominio.ApuestaDirecta;
 import Dominio.Crupier;
 import Dominio.Mesa;
 import Dominio.TipoApuesta;
@@ -16,7 +15,6 @@ public class IniciarMesaVistaControlador {
     private Crupier crupier;
 
     public IniciarMesaVistaControlador(IniciarMesaVista vista, Crupier crupier) {
-
         this.vista = vista;
         this.crupier = crupier;
         fachada = Fachada.getInstancia();
@@ -29,44 +27,23 @@ public class IniciarMesaVistaControlador {
 
     public void crearMesa(List<String> apuestas) {
         String nombre = crupier.getCedula() + "";
-        ArrayList<TipoApuesta> tipoApuestaSeleccionada = obligatoriedadApuestaDirecta();
+        ArrayList<TipoApuesta> tipoApuestaSeleccionada = new ArrayList<>();
 
         for (TipoApuesta tipo : fachada.tipoApuestaDisponibles()) {
             for (String dato : apuestas) {
-                if (tipo.getTipo().equals(dato)) {
+                if (tipo.getNombreTipo().equals(dato)) {
                     tipoApuestaSeleccionada.add(tipo);
                 }
             }
         }
-
-        //try { NO HAY EXCEPCIONES AL CREAR MESA
         Mesa mesa = new Mesa(nombre, tipoApuestaSeleccionada, crupier);
+        //la obligatoriedad de ap directa esta seteada en la mesa
         fachada.crearMesa(mesa);
-
-        //nuevo panel
-        //PanelRuletaJuego panel = new PanelRuletaJuego(mesa);
-
         vista.ejecutarCasoOperarMesa(mesa);
         vista.cerrarVentana();
-        /*} catch (Exception e) {
-            vista.mostrarMensajeError(e.getMessage());
-        }*/
     }
 
     public void desloguearUsuario(Crupier crupier) {
         fachada.desloguearUsuarioCrupier(crupier);
-    }
-
-    private ArrayList<TipoApuesta> obligatoriedadApuestaDirecta() {
-
-        ArrayList<TipoApuesta> tipoApuestaSeleccionada = new ArrayList<>();
-        ArrayList<TipoApuesta> tiposDisponibles = fachada.tipoApuestaDisponibles();
-
-        for (int i = 0; i < tiposDisponibles.size() && tipoApuestaSeleccionada.isEmpty(); i++) {
-            if (tiposDisponibles.get(i) instanceof ApuestaDirecta) {
-                tipoApuestaSeleccionada.add(tiposDisponibles.get(i));
-            }
-        }
-        return tipoApuestaSeleccionada;
     }
 }

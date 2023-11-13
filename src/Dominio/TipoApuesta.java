@@ -11,8 +11,12 @@ public abstract class TipoApuesta {
         factorDePago = factor;
         tipo = nombre;
     }
+    
+    protected TipoApuesta(){
+        
+    }
 
-    public String getTipo() {
+    public String getNombreTipo() {
         return tipo;
     }
 

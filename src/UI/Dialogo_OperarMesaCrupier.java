@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import UI.Interface.OperarMesaVista;
 import componente.PanelRuleta;
 import java.util.Map;
+import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 
 public class Dialogo_OperarMesaCrupier extends Dialogo_GeneralVista implements OperarMesaVista {
@@ -22,6 +23,9 @@ public class Dialogo_OperarMesaCrupier extends Dialogo_GeneralVista implements O
         initComponents();
         controlador = new OperarMesaVistaControlador(this, mesa);
         tUltimosLanzamientos.setText("");
+        this.setTitle("Aplicacion Crupier: Operar mesa");
+        //NO DEJO CERRAR LA VENTANA CON EL X 
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
     }
 
     @SuppressWarnings("unchecked")
@@ -260,7 +264,6 @@ public class Dialogo_OperarMesaCrupier extends Dialogo_GeneralVista implements O
     private void bPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bPagarActionPerformed
         controlador.pagar();
     }//GEN-LAST:event_bPagarActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bCerrarMesa;

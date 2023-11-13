@@ -20,7 +20,7 @@ public class Dialogo_Jugar extends Dialogo_GeneralVista implements JugarVista {
         super(parent, modal);
         initComponents();
         controlador = new JugarVistaControlador(this, mesa, jugador);
-        this.setTitle("Aplicacion jugador");
+        this.setTitle("Aplicacion jugador: Jugar");
     }
 
     @SuppressWarnings("unchecked")

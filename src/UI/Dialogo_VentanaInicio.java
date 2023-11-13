@@ -6,7 +6,6 @@ public class Dialogo_VentanaInicio extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         this.setTitle("Seleccione Tipo de Usuario"); 
-         
     }
 
     @SuppressWarnings("unchecked")

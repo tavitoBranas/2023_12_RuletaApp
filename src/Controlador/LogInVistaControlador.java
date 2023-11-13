@@ -18,14 +18,9 @@ public abstract class LogInVistaControlador {
         Usuario usuario = logInEspecifico(ci, pass);
         if (usuario != null) {
             vista.ejecutarCasoInicial(usuario);
-            cerrarVentana();
+            vista.cerrarVentana();
         }
     }
 
     protected abstract Usuario logInEspecifico(int ci, String pass);
-
-    protected void cerrarVentana() {
-        vista.cerrarVentana();
-    }
-
 }

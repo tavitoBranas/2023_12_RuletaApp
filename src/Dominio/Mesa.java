@@ -30,6 +30,7 @@ public class Mesa extends Observable implements Observador {
         this.mensaje = "";
         estadistica = new Estadistica(this);
         estado = new EstadoMesaAbiertaPagar(this);
+        obligatoriedadApuestaDirecta();
     }
 
     public String getNombre() {
@@ -295,11 +296,6 @@ public class Mesa extends Observable implements Observador {
         return retorno;
     }
 
-    /*
-    private boolean apuestaInvolucraDocena(Apuesta apuesta) {
-        return ListaUniversalCasilleros.getCasillerosApuestaDocena().stream().anyMatch(a -> a == apuesta.getCasillero());
-    }
-     */
     @Override
     public void actualizar(Observable origen, Object evento) {
         if (Eventos.ApuestaRealizada.equals(evento)) {
@@ -310,4 +306,19 @@ public class Mesa extends Observable implements Observador {
         }
     }
 
+    private void obligatoriedadApuestaDirecta() {
+        boolean poseeApuestaDirecta = false;
+        ApuestaDirecta apuestaDirecta = new ApuestaDirecta();
+        for(TipoApuesta tipo: tipoApuesta){
+            if(tipo instanceof ApuestaDirecta){
+                apuestaDirecta = (ApuestaDirecta) tipo;
+            }
+            if(tipo instanceof ApuestaDirecta){
+                poseeApuestaDirecta = true;
+            }
+        }
+        if(!poseeApuestaDirecta){
+            tipoApuesta.add(apuestaDirecta);
+        }
+    }
 }
