@@ -1,21 +1,15 @@
 package UI;
 
 import Controlador.OperarMesaVistaControlador;
-import Dominio.Apuesta;
 import Dominio.ApuestaColor;
 import Dominio.ApuestaDocena;
 import Dominio.BalanceMesa;
 import Dominio.Efecto;
-import Dominio.Estadistica;
 import Dominio.Jugador;
-import Dominio.ListaUniversalCasilleros;
 import Dominio.Mesa;
 import java.util.ArrayList;
 import UI.Interface.OperarMesaVista;
 import componente.PanelRuleta;
-
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Map;
 import javax.swing.table.DefaultTableModel;
 
@@ -255,23 +249,16 @@ public class Dialogo_OperarMesaCrupier extends Dialogo_GeneralVista implements O
     }//GEN-LAST:event_bCerrarMesaActionPerformed
 
     private void bLanzarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bLanzarActionPerformed
-        // TODO add your handling code here:
         String efectoSeleccionado = (String) cbEfecto.getSelectedItem();
-
-        //arrayList de casilleros seleccionados
-        ArrayList<Integer> casillerosSeleccionados = new ArrayList<>(Arrays.asList(40, 41, 42, 1));
-
         if (efectoSeleccionado.contains("Efecto")) {
             mostrarMensajeError("Seleccione un efecto para continuar");
         } else {
-            controlador.lanzar(efectoSeleccionado, casillerosSeleccionados);
+            controlador.lanzar(efectoSeleccionado);
         }
     }//GEN-LAST:event_bLanzarActionPerformed
 
     private void bPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bPagarActionPerformed
-        // TODO add your handling code here:
         controlador.pagar();
-
     }//GEN-LAST:event_bPagarActionPerformed
 
 

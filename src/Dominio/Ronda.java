@@ -2,8 +2,8 @@ package Dominio;
 
 import Excepciones.ApuestaInvalidaException;
 import Excepciones.MontoInsuficienteException;
-import comun.Observable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,8 +52,8 @@ public class Ronda {
         return casillerosSeleccionados;
     }
 
-    public void setCasillerosSeleccionados(ArrayList<Integer> casillerosSeleccionados) {
-        this.casillerosSeleccionados = casillerosSeleccionados;
+    public void setCasillerosSeleccionados() {
+        this.casillerosSeleccionados = casillerosApostados();
     }
 
     public void lanzar() {
@@ -95,7 +95,7 @@ public class Ronda {
             }
         } else {
             apuestasJugador.add(apuesta);
-           apuestas.put(jugador, apuestasJugador);
+            apuestas.put(jugador, apuestasJugador);
         }
 
         //se actualiza saldo del jugador
@@ -108,4 +108,18 @@ public class Ronda {
         apuesta.getJugador().avisar(Eventos.ApuestaRealizada);
     }
 
+    private ArrayList<Integer> casillerosApostados() {
+        ArrayList<Integer> casillerosApostados = new ArrayList<>();
+
+        Collection<ArrayList<Apuesta>> apuestas = getApuestas().values();
+
+        for (ArrayList<Apuesta> listaApuestas : apuestas) {
+            for (Apuesta apuesta : listaApuestas) {
+                if (!casillerosApostados.contains(apuesta.getCasillero())) {
+                    casillerosApostados.add(apuesta.getCasillero());
+                }
+            }
+        }
+        return casillerosApostados;
+    }
 }

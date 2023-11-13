@@ -33,10 +33,10 @@ public class OperarMesaVistaControlador implements Observador {
 
     private void inicializarVista() {
         estadoBotonLanzar(true);
+        habilitarCerrarMesa(false);
         vista.cargarDatosMesa(modelo);
         vista.cargarDatosJugadores(modelo.getListaJugadores());
         vista.cargarEfectos(Fachada.getInstancia().efectosDisponibles());
-        habilitarCerrarMesa(false);
     }
 
     public void cerrarMesa() {
@@ -45,22 +45,6 @@ public class OperarMesaVistaControlador implements Observador {
         } catch (MesaEstadoException ex) {
             vista.mostrarMensajeError(ex.getMessage());
         }
-        //revisar este codigo porque me parece  que iria dentro del estado de la mesa
-        //cerrarMesaExpulsarUsuarios();
-        // eliminarMesaDeDisponibles();
-        //Fachada.getInstancia().desloguearUsuarioCrupier(modelo.getCrupier());
-        cerrarVentana();
-    }
-
-    /* private void eliminarMesaDeDisponibles() {
-        Fachada.getInstancia().eliminarMesa(modelo);
-    }
-    
-    private void cerrarMesaExpulsarUsuarios() {
-        modelo.expulsarJugadores();
-    }
-     */
-    protected void cerrarVentana() {
         vista.cerrarVentana();
     }
 
@@ -87,11 +71,11 @@ public class OperarMesaVistaControlador implements Observador {
         }
     }
 
-    public void lanzar(String efectoSeleccionado, ArrayList<Integer> casillerosSeleccionados) {
+    public void lanzar(String efectoSeleccionado) {
         //obtengo efecto, lo asocio a la ronda y lanzo
         Efecto efecto = buscarEfecto(efectoSeleccionado);
         modelo.getRonda().setEfecto(efecto);
-        modelo.getRonda().setCasillerosSeleccionados(casillerosSeleccionados);
+        modelo.getRonda().setCasillerosSeleccionados();
 
         try {
             //seteo el estado de la mesa, no permite que nadie ingrese o salga o apueste
@@ -140,12 +124,9 @@ public class OperarMesaVistaControlador implements Observador {
     }
 
     private void mostrarApuestas() {
-        Map<Integer,Integer> resumenApuestas = new HashMap<>();
-        
+        Map<Integer, Integer> resumenApuestas = new HashMap<>();
         ArrayList<Integer> universalCellCodes = ListaUniversalCasilleros.casillerosDisponibles();
-        
         Collection<ArrayList<Apuesta>> apuestas = modelo.getRonda().getApuestas().values();
-
         for (Integer code : universalCellCodes) {
             int monto = 0;
             for (ArrayList<Apuesta> listaApuestas : apuestas) {

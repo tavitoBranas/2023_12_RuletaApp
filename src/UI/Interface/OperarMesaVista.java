@@ -1,11 +1,9 @@
 package UI.Interface;
 
-import Dominio.Apuesta;
 import Dominio.Efecto;
 import Dominio.Jugador;
 import Dominio.Mesa;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Map;
 
 public interface OperarMesaVista extends SeteoInicialMesa {

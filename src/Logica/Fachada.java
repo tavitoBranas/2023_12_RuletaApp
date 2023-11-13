@@ -88,8 +88,8 @@ public class Fachada extends Observable implements Observador {
         if (Eventos.MesaAgregada.equals(evento)) {
             avisar(Eventos.MesaAgregada);
         }
-        if (Eventos.UnirseAmesa.equals(evento)) {
-            avisar(Eventos.UnirseAmesa);
+        if (Eventos.UsuarioAgregado.equals(evento)) {
+            avisar(Eventos.UsuarioAgregado);
         }
         if (Eventos.UsuarioDeslogueado.equals(evento)) {
             avisar(Eventos.UsuarioDeslogueado);
