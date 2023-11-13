@@ -3,30 +3,27 @@ package Logica;
 import Dominio.Crupier;
 import Dominio.Eventos;
 import Dominio.Jugador;
-import Dominio.Mesa;
 import Dominio.Sesion;
 import Dominio.Usuario;
 import Excepciones.LoginException;
 import Excepciones.MesaAbandonoException;
-import Excepciones.MesaException;
 import Excepciones.MesaNoDisponibleException;
-import Excepciones.UsuarioEnMesaException;
 import comun.Observable;
 import java.util.ArrayList;
 
 class ServicioUsuario extends Observable {
 
     private static ServicioUsuario instancia;
-    private ArrayList<Usuario> listaJugadores;
-    private ArrayList<Usuario> listaCrupiers;
-    private ArrayList<Sesion> listaSesionJugadores;
-    private ArrayList<Sesion> listaSesionCrupiers;
+    private final ArrayList<Usuario> listaJugadores;
+    private final ArrayList<Usuario> listaCrupiers;
+    private final ArrayList<Sesion> listaSesionJugadores;
+    private final ArrayList<Sesion> listaSesionCrupiers;
 
     public ServicioUsuario() {
-        listaJugadores = new ArrayList<Usuario>();
-        listaCrupiers = new ArrayList<Usuario>();
-        listaSesionJugadores = new ArrayList<Sesion>();
-        listaSesionCrupiers = new ArrayList<Sesion>();
+        listaJugadores = new ArrayList<>();
+        listaCrupiers = new ArrayList<>();
+        listaSesionJugadores = new ArrayList<>();
+        listaSesionCrupiers = new ArrayList<>();
     }
 
     public synchronized static ServicioUsuario getInstancia() {
@@ -114,23 +111,21 @@ class ServicioUsuario extends Observable {
         if (listaJugadores.contains(jugador)) {
             for (int i = 0; i < listaSesionJugadores.size() && !encontrado; i++) {
                 if (listaSesionJugadores.get(i).getUsuario().equals(jugador)) {
+                    //elimino de la lista de mesas si existe
+                    Fachada.getInstancia().desloguearJugadordeMesas(jugador); //aca tira excepciones si no me deja abandonar
                     //elimino de la lista de sesiones
                     listaSesionJugadores.remove(listaSesionJugadores.get(i));
-                    //elimino de la lista de mesas si existe
-                    Fachada.getInstancia().desloguearJugadordeMesas(jugador);
                     encontrado = true;
                     avisar(Eventos.UsuarioDeslogueado);
                 }
             }
         }
-
     }
 
     void desloguearUsuarioCrupier(Crupier crupier) {
         if (listaCrupiers.contains(crupier)) {
             for (int i = 0; i < listaSesionCrupiers.size(); i++) {
                 if (listaSesionCrupiers.get(i).getUsuario().equals(crupier)) {
-                    //listaSesionCrupiers.get(i).getUsuario().setSesionActiva(false);
                     listaSesionCrupiers.remove(listaSesionCrupiers.get(i));
                 }
             }

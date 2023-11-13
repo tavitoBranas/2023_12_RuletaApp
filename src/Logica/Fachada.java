@@ -3,16 +3,14 @@ package Logica;
 import Dominio.*;
 import Excepciones.LoginException;
 import Excepciones.MesaAbandonoException;
-import Excepciones.MesaException;
 import Excepciones.MesaNoDisponibleException;
-import Excepciones.UsuarioEnMesaException;
 import comun.Observable;
 import comun.Observador;
 import java.util.ArrayList;
 
 public class Fachada extends Observable implements Observador {
 
-    private static Fachada instancia;  //singleton
+    private static Fachada instancia;
     private ServicioUsuario servicioUsuario;
     private ServicioMesa servicioMesa;
 
@@ -26,8 +24,8 @@ public class Fachada extends Observable implements Observador {
     private Fachada() {
         servicioUsuario = ServicioUsuario.getInstancia();
         servicioMesa = ServicioMesa.getInstancia();
-        servicioMesa.agregar(this); //observable servicioMesa, observador Fachada 
-        servicioUsuario.agregar(this); //observable servicioUsuario, observador Fachada 
+        servicioMesa.agregar(this);
+        servicioUsuario.agregar(this);
     }
 
     public Jugador loginJugador(int ci, String pass) throws LoginException {
@@ -83,6 +81,29 @@ public class Fachada extends Observable implements Observador {
         return servicioMesa.traerMesa(mesa);
     }
 
+    public void desloguearUsuarioCrupier(Crupier crupier) {
+        servicioUsuario.desloguearUsuarioCrupier(crupier);
+    }
+
+    public void desloguearUsuarioJugador(Jugador jugador) throws MesaNoDisponibleException, MesaAbandonoException {
+        servicioUsuario.desloguearUsuarioJugador(jugador);
+    }
+
+    public void desloguearJugadordeMesas(Jugador jugador) throws MesaNoDisponibleException, MesaAbandonoException {
+        servicioMesa.desloguearJugadordeMesas(jugador);
+    }
+
+    public Efecto buscarEfecto(String efectoSeleccionado) {
+        ArrayList<Efecto> efectos = servicioMesa.getEfectosDisponibles();
+        Efecto retorno = null;
+        for (int i = 0; i < efectos.size() && retorno == null; i++) {
+            if (efectos.get(i).getNombre().equals(efectoSeleccionado)) {
+                retorno = efectos.get(i);
+            }
+        }
+        return retorno;
+    }
+
     @Override
     public void actualizar(Observable origen, Object evento) {
         if (Eventos.MesaAgregada.equals(evento)) {
@@ -98,29 +119,4 @@ public class Fachada extends Observable implements Observador {
             avisar(Eventos.MesaEliminada);
         }
     }
-
-    public void desloguearUsuarioCrupier(Crupier crupier) {
-        servicioUsuario.desloguearUsuarioCrupier(crupier);
-    }
-
-    public void desloguearUsuarioJugador(Jugador jugador) throws MesaNoDisponibleException, MesaAbandonoException {
-        servicioUsuario.desloguearUsuarioJugador(jugador);
-    }
-
-    public void desloguearJugadordeMesas(Jugador jugador) throws MesaNoDisponibleException, MesaAbandonoException {
-        servicioMesa.desloguearJugadordeMesas(jugador);
-    }
-
-    public Efecto buscarEfecto(String efectoSeleccionado) {
-        ArrayList<Efecto> efectos = servicioMesa.getEfectosDisponibles();
-        
-        Efecto retorno = null;
-        for(int i=0; i< efectos.size() &&retorno == null; i++){
-            if(efectos.get(i).getNombre().equals(efectoSeleccionado)){
-                retorno = efectos.get(i);
-            }
-        }
-        return retorno;
-    }
-
 }

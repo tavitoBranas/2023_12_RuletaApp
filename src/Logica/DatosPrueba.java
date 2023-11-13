@@ -2,7 +2,6 @@ package Logica;
 
 import Dominio.*;
 import Excepciones.LoginException;
-import java.util.ArrayList;
 
 public class DatosPrueba {
 
@@ -40,26 +39,7 @@ public class DatosPrueba {
         Fachada.getInstancia().agregarTipoApuesta(aDir);
         Fachada.getInstancia().agregarTipoApuesta(aCol);
         Fachada.getInstancia().agregarTipoApuesta(aDoc);
-
-        /*//eliminar estas mesas, son solo de prueba
-        ArrayList<TipoApuesta> tipoApuestaMesa1 = new ArrayList<>();
-        tipoApuestaMesa1.add(aDir);
-        ArrayList<TipoApuesta> tipoApuestaMesa2 = new ArrayList<>();
-        tipoApuestaMesa2.add(aDir);
-        tipoApuestaMesa2.add(aCol);
-        ArrayList<TipoApuesta> tipoApuestaMesa3 = new ArrayList<>();
-        tipoApuestaMesa3.add(aDir);
-        tipoApuestaMesa3.add(aDoc);
-
-        Mesa m1 = new Mesa("Mesa 1", tipoApuestaMesa1, c3);
-        Mesa m2 = new Mesa("Mesa 2", tipoApuestaMesa2, c4);
-        Mesa m3 = new Mesa("Mesa 3", tipoApuestaMesa3, c5);
-
-        Fachada.getInstancia().agregarMesa(m1);
-        Fachada.getInstancia().agregarMesa(m2);
-        Fachada.getInstancia().agregarMesa(m3);
-         */
-        
+       
         Efecto efectoAleatorio = new EfectoAleatorio();
         Efecto efectoAleatorioParcial = new EfectoAleatorioParcial();
         Efecto efectoSimulador = new EfectoSimulador();
@@ -67,6 +47,5 @@ public class DatosPrueba {
         Fachada.getInstancia().agregarEfecto(efectoAleatorio);
         Fachada.getInstancia().agregarEfecto(efectoAleatorioParcial);
         Fachada.getInstancia().agregarEfecto(efectoSimulador);
-
     }
 }
