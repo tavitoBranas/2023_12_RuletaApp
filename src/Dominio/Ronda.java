@@ -4,7 +4,6 @@ import Excepciones.ApuestaInvalidaException;
 import Excepciones.EfectoException;
 import Excepciones.MontoInsuficienteException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,17 +27,6 @@ public class Ronda {
 
     public Mesa getMesa() {
         return mesa;
-    }
-
-    public ArrayList<Integer> apuestaDerecta() {
-        ArrayList<Integer> retorno = new ArrayList<>();
-
-        for (int a : getCasillerosSeleccionados()) {
-            if (a >= 0 && a <= 36 && !retorno.contains(a)) {
-                retorno.add(a);
-            }
-        }
-        return retorno;
     }
 
     public Efecto getEfecto() {
@@ -73,14 +61,47 @@ public class Ronda {
         return montoTotalApostado;
     }
 
+    public ArrayList<Integer> apuestaDerecta() {
+        ArrayList<Integer> retorno = new ArrayList<>();
+
+        for (int a : getCasillerosSeleccionados()) {
+            if (ListaUniversalCasilleros.getCasillerosApuestaDirecta().stream().anyMatch(casillero -> casillero == a)
+                    && !retorno.contains(a)) {
+                retorno.add(a);
+            }
+        }
+        return retorno;
+    }
+
     public void apostar(Apuesta apuesta) throws ApuestaInvalidaException, MontoInsuficienteException {
         //1er valido si jugador puede apostar
         apuesta.getJugador().validaMontoApuesta(apuesta.getMontoApostado());
-
         //2er se valida apuesta a nivel de la mesa
         mesa.validarApuesta(apuesta);
-
         //se ingresa al hasmap de apuestas de la ronda
+        ingresoApuestasARonda(apuesta);
+        //se actualiza saldo del jugador
+        int nuevoSaldo = apuesta.getJugador().getSaldo() - apuesta.getMontoApostado();
+        apuesta.getJugador().setSaldo(nuevoSaldo);
+        //se actualiza monto total apostado y cantidad apuestas de la ronda
+        this.cantidadApuestas += 1;
+        this.montoTotalApostado += apuesta.getMontoApostado();
+        apuesta.getJugador().avisar(Eventos.ApuestaRealizada);
+    }
+
+    private ArrayList<Integer> casillerosApostados() {
+        ArrayList<Integer> casillerosApostados = new ArrayList<>();
+        for (ArrayList<Apuesta> listaApuestas : getApuestas().values()) {
+            for (Apuesta apuesta : listaApuestas) {
+                if (!casillerosApostados.contains(apuesta.getCasillero())) {
+                    casillerosApostados.add(apuesta.getCasillero());
+                }
+            }
+        }
+        return casillerosApostados;
+    }
+
+    private void ingresoApuestasARonda(Apuesta apuesta) {
         Jugador jugador = apuesta.getJugador();
         ArrayList<Apuesta> apuestasJugador = getApuestas().getOrDefault(jugador, new ArrayList<>());
         //veo si ya existe una apuesta anterior al mismo casillero
@@ -98,29 +119,5 @@ public class Ronda {
             apuestasJugador.add(apuesta);
             apuestas.put(jugador, apuestasJugador);
         }
-
-        //se actualiza saldo del jugador
-        int nuevoSaldo = apuesta.getJugador().getSaldo() - apuesta.getMontoApostado();
-        apuesta.getJugador().setSaldo(nuevoSaldo);
-
-        //se actualiza monto total apostado y cantidad apuestas de la ronda
-        this.cantidadApuestas += 1;
-        this.montoTotalApostado += apuesta.getMontoApostado();
-        apuesta.getJugador().avisar(Eventos.ApuestaRealizada);
-    }
-
-    private ArrayList<Integer> casillerosApostados() {
-        ArrayList<Integer> casillerosApostados = new ArrayList<>();
-
-        Collection<ArrayList<Apuesta>> apuestas = getApuestas().values();
-
-        for (ArrayList<Apuesta> listaApuestas : apuestas) {
-            for (Apuesta apuesta : listaApuestas) {
-                if (!casillerosApostados.contains(apuesta.getCasillero())) {
-                    casillerosApostados.add(apuesta.getCasillero());
-                }
-            }
-        }
-        return casillerosApostados;
     }
 }

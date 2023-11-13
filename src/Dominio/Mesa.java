@@ -96,8 +96,9 @@ public class Mesa extends Observable implements Observador {
         }
         if (estado instanceof EstadoMesaCerrar) {
             habilitadoCierreDeMesa(estado);
-            cerrar();
             this.estado = estado;
+            cerrar();
+
         }
 
         //ver cuando se cierre la mesa que se hace
