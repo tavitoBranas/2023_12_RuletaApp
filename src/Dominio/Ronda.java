@@ -2,6 +2,7 @@ package Dominio;
 
 import Excepciones.ApuestaInvalidaException;
 import Excepciones.EfectoException;
+import Excepciones.MesaAbandonoException;
 import Excepciones.MontoInsuficienteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -118,6 +119,12 @@ public class Ronda {
         } else {
             apuestasJugador.add(apuesta);
             apuestas.put(jugador, apuestasJugador);
+        }
+    }
+
+    public void habilitadoAbandono(Jugador jugador) throws MesaAbandonoException {
+        if (getApuestas().containsKey(jugador)) {
+            throw new MesaAbandonoException("No puede abandonar hasta completar la ronda");
         }
     }
 }

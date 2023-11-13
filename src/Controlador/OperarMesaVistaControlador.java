@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class OperarMesaVistaControlador implements Observador {
 
@@ -60,32 +62,27 @@ public class OperarMesaVistaControlador implements Observador {
         modelo.getRonda().setEfecto(efecto);
         modelo.getRonda().setCasillerosSeleccionados();
         try {
-            //seteo el estado de la mesa, no permite que nadie ingrese o salga o apueste
-            modelo.setEstado(new EstadoMesaLanzar());
+            modelo.setEstadoLanzar();
             estadoBotonLanzar(false);
             habilitarCerrarMesa(true);
-        } catch (MesaEstadoException | EfectoException ex) {
+        } catch (EfectoException ex) {
             vista.mostrarMensajeError(ex.getMessage());
         }
     }
 
     public void pagar() {
-        try {
-            modelo.setEstado(new EstadoMesaAbiertaPagar(modelo));
-            vista.ocultarNumeroGanador();
-            vista.actualizarEstadisticaYronda(modelo);
-            estadoBotonLanzar(true);
-            habilitarCerrarMesa(false);
-        } catch (MesaEstadoException | EfectoException ex) {
-            vista.mostrarMensajeError(ex.getMessage());
-        }
+        modelo.setEstadoPagar();
+        vista.ocultarNumeroGanador();
+        vista.actualizarEstadisticaYronda(modelo);
+        estadoBotonLanzar(true);
+        habilitarCerrarMesa(false);
     }
 
     public void cerrarMesa() {
         try {
-            modelo.setEstado(new EstadoMesaCerrar(modelo));
+            modelo.setEstadoCerrar();
             vista.cerrarVentana();
-        } catch (MesaEstadoException | EfectoException ex) {
+        } catch (MesaEstadoException ex) {
             vista.mostrarMensajeError(ex.getMessage());
         }
     }

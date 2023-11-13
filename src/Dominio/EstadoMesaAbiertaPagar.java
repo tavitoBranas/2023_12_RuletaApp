@@ -1,16 +1,27 @@
 package Dominio;
 
+import Excepciones.MesaEstadoException;
 import java.util.ArrayList;
 import java.util.Map;
 
 public final class EstadoMesaAbiertaPagar extends EstadoMesa {
 
     public EstadoMesaAbiertaPagar(Mesa mesa) {
-        super();
-        this.setJugadoresAbandonanMesa(true);
-        this.setJugadoresApuestan(true);
-        this.setJugadoresIngresanMesa(true);
-        mesa.setMensaje("La mesa esta disponible para jugar");
+        super(mesa);
+    }
+
+    @Override
+    protected void habilitadoIngreso() {
+    }
+
+    @Override
+    protected void habilitadoAvandono() {
+    }
+
+    @Override
+    protected void habilitadoCierreDeMesa() throws MesaEstadoException {
+        throw new MesaEstadoException("No se puede cerrar la mesa. Para ello la misma debe de estar "
+                + "Lanzando");
     }
 
     @Override
@@ -41,4 +52,5 @@ public final class EstadoMesaAbiertaPagar extends EstadoMesa {
             jugador.setUltimasApuestas(listaApuestas);
         }
     }
+
 }

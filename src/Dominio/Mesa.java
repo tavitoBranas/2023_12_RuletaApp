@@ -16,11 +16,10 @@ public class Mesa extends Observable implements Observador {
     private ArrayList<TipoApuesta> tipoApuesta;
     private ArrayList<Jugador> listaJugadores;
     private Ronda ronda;
-    private Estadistica estadistica;
-    private Crupier crupier;
+    private final Estadistica estadistica;
+    private final Crupier crupier;
     private String mensaje;
     private EstadoMesa estado;
-    //private PanelRuleta panel;
 
     public Mesa(String nombre, ArrayList<TipoApuesta> tipo, Crupier crupier) {
         this.nombre = nombre;
@@ -32,6 +31,13 @@ public class Mesa extends Observable implements Observador {
         estadistica = new Estadistica(this);
         estado = new EstadoMesaAbiertaPagar(this);
         obligatoriedadApuestaDirecta();
+    }
+
+    private void obligatoriedadApuestaDirecta() {
+        ApuestaDirecta apuestaDirecta = new ApuestaDirecta(36);
+        if (!tipoApuesta.contains(apuestaDirecta)) {
+            tipoApuesta.add(apuestaDirecta);
+        }
     }
 
     public String getNombre() {
@@ -82,30 +88,41 @@ public class Mesa extends Observable implements Observador {
         return ronda;
     }
 
-    public void setEstado(EstadoMesa estado) throws MesaEstadoException, EfectoException {
-        //evaluo si la  mesa puede cerrarse
+    public Estadistica getEstadistica() {
+        return estadistica;
+    }
 
-        if (estado instanceof EstadoMesaAbiertaPagar) {
-            this.estado = estado;
-            pagar();
+    private void habilitadoAvandono(Jugador jugador) throws MesaAbandonoException {
+        estado.habilitadoAvandono();
+        ronda.habilitadoAbandono(jugador);
+    }
+
+    public void setEstadoPagar() {
+        this.estado = new EstadoMesaAbiertaPagar(this);
+        estado.pagar(this);
+        avisar(Eventos.Pagar);
+    }
+
+    public void setEstadoLanzar() throws EfectoException {
+        this.estado = new EstadoMesaLanzar(this);
+        try {
+            estado.lanzar(this);
+            avisar(Eventos.Lanzar);
+        } catch (EfectoException ex) {
+            estado = new EstadoMesaAbiertaPagar(this);
+            throw ex;
         }
-        if (estado instanceof EstadoMesaLanzar) {
+    }
 
-            this.estado = estado;
-            lanzar();
-        }
-        if (estado instanceof EstadoMesaCerrar) {
-            habilitadoCierreDeMesa(estado);
-            this.estado = estado;
-            cerrar();
-
-        }
-
-        //ver cuando se cierre la mesa que se hace
+    public void setEstadoCerrar() throws MesaEstadoException {
+        estado.habilitadoCierreDeMesa();
+        this.estado = new EstadoMesaCerrar(this);
+        estado.cerrar(this);
+        avisar(Eventos.CierraMesa);
     }
 
     public Mesa ingresarAmesa(Jugador jugador) throws UsuarioEnMesaException, MesaNoDisponibleException {
-        habilitadoIngreso();
+        estado.habilitadoIngreso();
         for (Jugador jugadorEnLista : listaJugadores) {
             if (jugadorEnLista.equals(jugador)) {
                 throw new UsuarioEnMesaException("El jugador ya participa de esta mesa");
@@ -132,59 +149,6 @@ public class Mesa extends Observable implements Observador {
             j.remover(this);
         }
         listaJugadores.clear();
-    }
-
-    public Estadistica getEstadistica() {
-        return estadistica;
-    }
-
-    public void lanzar() throws EfectoException {
-        try {
-            estado.lanzar(this);
-        } catch (EfectoException ex) {
-            estado = new EstadoMesaAbiertaPagar(this);
-            throw ex;
-        }
-        avisar(Eventos.Lanzar);
-    }
-
-    private void pagar() {
-        estado.pagar(this);
-        avisar(Eventos.Pagar);
-    }
-
-    private void cerrar() {
-        estado.cerrar(this);
-        avisar(Eventos.CierraMesa);
-    }
-
-    private void habilitadoIngreso() throws MesaNoDisponibleException {
-        if (this.estado instanceof EstadoMesaLanzar) {
-            throw new MesaNoDisponibleException("Esta mesa se encuentra pagando. Intente nuevamente en unos segundos");
-        }
-        if (this.estado instanceof EstadoMesaCerrar) {
-            throw new MesaNoDisponibleException("Esta mesa esta cerrando. No es posible su acceso");
-        }
-    }
-
-    private void habilitadoAvandono(Jugador jugador) throws MesaAbandonoException {
-        if (this.estado instanceof EstadoMesaLanzar) {
-            throw new MesaAbandonoException("No se puede avandonar mesa. La misma esta pagando");
-        }
-        if (this.estado instanceof EstadoMesaCerrar) {
-            throw new MesaAbandonoException("No se puede avandonar mesa. La misma esta pagando");
-        }
-        if (ronda.getApuestas().containsKey(jugador)) {
-            throw new MesaAbandonoException("No puede abandonar hasta completar la ronda");
-        }
-    }
-
-    private void habilitadoCierreDeMesa(EstadoMesa estado) throws MesaEstadoException {
-        if (this.estado instanceof EstadoMesaAbiertaPagar
-                && estado instanceof EstadoMesaCerrar) {
-            throw new MesaEstadoException("No se puede cerrar la mesa. Para ello la misma debe de estar "
-                    + "bloqueada");
-        }
     }
 
     void validarApuesta(Apuesta apuesta) throws ApuestaInvalidaException {
@@ -273,21 +237,6 @@ public class Mesa extends Observable implements Observador {
         }
     }
 
-    /*
-    private int colorCasillero(int ultimoGanador) {
-        int retorno;
-        if (ListaUniversalCasilleros.numerosRojos().stream().anyMatch(l -> l == ultimoGanador)) {
-            retorno = ListaUniversalCasilleros.casilleroRojo();
-        } else {
-            retorno = ListaUniversalCasilleros.casilleroNegro();
-        }
-        return retorno;
-    }
-
-    private boolean apuestaInvolucraColor(Apuesta apuesta) {
-        return ListaUniversalCasilleros.getCasillerosApuestaColor().stream().anyMatch(a -> a == apuesta.getCasillero());
-    }
-     */
     private ArrayList<Apuesta> jugadorApostoColorEnRondaAnterior(ArrayList<Apuesta> apuestas) {
         ArrayList<Apuesta> retorno = new ArrayList<>();
         ArrayList<Integer> casillerosColores = ListaUniversalCasilleros.getCasillerosApuestaColor();
@@ -314,19 +263,4 @@ public class Mesa extends Observable implements Observador {
         }
     }
 
-    private void obligatoriedadApuestaDirecta() {
-        boolean poseeApuestaDirecta = false;
-        ApuestaDirecta apuestaDirecta = new ApuestaDirecta();
-        for (TipoApuesta tipo : tipoApuesta) {
-            if (tipo instanceof ApuestaDirecta) {
-                apuestaDirecta = (ApuestaDirecta) tipo;
-            }
-            if (tipo instanceof ApuestaDirecta) {
-                poseeApuestaDirecta = true;
-            }
-        }
-        if (!poseeApuestaDirecta) {
-            tipoApuesta.add(apuestaDirecta);
-        }
-    }
 }

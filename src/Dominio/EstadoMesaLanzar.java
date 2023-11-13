@@ -1,6 +1,9 @@
 package Dominio;
 
 import Excepciones.EfectoException;
+import Excepciones.MesaAbandonoException;
+import Excepciones.MesaEstadoException;
+import Excepciones.MesaNoDisponibleException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -8,17 +11,31 @@ public final class EstadoMesaLanzar extends EstadoMesa {
 
     private final HashMap casillerosGanadores;
 
-    public EstadoMesaLanzar() {
-        super();
+    public EstadoMesaLanzar(Mesa mesa) {
+        super(mesa);
         casillerosGanadores = new HashMap<String, Integer>();
     }
 
     @Override
-    public void lanzar(Mesa mesa) throws EfectoException{
+    protected void habilitadoIngreso() throws MesaNoDisponibleException {
+        throw new MesaNoDisponibleException("Esta mesa se encuentra pagando. Intente nuevamente en unos segundos");
+    }
+
+    @Override
+    protected void habilitadoAvandono() throws MesaAbandonoException {
+        throw new MesaAbandonoException("No se puede avandonar mesa. La misma esta pagando");
+    }
+
+    @Override
+    protected void habilitadoCierreDeMesa() throws MesaEstadoException {
+    }
+
+    @Override
+    public void lanzar(Mesa mesa) throws EfectoException {
 
         mesa.setMensaje("La mesa esta bloqueada. No se puede apostar ni abandonar la misma");
         mesa.getRonda().lanzar();
-        
+
         //seteo casilleros ganadores
         casillerosGanadores.clear();
         int numeroGanador = mesa.getRonda().getEfecto().getNumeroGanador();
@@ -109,4 +126,5 @@ public final class EstadoMesaLanzar extends EstadoMesa {
             }
         }
     }
+
 }

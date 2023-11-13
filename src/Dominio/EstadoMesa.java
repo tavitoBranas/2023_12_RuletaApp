@@ -1,58 +1,37 @@
 package Dominio;
 
 import Excepciones.EfectoException;
+import Excepciones.MesaAbandonoException;
+import Excepciones.MesaEstadoException;
+import Excepciones.MesaNoDisponibleException;
 import java.util.ArrayList;
 import java.util.Map;
 
 public abstract class EstadoMesa {
 
-    private boolean jugadoresIngresanMesa;
-    private boolean jugadoresAbandonanMesa;
-    private boolean jugadoresApuestan;
+    private final Mesa mesa;
 
-    public EstadoMesa() {
-
-    }
-
-    public boolean isJugadoresIngresanMesa() {
-        return jugadoresIngresanMesa;
-    }
-
-    public void setJugadoresIngresanMesa(boolean jugadoresIngresanMesa) {
-        this.jugadoresIngresanMesa = jugadoresIngresanMesa;
-    }
-
-    public boolean isJugadoresAbandonanMesa() {
-        return jugadoresAbandonanMesa;
-    }
-
-    public void setJugadoresAbandonanMesa(boolean jugadoresAbandonanMesa) {
-        this.jugadoresAbandonanMesa = jugadoresAbandonanMesa;
-    }
-
-    public boolean isJugadoresApuestan() {
-        return jugadoresApuestan;
-    }
-
-    public void setJugadoresApuestan(boolean jugadoresApuestan) {
-        this.jugadoresApuestan = jugadoresApuestan;
+    public EstadoMesa(Mesa mesa) {
+        this.mesa = mesa;
     }
 
     protected void lanzar(Mesa mesa) throws EfectoException {
     }
 
-    ;
     protected void pagar(Mesa mesa) {
     }
 
-    ;
     protected void cerrar(Mesa mesa) {
     }
 
-    ;
+    protected abstract void habilitadoIngreso() throws MesaNoDisponibleException;
+
+    protected abstract void habilitadoAvandono() throws MesaAbandonoException;
+
+    protected abstract void habilitadoCierreDeMesa() throws MesaEstadoException;
 
     private void pagarAlJugadorApuestaLiquidacionMesa(Jugador jugador, Apuesta apuesta, TipoApuesta tipo,
-            BalanceMesa balanceMesa, BalanceJugador balanceJugador) {
+        BalanceMesa balanceMesa, BalanceJugador balanceJugador) {
         int saldoAnterior = jugador.getSaldo();
         int ganancia = apuesta.getMontoApostado() * tipo.getFactorDePago();
         jugador.setSaldo(saldoAnterior + ganancia);
@@ -149,4 +128,5 @@ public abstract class EstadoMesa {
         balanceJugador.setTotalApostado(montoTotalApostado);
         return balanceJugador;
     }
+
 }
