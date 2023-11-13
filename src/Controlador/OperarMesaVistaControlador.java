@@ -1,10 +1,12 @@
 package Controlador;
 
+import Dominio.Apuesta;
 import Dominio.Efecto;
 import Dominio.EstadoMesaAbiertaPagar;
 import Dominio.EstadoMesaCerrar;
 import Dominio.EstadoMesaLanzar;
 import Dominio.Eventos;
+import Dominio.ListaUniversalCasilleros;
 import Dominio.Mesa;
 import Excepciones.MesaEstadoException;
 import Logica.Fachada;
@@ -12,12 +14,15 @@ import UI.Interface.OperarMesaVista;
 import comun.Observable;
 import comun.Observador;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class OperarMesaVistaControlador implements Observador {
-    
+
     private final OperarMesaVista vista;
     private final Mesa modelo;
-    
+
     public OperarMesaVistaControlador(OperarMesaVista vista, Mesa mesa) {
         this.vista = vista;
         this.modelo = mesa;
@@ -25,7 +30,7 @@ public class OperarMesaVistaControlador implements Observador {
         modelo.agregar(this);
         Fachada.getInstancia().agregar(this);
     }
-    
+
     private void inicializarVista() {
         estadoBotonLanzar(true);
         vista.cargarDatosMesa(modelo);
@@ -33,7 +38,7 @@ public class OperarMesaVistaControlador implements Observador {
         vista.cargarEfectos(Fachada.getInstancia().efectosDisponibles());
         habilitarCerrarMesa(false);
     }
-    
+
     public void cerrarMesa() {
         try {
             modelo.setEstado(new EstadoMesaCerrar(modelo));
@@ -42,23 +47,23 @@ public class OperarMesaVistaControlador implements Observador {
         }
         //revisar este codigo porque me parece  que iria dentro del estado de la mesa
         //cerrarMesaExpulsarUsuarios();
-       // eliminarMesaDeDisponibles();
+        // eliminarMesaDeDisponibles();
         //Fachada.getInstancia().desloguearUsuarioCrupier(modelo.getCrupier());
         cerrarVentana();
     }
-    
-   /* private void eliminarMesaDeDisponibles() {
+
+    /* private void eliminarMesaDeDisponibles() {
         Fachada.getInstancia().eliminarMesa(modelo);
     }
     
     private void cerrarMesaExpulsarUsuarios() {
         modelo.expulsarJugadores();
     }
-    */
+     */
     protected void cerrarVentana() {
         vista.cerrarVentana();
     }
-    
+
     @Override
     public void actualizar(Observable origen, Object evento) {
         if (Eventos.UsuarioAgregado.equals(evento) || Eventos.UsuarioAbandonaMesa.equals(evento)
@@ -76,18 +81,18 @@ public class OperarMesaVistaControlador implements Observador {
         if (Eventos.ActualizacionSaldo.equals(evento)) {
             vista.apuestaRealizada(modelo);
         }
-        if(Eventos.ApuestaRealizada.equals(evento) ){
+        if (Eventos.ApuestaRealizada.equals(evento)) {
             vista.apuestaRealizada(modelo);
-            vista.mostrarApuesta(modelo.getRonda().getApuestas().values());
+            mostrarApuestas();
         }
     }
-    
+
     public void lanzar(String efectoSeleccionado, ArrayList<Integer> casillerosSeleccionados) {
         //obtengo efecto, lo asocio a la ronda y lanzo
         Efecto efecto = buscarEfecto(efectoSeleccionado);
         modelo.getRonda().setEfecto(efecto);
         modelo.getRonda().setCasillerosSeleccionados(casillerosSeleccionados);
-        
+
         try {
             //seteo el estado de la mesa, no permite que nadie ingrese o salga o apueste
             modelo.setEstado(new EstadoMesaLanzar());
@@ -97,11 +102,11 @@ public class OperarMesaVistaControlador implements Observador {
         estadoBotonLanzar(false);
         habilitarCerrarMesa(true);
     }
-    
+
     private Efecto buscarEfecto(String efectoSeleccionado) {
         return Fachada.getInstancia().buscarEfecto(efectoSeleccionado);
     }
-    
+
     public void pagar() {
         try {
             modelo.setEstado(new EstadoMesaAbiertaPagar(modelo));
@@ -113,24 +118,45 @@ public class OperarMesaVistaControlador implements Observador {
         estadoBotonLanzar(true);
         habilitarCerrarMesa(false);
     }
-    
+
     private void mostrarNumeroGanador(int numeroGanador) {
         vista.mostrarNumeroGanador(numeroGanador);
     }
-    
+
     private void ocultarNumeroGanador() {
         vista.ocultarNumeroGanador();
     }
-    
+
     private void actualizarNumerosYronda() {
         vista.actualizarEstadisticaYronda(modelo);
     }
-    
+
     private void estadoBotonLanzar(boolean estado) {
         vista.estadoBotonLanzar(estado);
     }
-    
+
     private void habilitarCerrarMesa(boolean b) {
         vista.habilitarCerrarMesa(b);
+    }
+
+    private void mostrarApuestas() {
+        Map<Integer,Integer> resumenApuestas = new HashMap<>();
+        
+        ArrayList<Integer> universalCellCodes = ListaUniversalCasilleros.casillerosDisponibles();
+        
+        Collection<ArrayList<Apuesta>> apuestas = modelo.getRonda().getApuestas().values();
+
+        for (Integer code : universalCellCodes) {
+            int monto = 0;
+            for (ArrayList<Apuesta> listaApuestas : apuestas) {
+                for (Apuesta apuesta : listaApuestas) {
+                    if (apuesta.getCasillero() == code) {
+                        monto += apuesta.getMontoApostado();
+                    }
+                }
+            }
+            resumenApuestas.put(code, monto);
+        }
+        vista.mostrarApuesta(resumenApuestas);
     }
 }

@@ -426,21 +426,13 @@ public class Dialogo_OperarMesaCrupier extends Dialogo_GeneralVista implements O
     }
 
     @Override
-    public void mostrarApuesta(Collection<ArrayList<Apuesta>> apuestas) {
+    public void mostrarApuesta(Map<Integer, Integer> resumenApuestas) {
 
-        ArrayList<Integer> universalCellCodes = ListaUniversalCasilleros.casillerosDisponibles();
-
-        for (Integer code : universalCellCodes) {
-            int monto = 0;
-            for (ArrayList<Apuesta> listaApuestas : apuestas) {
-                for (Apuesta apuesta : listaApuestas) {
-                    if (apuesta.getCasillero() == code) {
-                        monto += apuesta.getMontoApostado();
-                    }
-                }
-            }
-            if (monto != 0) {
-                panelRuleta1.setApuesta(code, monto);
+        for (Map.Entry<Integer, Integer> entry : resumenApuestas.entrySet()) {
+            Integer code = entry.getKey();
+            Integer montoApostado = entry.getValue();
+            if (montoApostado != 0) {
+                panelRuleta1.setApuesta(code, montoApostado);
             }
         }
     }
