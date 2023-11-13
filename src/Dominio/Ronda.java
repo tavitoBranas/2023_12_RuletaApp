@@ -1,6 +1,7 @@
 package Dominio;
 
 import Excepciones.ApuestaInvalidaException;
+import Excepciones.EfectoException;
 import Excepciones.MontoInsuficienteException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -56,7 +57,7 @@ public class Ronda {
         this.casillerosSeleccionados = casillerosApostados();
     }
 
-    public void lanzar() {
+    public void lanzar() throws EfectoException {
         this.getEfecto().lanzar(this);
     }
 

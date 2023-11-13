@@ -1,5 +1,6 @@
 package Dominio;
 
+import Excepciones.EfectoException;
 import java.util.Random;
 
 public abstract class Efecto {
@@ -29,6 +30,6 @@ public abstract class Efecto {
         return numeroGanador;
     }
 
-    protected abstract void lanzar(Ronda ronda);
+    protected abstract void lanzar(Ronda ronda) throws EfectoException;
 
 }

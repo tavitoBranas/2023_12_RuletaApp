@@ -1,6 +1,7 @@
 package Dominio;
 
 import Excepciones.ApuestaInvalidaException;
+import Excepciones.EfectoException;
 import Excepciones.MesaAbandonoException;
 import Excepciones.MesaEstadoException;
 import Excepciones.MesaNoDisponibleException;
@@ -81,7 +82,7 @@ public class Mesa extends Observable implements Observador {
         return ronda;
     }
 
-    public void setEstado(EstadoMesa estado) throws MesaEstadoException {
+    public void setEstado(EstadoMesa estado) throws MesaEstadoException, EfectoException {
         //evaluo si la  mesa puede cerrarse
 
         if (estado instanceof EstadoMesaAbiertaPagar) {
@@ -135,18 +136,18 @@ public class Mesa extends Observable implements Observador {
         return estadistica;
     }
 
-    public void lanzar() {
-        estado.accionar(this);
+    public void lanzar() throws EfectoException {
+        estado.lanzar(this);
         avisar(Eventos.Lanzar);
     }
 
     private void pagar() {
-        estado.accionar(this);
+        estado.pagar(this);
         avisar(Eventos.Pagar);
     }
     
     private void cerrar(){
-        estado.accionar(this);
+        estado.cerrar(this);
         avisar(Eventos.CierraMesa);
     }
 

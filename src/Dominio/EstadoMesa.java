@@ -1,5 +1,6 @@
 package Dominio;
 
+import Excepciones.EfectoException;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -37,10 +38,21 @@ public abstract class EstadoMesa {
         this.jugadoresApuestan = jugadoresApuestan;
     }
 
-    protected abstract void accionar(Mesa mesa);
+    protected void lanzar(Mesa mesa) throws EfectoException {
+    }
+
+    ;
+    protected void pagar(Mesa mesa) {
+    }
+
+    ;
+    protected void cerrar(Mesa mesa) {
+    }
+
+    ;
 
     private void pagarAlJugadorApuestaLiquidacionMesa(Jugador jugador, Apuesta apuesta, TipoApuesta tipo,
-        BalanceMesa balanceMesa, BalanceJugador balanceJugador) {
+            BalanceMesa balanceMesa, BalanceJugador balanceJugador) {
         int saldoAnterior = jugador.getSaldo();
         int ganancia = apuesta.getMontoApostado() * tipo.getFactorDePago();
         jugador.setSaldo(saldoAnterior + ganancia);

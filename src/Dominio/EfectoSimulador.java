@@ -1,5 +1,7 @@
 package Dominio;
 
+import Excepciones.EfectoException;
+
 public class EfectoSimulador extends Efecto {
 
     public EfectoSimulador() {
@@ -7,24 +9,17 @@ public class EfectoSimulador extends Efecto {
     }
 
     @Override
-    public void lanzar(Ronda ronda) {
+    public void lanzar(Ronda ronda) throws EfectoException {
 
+        if (ronda.apuestaDerecta().isEmpty()) {
+            throw new EfectoException("No se cuenta con apuestas directas para seleccionar un numero ganador "
+                    + "mediante Efecto Simulador");
+        }
         int resultado;
-        
         do {
             resultado = numeroGanador();
             //la bola sortea únicamente entre los números que tienen Apuesta Directa, más el cero
-        } while (validar(ronda, resultado) || resultado == 0);
-
+        } while (!ronda.apuestaDerecta().contains(resultado) || resultado == 0);
         setearNumeroGanador(resultado);
     }
-    
-    private boolean validar(Ronda ronda, int resultado){
-        boolean validar = false;
-        if(!ronda.apuestaDerecta().isEmpty()){
-            validar = !ronda.apuestaDerecta().contains(resultado);
-        }
-        return validar;
-    }
-        
 }

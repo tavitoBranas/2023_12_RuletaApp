@@ -1,6 +1,7 @@
 package Controlador;
 
 import Dominio.*;
+import Excepciones.EfectoException;
 import Excepciones.MesaEstadoException;
 import Logica.Fachada;
 import UI.Interface.OperarMesaVista;
@@ -61,32 +62,32 @@ public class OperarMesaVistaControlador implements Observador {
         try {
             //seteo el estado de la mesa, no permite que nadie ingrese o salga o apueste
             modelo.setEstado(new EstadoMesaLanzar());
-        } catch (MesaEstadoException ex) {
+            estadoBotonLanzar(false);
+            habilitarCerrarMesa(true);
+        } catch (MesaEstadoException | EfectoException ex) {
             vista.mostrarMensajeError(ex.getMessage());
         }
-        estadoBotonLanzar(false);
-        habilitarCerrarMesa(true);
     }
 
     public void pagar() {
         try {
             modelo.setEstado(new EstadoMesaAbiertaPagar(modelo));
-        } catch (MesaEstadoException ex) {
+            vista.ocultarNumeroGanador();
+            vista.actualizarEstadisticaYronda(modelo);
+            estadoBotonLanzar(true);
+            habilitarCerrarMesa(false);
+        } catch (MesaEstadoException | EfectoException ex) {
             vista.mostrarMensajeError(ex.getMessage());
         }
-        vista.ocultarNumeroGanador();
-        vista.actualizarEstadisticaYronda(modelo);
-        estadoBotonLanzar(true);
-        habilitarCerrarMesa(false);
     }
 
     public void cerrarMesa() {
         try {
             modelo.setEstado(new EstadoMesaCerrar(modelo));
-        } catch (MesaEstadoException ex) {
+            vista.cerrarVentana();
+        } catch (MesaEstadoException | EfectoException ex) {
             vista.mostrarMensajeError(ex.getMessage());
         }
-        vista.cerrarVentana();
     }
 
     private void estadoBotonLanzar(boolean estado) {

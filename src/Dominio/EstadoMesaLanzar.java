@@ -1,5 +1,6 @@
 package Dominio;
 
+import Excepciones.EfectoException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -17,7 +18,7 @@ public final class EstadoMesaLanzar extends EstadoMesa {
     }
 
     @Override
-    public void accionar(Mesa mesa) {
+    public void lanzar(Mesa mesa) throws EfectoException{
 
         mesa.setMensaje("La mesa esta bloqueada. No se puede apostar ni abandonar la misma");
         mesa.getRonda().lanzar();
