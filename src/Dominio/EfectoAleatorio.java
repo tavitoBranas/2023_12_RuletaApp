@@ -6,11 +6,9 @@ public class EfectoAleatorio extends Efecto {
         super("Aleatorio");
     }
 
-    //la bola determina un valor 100% aleatorio en cada ronda.
     @Override
     public void lanzar(Ronda ronda) {
         int numero = numeroGanador();
         setearNumeroGanador(numero);
     }
-
 }

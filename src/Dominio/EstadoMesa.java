@@ -80,13 +80,16 @@ public abstract class EstadoMesa {
     }
 
     protected void pagarJugadores(Mesa mesa, BalanceMesa balanceMesa) {
+        //ya establece la recoleccion de la mesa al ver que perdieron
+        //setea la liquidacion al pagar al jugador
+        //setea ganancias y perdidas de jugador a nivel de su balance
         int numeroGanador = mesa.getEstadistica().getNumerosSorteados().get(0);
         int colorGanador = 0;
         int docenaGanadora = 0;
 
         if (numeroGanador != 0) {
-            colorGanador = ListaUniversalCasilleros.colorCasillero(numeroGanador);
-            docenaGanadora = ListaUniversalCasilleros.docenaCasillero(numeroGanador);
+            colorGanador = ListaUniversalCasilleros.colorDelCasillero(numeroGanador);
+            docenaGanadora = ListaUniversalCasilleros.docenaDelCasillero(numeroGanador);
         }
 
         Map<Jugador, ArrayList<Apuesta>> apuestas = mesa.getRonda().getApuestas();
@@ -97,7 +100,7 @@ public abstract class EstadoMesa {
             ArrayList<Apuesta> listaApuestas = elemento.getValue();
             //genero balance jugador para setear si gana o pierde          
             //seteo monto total apostado
-            BalanceJugador balanceJugador = jugador.setearMontoTotalApostado(mesa.getEstadistica().getNumeroDeRonda(), listaApuestas);
+            BalanceJugador balanceJugador = setearMontoTotalApostado(mesa.getEstadistica().getNumeroDeRonda(), listaApuestas);
 
             //analizo cada apuesta si se paga o si no va a recoleccion
             for (Apuesta apuesta : listaApuestas) {
@@ -134,5 +137,16 @@ public abstract class EstadoMesa {
             }
             jugador.setearBalanceAgregarAhistorico(balanceJugador);
         }
+    }
+
+    public BalanceJugador setearMontoTotalApostado(int numeroDeRonda, ArrayList<Apuesta> listaApuestas) {
+        BalanceJugador balanceJugador = new BalanceJugador(numeroDeRonda);
+        int montoTotalApostado = 0;
+
+        for (Apuesta apuesta : listaApuestas) {
+            montoTotalApostado += apuesta.getMontoApostado();
+        }
+        balanceJugador.setTotalApostado(montoTotalApostado);
+        return balanceJugador;
     }
 }

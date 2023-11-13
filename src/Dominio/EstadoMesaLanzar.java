@@ -10,10 +10,6 @@ public final class EstadoMesaLanzar extends EstadoMesa {
 
     public EstadoMesaLanzar() {
         super();
-        //aca bloqueo apuestas y abandono de jugadores
-        this.setJugadoresAbandonanMesa(false);
-        this.setJugadoresApuestan(false);
-        this.setJugadoresIngresanMesa(false);
         casillerosGanadores = new HashMap<String, Integer>();
     }
 
@@ -113,5 +109,4 @@ public final class EstadoMesaLanzar extends EstadoMesa {
             }
         }
     }
-
 }

@@ -86,36 +86,8 @@ public class ListaUniversalCasilleros {
         return docenas;
     }
 
-    public static int casilleroRojo() {
-        return 43;
-    }
-
-    public static int casilleroNegro() {
-        return 44;
-    }
-
-    public static int casilleroPrimeraDocena() {
-        return 40;
-    }
-
-    public static int casilleroSegundaDocena() {
-        return 41;
-    }
-
-    public static int casilleroTerceraDocena() {
-        return 42;
-    }
-
-    public static boolean apuestaInvolucraDocena(Apuesta apuesta) {
-        return getCasillerosApuestaDocena().stream().anyMatch(a -> a == apuesta.getCasillero());
-    }
-
-    public static boolean apuestaInvolucraColor(Apuesta apuesta) {
-        return ListaUniversalCasilleros.getCasillerosApuestaColor().stream().anyMatch(a -> a == apuesta.getCasillero());
-    }
-
-    public static int colorCasillero(int ultimoGanador) {
-        int retorno = -1; //si es cero no se determina color
+    public static int colorDelCasillero(int ultimoGanador) {
+        int retorno; //si es cero no se determina color
         if (numerosRojos().stream().anyMatch(l -> l == ultimoGanador)) {
             retorno = casilleroRojo();
         } else {
@@ -124,7 +96,7 @@ public class ListaUniversalCasilleros {
         return retorno;
     }
 
-    static int docenaCasillero(int numeroGanador) {
+    public static int docenaDelCasillero(int numeroGanador) {
         int retorno = -1; //si el ganador es cero entonces no tiene docena
         Map<String, ArrayList<Integer>> docenas = casillerosDocena();
         for (Map.Entry<String, ArrayList<Integer>> elemento : docenas.entrySet()) {
@@ -132,13 +104,13 @@ public class ListaUniversalCasilleros {
             ArrayList<Integer> numerosDeDocena = elemento.getValue();
 
             if (numerosDeDocena.stream().anyMatch(d -> d == numeroGanador)) {
-                retorno = numeroDocena(docena);
+                retorno = numeroDeLaDocena(docena);
             }
         }
         return retorno;
     }
 
-    private static int numeroDocena(String docena) {
+    private static int numeroDeLaDocena(String docena) {
         int retorno;
 
         switch (docena) {
@@ -168,5 +140,33 @@ public class ListaUniversalCasilleros {
             retorno.add(casillero);
         }
         return retorno;
+    }
+
+    public static int casilleroRojo() {
+        return 43;
+    }
+
+    public static int casilleroNegro() {
+        return 44;
+    }
+
+    public static int casilleroPrimeraDocena() {
+        return 40;
+    }
+
+    public static int casilleroSegundaDocena() {
+        return 41;
+    }
+
+    public static int casilleroTerceraDocena() {
+        return 42;
+    }
+
+    public static boolean apuestaInvolucraDocena(int apuesta) {
+        return getCasillerosApuestaDocena().stream().anyMatch(a -> a == apuesta);
+    }
+
+    public static boolean apuestaInvolucraColor(int apuesta) {
+        return ListaUniversalCasilleros.getCasillerosApuestaColor().stream().anyMatch(a -> a == apuesta);
     }
 }

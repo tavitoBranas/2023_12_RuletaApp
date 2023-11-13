@@ -30,6 +30,5 @@ public abstract class Usuario extends Observable {
     public boolean equals(Object o) {
         Usuario aComparar = (Usuario) o;
         return this.getCedula() == aComparar.getCedula();
-    }
-    
+    }  
 }

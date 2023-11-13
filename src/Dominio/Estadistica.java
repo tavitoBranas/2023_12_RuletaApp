@@ -14,11 +14,9 @@ public class Estadistica {
     private int historicoPrimeraDocena;
     private int historicoSegundaDocena;
     private int historicoTerceraDocena;
-    //aca tengo un hasmap con los numeros y la frecuencia que se obtuvieron
-    private HashMap<Integer, Integer> frecuenciaDeNumerosSorteados;
-    //aca tengo un arrayList de los balances de la mesa
-    private final ArrayList<BalanceMesa> historicoBalance;
-    private Mesa mesa;
+    private HashMap<Integer, Integer> frecuenciaDeNumerosSorteados; //aca tengo un hasmap con los numeros y la frecuencia que se obtuvieron
+    private final ArrayList<BalanceMesa> historicoBalance; //aca tengo un arrayList de los balances de la mesa
+    private final Mesa mesa;
 
     public Estadistica(Mesa mesa) {
         numerosSorteados = new ArrayList<>();
@@ -116,6 +114,10 @@ public class Estadistica {
         return historicoBalance;
     }
 
+    public int getSaldo() {
+        return historicoBalance.get(0).getBalancePosterior();
+    }
+
     public void setHistoricoBalance(BalanceMesa balance) {
         if (!historicoBalance.isEmpty()) {
             balance.setBalanceAnterior(historicoBalance.get(0).getBalancePosterior());
@@ -128,7 +130,6 @@ public class Estadistica {
     }
 
     public Map<String, Integer> estadisticasDeLaMesa() {
-
         Map<String, Integer> estadisticasRetorno = new LinkedHashMap<>();
         int porcentaje;
 
@@ -161,9 +162,5 @@ public class Estadistica {
             }
         }
         return estadisticasRetorno;
-    }
-
-    public int getSaldo() {
-        return historicoBalance.get(0).getBalancePosterior();
     }
 }

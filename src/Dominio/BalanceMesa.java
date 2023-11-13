@@ -21,12 +21,7 @@ public class BalanceMesa {
     public int getRonda() {
         return ronda;
     }
-
-    /*
-    public void setRonda(int ronda) {
-        this.ronda = ronda;
-    }
-     */
+    
     public int getBalanceAnterior() {
         return balanceAnterior;
     }
@@ -70,5 +65,4 @@ public class BalanceMesa {
     public void setBalancePosterior(int balancePosterior) {
         this.balancePosterior = balancePosterior;
     }
-
 }

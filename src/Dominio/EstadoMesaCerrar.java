@@ -17,17 +17,10 @@ public final class EstadoMesaCerrar extends EstadoMesa {
         mesa.avisar(Eventos.MesaPorCerrar);
         BalanceMesa balance = new BalanceMesa(mesa.getEstadistica().getNumeroDeRonda());
         pagarJugadores(mesa, balance);
-        //ya establece la recoleccion de la mesa al ver que perdieron
-        //setea la liquidacion al pagar al jugador
-        //setea ganancias y perdidas de jugador a nivel de su balance
         balanceMesa(mesa, balance);  //setea monto total
-        mesa.getEstadistica().setNumeroDeRonda();
-        //elimino a los jugadores de la mesa
-        mesa.expulsarJugadores();
-        //elimino la mesa de disponibles
-        Fachada.getInstancia().eliminarMesa(mesa);
-        //deslogueo al crupier
-        Fachada.getInstancia().desloguearUsuarioCrupier(mesa.getCrupier());
+        mesa.getEstadistica().setNumeroDeRonda(); 
+        mesa.expulsarJugadores(); //elimino a los jugadores de la mesa
+        Fachada.getInstancia().eliminarMesa(mesa);//elimino la mesa de disponibles
+        Fachada.getInstancia().desloguearUsuarioCrupier(mesa.getCrupier());//deslogueo al crupier
     }
-
 }

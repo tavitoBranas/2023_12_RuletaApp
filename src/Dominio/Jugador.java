@@ -71,25 +71,14 @@ public class Jugador extends Usuario {
         }
     }
 
-    BalanceJugador setearMontoTotalApostado(int numeroDeRonda, ArrayList<Apuesta> listaApuestas) {
-        BalanceJugador balanceJugador = new BalanceJugador(numeroDeRonda);
-        int montoTotalApostado = 0;
-
-        for (Apuesta apuesta : listaApuestas) {
-            montoTotalApostado += apuesta.getMontoApostado();
-        }
-        balanceJugador.setTotalApostado(montoTotalApostado);
-        return balanceJugador;
-    }
-
-    void setearBalanceAgregarAhistorico(BalanceJugador balanceJugador) {
+    public void setearBalanceAgregarAhistorico(BalanceJugador balanceJugador) {
         if (!historicoBalanceJugador.isEmpty()) {
             balanceJugador.setBalance(getHistoricoBalanceJugador().get(0).getBalance());
         } else {
             int saldoInicial = saldo + balanceJugador.getTotalApostado() - balanceJugador.getGanado();
             balanceJugador.setBalance(saldoInicial);
         }
-        getHistoricoBalanceJugador().add(0,balanceJugador);
+        getHistoricoBalanceJugador().add(0, balanceJugador);
         avisar(Eventos.ActualizacionSaldo);
     }
 

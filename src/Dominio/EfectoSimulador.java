@@ -10,7 +10,6 @@ public class EfectoSimulador extends Efecto {
 
     @Override
     public void lanzar(Ronda ronda) throws EfectoException {
-
         if (ronda.apuestaDerecta().isEmpty()) {
             throw new EfectoException("No se cuenta con apuestas directas para seleccionar un numero ganador "
                     + "mediante Efecto Simulador");
@@ -18,7 +17,6 @@ public class EfectoSimulador extends Efecto {
         int resultado;
         do {
             resultado = numeroGanador();
-            //la bola sortea únicamente entre los números que tienen Apuesta Directa, más el cero
         } while (!ronda.apuestaDerecta().contains(resultado) || resultado == 0);
         setearNumeroGanador(resultado);
     }

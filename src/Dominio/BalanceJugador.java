@@ -31,10 +31,6 @@ public final class BalanceJugador {
     public int getBalance() {
         return balance;
     }
-/*
-    public void setBalanceInicial(int monto) {
-        balance = monto;
-    }*/
     
     public void setBalance(int balanceAnterior) {
         balance = balanceAnterior + ganado - totalApostado;
@@ -55,5 +51,4 @@ public final class BalanceJugador {
     public void setPerdido(int perdido) {
         this.perdido = perdido;
     }
-
 }

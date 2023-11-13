@@ -90,13 +90,14 @@ public class Mesa extends Observable implements Observador {
             pagar();
         }
         if (estado instanceof EstadoMesaLanzar) {
+
             this.estado = estado;
             lanzar();
         }
         if (estado instanceof EstadoMesaCerrar) {
             habilitadoCierreDeMesa(estado);
-            this.estado = estado;
             cerrar();
+            this.estado = estado;
         }
 
         //ver cuando se cierre la mesa que se hace
@@ -137,7 +138,12 @@ public class Mesa extends Observable implements Observador {
     }
 
     public void lanzar() throws EfectoException {
-        estado.lanzar(this);
+        try {
+            estado.lanzar(this);
+        } catch (EfectoException ex) {
+            estado = new EstadoMesaAbiertaPagar(this);
+            throw ex;
+        }
         avisar(Eventos.Lanzar);
     }
 
@@ -145,8 +151,8 @@ public class Mesa extends Observable implements Observador {
         estado.pagar(this);
         avisar(Eventos.Pagar);
     }
-    
-    private void cerrar(){
+
+    private void cerrar() {
         estado.cerrar(this);
         avisar(Eventos.CierraMesa);
     }
@@ -185,12 +191,12 @@ public class Mesa extends Observable implements Observador {
         validacionDeCasillero(apuesta.getCasillero());
         //valido que la jugada anterior permita apuesta de color
         if (tipoApuesta.stream().anyMatch(tipo -> tipo instanceof ApuestaColor)
-                && ListaUniversalCasilleros.apuestaInvolucraColor(apuesta)) {
+                && ListaUniversalCasilleros.apuestaInvolucraColor(apuesta.getCasillero())) {
             validacionConUltimaJugada(apuesta.getJugador(), apuesta);
         }
         //valido que solo se permita una sola apuesta a docena
         if (tipoApuesta.stream().anyMatch(tipo -> tipo instanceof ApuestaDocena)
-                && ListaUniversalCasilleros.apuestaInvolucraDocena(apuesta)) {
+                && ListaUniversalCasilleros.apuestaInvolucraDocena(apuesta.getCasillero())) {
             validacionCantidadApuestasDocena(apuesta.getJugador(), apuesta);
         }
     }
@@ -240,7 +246,7 @@ public class Mesa extends Observable implements Observador {
             //analizo restricciones basado en el ultimo ganador
             if (!apuestasAanalizar.isEmpty()) {
                 if (ultimoGanador != 0) {
-                    int colorBuscado = ListaUniversalCasilleros.colorCasillero(ultimoGanador);
+                    int colorBuscado = ListaUniversalCasilleros.colorDelCasillero(ultimoGanador);
                     //el color que se aposto anteriormente no gano?
                     if (apuestasAanalizar.size() == 1 && apuestasAanalizar.get(0).getCasillero() != colorBuscado) {
                         //la apuesta es al mismo color que se aposto anteriormente Y apuesto por un monto mayor
@@ -310,15 +316,15 @@ public class Mesa extends Observable implements Observador {
     private void obligatoriedadApuestaDirecta() {
         boolean poseeApuestaDirecta = false;
         ApuestaDirecta apuestaDirecta = new ApuestaDirecta();
-        for(TipoApuesta tipo: tipoApuesta){
-            if(tipo instanceof ApuestaDirecta){
+        for (TipoApuesta tipo : tipoApuesta) {
+            if (tipo instanceof ApuestaDirecta) {
                 apuestaDirecta = (ApuestaDirecta) tipo;
             }
-            if(tipo instanceof ApuestaDirecta){
+            if (tipo instanceof ApuestaDirecta) {
                 poseeApuestaDirecta = true;
             }
         }
-        if(!poseeApuestaDirecta){
+        if (!poseeApuestaDirecta) {
             tipoApuesta.add(apuestaDirecta);
         }
     }
