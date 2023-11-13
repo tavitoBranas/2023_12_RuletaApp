@@ -1,18 +1,21 @@
 package UI;
 
 import Controlador.OperarMesaVistaControlador;
+import Dominio.Apuesta;
 import Dominio.ApuestaColor;
 import Dominio.ApuestaDocena;
 import Dominio.BalanceMesa;
 import Dominio.Efecto;
 import Dominio.Estadistica;
 import Dominio.Jugador;
+import Dominio.ListaUniversalCasilleros;
 import Dominio.Mesa;
 import java.util.ArrayList;
 import UI.Interface.OperarMesaVista;
 import componente.PanelRuleta;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Map;
 import javax.swing.table.DefaultTableModel;
 
@@ -256,7 +259,7 @@ public class Dialogo_OperarMesaCrupier extends Dialogo_GeneralVista implements O
         String efectoSeleccionado = (String) cbEfecto.getSelectedItem();
 
         //arrayList de casilleros seleccionados
-        ArrayList<Integer> casillerosSeleccionados = new ArrayList<>(Arrays.asList(40,41, 42, 1));
+        ArrayList<Integer> casillerosSeleccionados = new ArrayList<>(Arrays.asList(40, 41, 42, 1));
 
         if (efectoSeleccionado.contains("Efecto")) {
             mostrarMensajeError("Seleccione un efecto para continuar");
@@ -419,5 +422,26 @@ public class Dialogo_OperarMesaCrupier extends Dialogo_GeneralVista implements O
     public void resetearApuestasMonto() {
         tApuestas.setText("");
         tMonto.setText("");
+        panelRuleta1.limpiar();
+    }
+
+    @Override
+    public void mostrarApuesta(Collection<ArrayList<Apuesta>> apuestas) {
+
+        ArrayList<Integer> universalCellCodes = ListaUniversalCasilleros.casillerosDisponibles();
+
+        for (Integer code : universalCellCodes) {
+            int monto = 0;
+            for (ArrayList<Apuesta> listaApuestas : apuestas) {
+                for (Apuesta apuesta : listaApuestas) {
+                    if (apuesta.getCasillero() == code) {
+                        monto += apuesta.getMontoApostado();
+                    }
+                }
+            }
+            if (monto != 0) {
+                panelRuleta1.setApuesta(code, monto);
+            }
+        }
     }
 }

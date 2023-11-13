@@ -73,8 +73,12 @@ public class OperarMesaVistaControlador implements Observador {
             vista.actualizarEstadisticaYronda(modelo);
             vista.resetearApuestasMonto();
         }
-        if (Eventos.ApuestaRealizada.equals(evento) || Eventos.ActualizacionSaldo.equals(evento)) {
+        if (Eventos.ActualizacionSaldo.equals(evento)) {
             vista.apuestaRealizada(modelo);
+        }
+        if(Eventos.ApuestaRealizada.equals(evento) ){
+            vista.apuestaRealizada(modelo);
+            vista.mostrarApuesta(modelo.getRonda().getApuestas().values());
         }
     }
     

@@ -139,7 +139,7 @@ public class ListaUniversalCasilleros {
     }
 
     private static int numeroDocena(String docena) {
-        int retorno;  
+        int retorno;
 
         switch (docena) {
             case "Primera":
@@ -148,9 +148,24 @@ public class ListaUniversalCasilleros {
             case "Segunda":
                 retorno = casilleroSegundaDocena();
                 break;
-           default:
+            default:
                 retorno = casilleroTerceraDocena();
                 break;
+        }
+        return retorno;
+    }
+
+    public static ArrayList<Integer> casillerosDisponibles() {
+        ArrayList<Integer> retorno = new ArrayList<>();
+
+        for (Integer casillero : getCasillerosApuestaDirecta()) {
+            retorno.add(casillero);
+        }
+        for (Integer casillero : getCasillerosApuestaColor()) {
+            retorno.add(casillero);
+        }
+        for (Integer casillero : getCasillerosApuestaDocena()) {
+            retorno.add(casillero);
         }
         return retorno;
     }

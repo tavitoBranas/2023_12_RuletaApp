@@ -1,8 +1,8 @@
 package UI.Interface;
 
+import Dominio.Apuesta;
 import Dominio.Jugador;
 import Dominio.Mesa;
-import Logica.Fachada;
 import java.util.ArrayList;
 
 public interface JugarVista extends SeteoInicialMesa {
@@ -20,4 +20,7 @@ public interface JugarVista extends SeteoInicialMesa {
     public void actualizarBalanceJugador(Jugador jugador);
 
     public void avisarMesaEstaPorCerrar(String la_mesa_esta_por_cerrar);
+
+    public void aceptarApuesta(int monto, int casillero);
+
 }

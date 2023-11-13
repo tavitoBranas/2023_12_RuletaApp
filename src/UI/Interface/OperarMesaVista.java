@@ -1,9 +1,11 @@
 package UI.Interface;
 
+import Dominio.Apuesta;
 import Dominio.Efecto;
 import Dominio.Jugador;
 import Dominio.Mesa;
 import java.util.ArrayList;
+import java.util.Collection;
 
 public interface OperarMesaVista extends SeteoInicialMesa {
 
@@ -16,5 +18,7 @@ public interface OperarMesaVista extends SeteoInicialMesa {
     public void apuestaRealizada(Mesa mesa);
 
     public void resetearApuestasMonto();
+
+    public void mostrarApuesta(Collection<ArrayList<Apuesta>> values);
 
 }
