@@ -5,6 +5,7 @@ import Dominio.Jugador;
 import Dominio.Mesa;
 import UI.Interface.UnirseMesaVista;
 import java.util.ArrayList;
+import javax.swing.JFrame;
 
 public class Dialogo_UnirseAmesaJugador extends Dialogo_GeneralVista implements UnirseMesaVista {
 
@@ -15,6 +16,8 @@ public class Dialogo_UnirseAmesaJugador extends Dialogo_GeneralVista implements 
         initComponents();
         controlador = new UnirseAmesaVistaControlador(this, jugador);
         this.setTitle("Aplicacion jugador: Unirse a mesa");
+        //NO DEJO CERRAR LA VENTANA CON EL X 
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
     }
 
     @SuppressWarnings("unchecked")
@@ -90,9 +93,9 @@ public class Dialogo_UnirseAmesaJugador extends Dialogo_GeneralVista implements 
 
     private void bUnirseYjugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bUnirseYjugarActionPerformed
         String mesaSeleccionada = (String) cbMesasDisponibles.getSelectedItem();
-        if(mesaSeleccionada.contains("Seleccione")){
+        if (mesaSeleccionada.contains("Seleccione")) {
             mostrarMensajeError("Seleccione una mesa para continuar");
-        }else{
+        } else {
             controlador.unirseAmesa(mesaSeleccionada);
         }
     }//GEN-LAST:event_bUnirseYjugarActionPerformed
@@ -111,7 +114,7 @@ public class Dialogo_UnirseAmesaJugador extends Dialogo_GeneralVista implements 
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public void mostrarMesasAbiertas(ArrayList<Mesa> mesas) {      
+    public void mostrarMesasAbiertas(ArrayList<Mesa> mesas) {
         cbMesasDisponibles.removeAllItems();
         cbMesasDisponibles.addItem("<<Seleccione mesa>>");
         for (Mesa mesa : mesas) {

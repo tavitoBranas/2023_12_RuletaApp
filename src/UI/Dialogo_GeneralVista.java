@@ -1,5 +1,6 @@
 package UI;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class Dialogo_GeneralVista extends javax.swing.JDialog {
@@ -7,6 +8,8 @@ public class Dialogo_GeneralVista extends javax.swing.JDialog {
     public Dialogo_GeneralVista(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        //NO DEJO CERRAR LA VENTANA CON EL X 
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
     }
 
     @SuppressWarnings("unchecked")

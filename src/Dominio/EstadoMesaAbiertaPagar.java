@@ -25,7 +25,7 @@ public final class EstadoMesaAbiertaPagar extends EstadoMesa {
     }
 
     @Override
-    protected void pagar(Mesa mesa) {
+    protected void pagar() {
         mesa.setMensaje("La mesa esta disponible para jugar");
         BalanceMesa balance = new BalanceMesa(mesa.getEstadistica().getNumeroDeRonda());
         pagarJugadores(mesa, balance);

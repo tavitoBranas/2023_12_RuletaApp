@@ -9,19 +9,19 @@ import java.util.Map;
 
 public abstract class EstadoMesa {
 
-    private final Mesa mesa;
+    protected final Mesa mesa;
 
     public EstadoMesa(Mesa mesa) {
         this.mesa = mesa;
     }
 
-    protected void lanzar(Mesa mesa) throws EfectoException {
+    protected void lanzar() throws EfectoException {
     }
 
-    protected void pagar(Mesa mesa) {
+    protected void pagar() {
     }
 
-    protected void cerrar(Mesa mesa) {
+    protected void cerrar() {
     }
 
     protected abstract void habilitadoIngreso() throws MesaNoDisponibleException;
@@ -31,7 +31,7 @@ public abstract class EstadoMesa {
     protected abstract void habilitadoCierreDeMesa() throws MesaEstadoException;
 
     private void pagarAlJugadorApuestaLiquidacionMesa(Jugador jugador, Apuesta apuesta, TipoApuesta tipo,
-        BalanceMesa balanceMesa, BalanceJugador balanceJugador) {
+            BalanceMesa balanceMesa, BalanceJugador balanceJugador) {
         int saldoAnterior = jugador.getSaldo();
         int ganancia = apuesta.getMontoApostado() * tipo.getFactorDePago();
         jugador.setSaldo(saldoAnterior + ganancia);
@@ -79,37 +79,24 @@ public abstract class EstadoMesa {
             ArrayList<Apuesta> listaApuestas = elemento.getValue();
             //genero balance jugador para setear si gana o pierde          
             //seteo monto total apostado
-            BalanceJugador balanceJugador = setearMontoTotalApostado(mesa.getEstadistica().getNumeroDeRonda(), listaApuestas);
+            BalanceJugador balanceJugador = mesa.getRonda().setearMontoTotalApostado(mesa.getEstadistica().getNumeroDeRonda(), jugador);
 
             //analizo cada apuesta si se paga o si no va a recoleccion
             for (Apuesta apuesta : listaApuestas) {
                 int numeroApostado = apuesta.getCasillero();
-
                 for (TipoApuesta ap : mesa.getTipoApuesta()) {
                     if (ap instanceof ApuestaDirecta
                             && ListaUniversalCasilleros.getCasillerosApuestaDirecta().stream().anyMatch(a -> a == numeroApostado)) {
-                        if (numeroApostado == numeroGanador) {
-                            pagarAlJugadorApuestaLiquidacionMesa(jugador, apuesta, ap, balanceMesa, balanceJugador);
-                        } else {
-                            actualizarPeridasJugadorGananciaMesa(apuesta, balanceMesa, balanceJugador);
-                        }
+                        determinarSiGanaOpierde(numeroApostado, numeroGanador, jugador, apuesta, ap, balanceMesa, balanceJugador);
                     }
                     if (numeroGanador != 0) {
                         if (ap instanceof ApuestaColor
                                 && ListaUniversalCasilleros.getCasillerosApuestaColor().stream().anyMatch(a -> a == numeroApostado)) {
-                            if (numeroApostado == colorGanador) {
-                                pagarAlJugadorApuestaLiquidacionMesa(jugador, apuesta, ap, balanceMesa, balanceJugador);
-                            } else {
-                                actualizarPeridasJugadorGananciaMesa(apuesta, balanceMesa, balanceJugador);
-                            }
+                            determinarSiGanaOpierde(numeroApostado, colorGanador, jugador, apuesta, ap, balanceMesa, balanceJugador);
                         }
                         if (ap instanceof ApuestaDocena
                                 && ListaUniversalCasilleros.getCasillerosApuestaDocena().stream().anyMatch(a -> a == numeroApostado)) {
-                            if (numeroApostado == docenaGanadora) {
-                                pagarAlJugadorApuestaLiquidacionMesa(jugador, apuesta, ap, balanceMesa, balanceJugador);
-                            } else {
-                                actualizarPeridasJugadorGananciaMesa(apuesta, balanceMesa, balanceJugador);
-                            }
+                            determinarSiGanaOpierde(numeroApostado, docenaGanadora, jugador, apuesta, ap, balanceMesa, balanceJugador);
                         }
                     }
                 }
@@ -118,15 +105,12 @@ public abstract class EstadoMesa {
         }
     }
 
-    public BalanceJugador setearMontoTotalApostado(int numeroDeRonda, ArrayList<Apuesta> listaApuestas) {
-        BalanceJugador balanceJugador = new BalanceJugador(numeroDeRonda);
-        int montoTotalApostado = 0;
-
-        for (Apuesta apuesta : listaApuestas) {
-            montoTotalApostado += apuesta.getMontoApostado();
+    private void determinarSiGanaOpierde(int numeroApostado, int numeroGanador, Jugador jugador, Apuesta apuesta, TipoApuesta ap,
+            BalanceMesa balanceMesa, BalanceJugador balanceJugador) {
+        if (numeroApostado == numeroGanador) {
+            pagarAlJugadorApuestaLiquidacionMesa(jugador, apuesta, ap, balanceMesa, balanceJugador);
+        } else {
+            actualizarPeridasJugadorGananciaMesa(apuesta, balanceMesa, balanceJugador);
         }
-        balanceJugador.setTotalApostado(montoTotalApostado);
-        return balanceJugador;
     }
-
 }

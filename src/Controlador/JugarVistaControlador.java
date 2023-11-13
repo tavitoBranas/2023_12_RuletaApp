@@ -34,9 +34,6 @@ public class JugarVistaControlador implements Observador {
 
     @Override
     public void actualizar(Observable origen, Object evento) {
-        if (Eventos.UsuarioAbandonaMesa.equals(evento)) {
-            vista.cerrarVentana();
-        }
         if (Eventos.Pagar.equals(evento)) {
             vista.ocultarNumeroGanador();
             vista.actualizarEstadisticaYronda(modelo);

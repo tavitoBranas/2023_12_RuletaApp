@@ -127,4 +127,17 @@ public class Ronda {
             throw new MesaAbandonoException("No puede abandonar hasta completar la ronda");
         }
     }
+
+    public BalanceJugador setearMontoTotalApostado(int numeroDeRonda, Jugador jugador) {
+        BalanceJugador balanceJugador = new BalanceJugador(numeroDeRonda);
+        int montoTotalApostado = 0;
+
+        ArrayList<Apuesta> apuestasJugador = apuestas.get(jugador);
+
+        for (Apuesta apuesta : apuestasJugador) {
+            montoTotalApostado += apuesta.getMontoApostado();
+        }
+        balanceJugador.setTotalApostado(montoTotalApostado);
+        return balanceJugador;
+    }
 }

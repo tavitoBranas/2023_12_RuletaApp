@@ -9,6 +9,7 @@ import Dominio.Mesa;
 import UI.Interface.JugarVista;
 import componente.PanelRuleta;
 import java.util.Map;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -21,6 +22,8 @@ public class Dialogo_Jugar extends Dialogo_GeneralVista implements JugarVista {
         initComponents();
         controlador = new JugarVistaControlador(this, mesa, jugador);
         this.setTitle("Aplicacion jugador: Jugar");
+        //NO DEJO CERRAR LA VENTANA CON EL X 
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
     }
 
     @SuppressWarnings("unchecked")

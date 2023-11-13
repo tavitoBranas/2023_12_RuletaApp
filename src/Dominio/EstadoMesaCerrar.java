@@ -26,7 +26,7 @@ public final class EstadoMesaCerrar extends EstadoMesa {
     }
 
     @Override
-    protected void cerrar(Mesa mesa) {
+    protected void cerrar() {
         mesa.setMensaje("La mesa se va a cerrar");
         mesa.avisar(Eventos.MesaPorCerrar);
         BalanceMesa balance = new BalanceMesa(mesa.getEstadistica().getNumeroDeRonda());

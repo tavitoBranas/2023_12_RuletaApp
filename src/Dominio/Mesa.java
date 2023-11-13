@@ -99,14 +99,14 @@ public class Mesa extends Observable implements Observador {
 
     public void setEstadoPagar() {
         this.estado = new EstadoMesaAbiertaPagar(this);
-        estado.pagar(this);
+        estado.pagar();
         avisar(Eventos.Pagar);
     }
 
     public void setEstadoLanzar() throws EfectoException {
         this.estado = new EstadoMesaLanzar(this);
         try {
-            estado.lanzar(this);
+            estado.lanzar();
             avisar(Eventos.Lanzar);
         } catch (EfectoException ex) {
             estado = new EstadoMesaAbiertaPagar(this);
@@ -117,7 +117,7 @@ public class Mesa extends Observable implements Observador {
     public void setEstadoCerrar() throws MesaEstadoException {
         estado.habilitadoCierreDeMesa();
         this.estado = new EstadoMesaCerrar(this);
-        estado.cerrar(this);
+        estado.cerrar();
         avisar(Eventos.CierraMesa);
     }
 
@@ -151,6 +151,8 @@ public class Mesa extends Observable implements Observador {
         listaJugadores.clear();
     }
 
+    ////////////////////////////////////////////////////////////
+    
     void validarApuesta(Apuesta apuesta) throws ApuestaInvalidaException {
         //valido que e; casillero sea aceptado para apostar
         validacionDeCasillero(apuesta.getCasillero());

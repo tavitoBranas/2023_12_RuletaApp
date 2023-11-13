@@ -31,7 +31,7 @@ public final class EstadoMesaLanzar extends EstadoMesa {
     }
 
     @Override
-    public void lanzar(Mesa mesa) throws EfectoException {
+    public void lanzar() throws EfectoException {
 
         mesa.setMensaje("La mesa esta bloqueada. No se puede apostar ni abandonar la misma");
         mesa.getRonda().lanzar();
