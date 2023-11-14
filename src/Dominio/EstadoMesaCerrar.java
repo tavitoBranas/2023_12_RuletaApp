@@ -30,9 +30,6 @@ public final class EstadoMesaCerrar extends EstadoMesa {
         throw new MesaAbandonoException("No se puede avandonar mesa. La misma esta pagando");
     }
 
-    @Override
-    protected void habilitadoCierreDeMesa() throws MesaEstadoException {
-    }
 
     @Override
     protected void cerrar() {

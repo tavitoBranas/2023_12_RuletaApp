@@ -5,20 +5,22 @@ import Excepciones.MesaEstadoException;
 import java.util.ArrayList;
 import java.util.Map;
 
-public final class EstadoMesaAbiertaPagar extends EstadoMesa {
+public final class EstadoMesaPagar extends EstadoMesa {
 
-    public EstadoMesaAbiertaPagar(Mesa mesa) {
+    public EstadoMesaPagar(Mesa mesa) {
         super(mesa);
     }
 
     @Override
-    protected void lanzar() throws EfectoException {
-        mesa.setEstado(new EstadoMesaLanzar(mesa));
-        mesa.lanzar();
+    protected void lanzar() throws EfectoException, MesaEstadoException {
+        throw new MesaEstadoException("No se puede LANZAR. Para ello la mesa debe de haber "
+                + "abierta");
     }
 
     @Override
-    protected void cerrar() {
+    protected void cerrar() throws MesaEstadoException {
+        mesa.setEstado(new EstadoMesaCerrar(mesa));
+        mesa.cerrar();
     }
 
     @Override
@@ -27,12 +29,6 @@ public final class EstadoMesaAbiertaPagar extends EstadoMesa {
 
     @Override
     protected void habilitadoAvandono() {
-    }
-
-    @Override
-    protected void habilitadoCierreDeMesa() throws MesaEstadoException {
-        throw new MesaEstadoException("No se puede cerrar la mesa. Para ello la misma debe de estar "
-                + "Lanzando");
     }
 
     @Override
@@ -45,6 +41,8 @@ public final class EstadoMesaAbiertaPagar extends EstadoMesa {
         generacionNuevaRonda(mesa);
         mesa.getEstadistica().setNumeroDeRonda();
         mesa.avisar(Eventos.Pagar);
+        //actualizo estado a abrir
+        mesa.setEstado(new EstadoMesaAbierta(mesa));
     }
 
     private void generacionNuevaRonda(Mesa mesa) {

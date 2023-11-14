@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class OperarMesaVistaControlador implements Observador {
 
@@ -63,17 +65,21 @@ public class OperarMesaVistaControlador implements Observador {
             modelo.lanzar();
             estadoBotonLanzar(false);
             habilitarCerrarMesa(true);
-        } catch (EfectoException ex) {
+        } catch (EfectoException | MesaEstadoException ex) {
             vista.mostrarMensajeError(ex.getMessage());
         }
     }
 
     public void pagar() {
-        modelo.pagar();
-        vista.ocultarNumeroGanador();
-        vista.actualizarEstadisticaYronda(modelo);
-        estadoBotonLanzar(true);
-        habilitarCerrarMesa(false);
+        try {
+            modelo.pagar();
+            vista.ocultarNumeroGanador();
+            vista.actualizarEstadisticaYronda(modelo);
+            estadoBotonLanzar(true);
+            habilitarCerrarMesa(false);
+        } catch (MesaEstadoException ex) {
+           vista.mostrarMensajeError(ex.getMessage());
+        }
     }
 
     public void cerrarMesa() {

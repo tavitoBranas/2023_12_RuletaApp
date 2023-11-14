@@ -15,17 +15,15 @@ public abstract class EstadoMesa {
         this.mesa = mesa;
     }
 
-    protected abstract void lanzar() throws EfectoException;
+    protected abstract void lanzar() throws EfectoException, MesaEstadoException;
 
-    protected abstract void pagar();
+    protected abstract void pagar() throws MesaEstadoException;
 
     protected abstract void cerrar() throws MesaEstadoException;
 
     protected abstract void habilitadoIngreso() throws MesaNoDisponibleException;
 
     protected abstract void habilitadoAvandono() throws MesaAbandonoException;
-
-    protected abstract void habilitadoCierreDeMesa() throws MesaEstadoException;
 
     private void pagarAlJugadorApuestaLiquidacionMesa(Jugador jugador, Apuesta apuesta, TipoApuesta tipo,
             BalanceMesa balanceMesa, BalanceJugador balanceJugador) {

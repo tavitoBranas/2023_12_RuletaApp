@@ -29,7 +29,7 @@ public class Mesa extends Observable implements Observador {
         listaJugadores = new ArrayList<>();
         this.mensaje = "";
         estadistica = new Estadistica(this);
-        estado = new EstadoMesaAbiertaPagar(this);
+        estado = new EstadoMesaAbierta(this);
         obligatoriedadApuestaDirecta();
     }
 
@@ -101,21 +101,15 @@ public class Mesa extends Observable implements Observador {
         this.estado = estado;
     }
 
-    public void pagar() {
+    public void pagar() throws MesaEstadoException {
         estado.pagar();
     }
 
-    public void lanzar() throws EfectoException {
-        try {
-            estado.lanzar();
-        } catch (EfectoException ex) {
-            estado = new EstadoMesaAbiertaPagar(this);
-            throw ex;
-        }
+    public void lanzar() throws EfectoException, MesaEstadoException {
+        estado.lanzar();
     }
 
     public void cerrar() throws MesaEstadoException {
-        estado.habilitadoCierreDeMesa();
         //this.estado = new EstadoMesaCerrar(this);
         estado.cerrar();
     }

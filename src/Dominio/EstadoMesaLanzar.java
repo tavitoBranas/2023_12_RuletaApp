@@ -17,15 +17,14 @@ public final class EstadoMesaLanzar extends EstadoMesa {
     }
 
     @Override
-    protected void pagar() {
-        mesa.setEstado(new EstadoMesaAbiertaPagar(mesa));
+    protected void pagar() throws MesaEstadoException {
+        mesa.setEstado(new EstadoMesaPagar(mesa));
         mesa.pagar();
     }
 
     @Override
-    protected void cerrar() throws MesaEstadoException{
-        mesa.setEstado(new EstadoMesaCerrar(mesa));
-        mesa.cerrar();
+    protected void cerrar() throws MesaEstadoException {
+        throw new MesaEstadoException("No se puede CERRAR. Para ello la mesa debe de haber lanzado ");
     }
 
     @Override
@@ -39,15 +38,16 @@ public final class EstadoMesaLanzar extends EstadoMesa {
     }
 
     @Override
-    protected void habilitadoCierreDeMesa() throws MesaEstadoException {
-    }
-
-    @Override
     public void lanzar() throws EfectoException {
 
         mesa.setMensaje("La mesa esta bloqueada. No se puede apostar ni abandonar la misma");
-        mesa.getRonda().lanzar();
-
+        //si da error el lanzar retorno a estado de mesa anterior
+        try {
+            mesa.getRonda().lanzar();
+        } catch (EfectoException ex) {
+            mesa.setEstado(new EstadoMesaAbierta(mesa));
+            throw ex;
+        }
         //seteo casilleros ganadores
         casillerosGanadores.clear();
         int numeroGanador = mesa.getRonda().getEfecto().getNumeroGanador();
@@ -63,6 +63,7 @@ public final class EstadoMesaLanzar extends EstadoMesa {
             casilleroGanadorDocena(numeroGanador, mesa);
         }
         mesa.avisar(Eventos.Lanzar);
+        mesa.setEstado(new EstadoMesaPagar(mesa));
     }
 
     private void setearNumeroGanador(int resultado, Mesa mesa) {
