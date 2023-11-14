@@ -33,6 +33,7 @@ public final class EstadoMesaAbiertaPagar extends EstadoMesa {
         actualizarUltimaJugadaJugadores(mesa);
         generacionNuevaRonda(mesa);
         mesa.getEstadistica().setNumeroDeRonda();
+        mesa.avisar(Eventos.Pagar);
     }
 
     private void generacionNuevaRonda(Mesa mesa) {

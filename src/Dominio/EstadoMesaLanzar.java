@@ -50,6 +50,7 @@ public final class EstadoMesaLanzar extends EstadoMesa {
         if (tipoApuestas.stream().anyMatch(apuesta -> apuesta instanceof ApuestaDocena)) {
             casilleroGanadorDocena(numeroGanador, mesa);
         }
+        mesa.avisar(Eventos.Lanzar);
     }
 
     private void setearNumeroGanador(int resultado, Mesa mesa) {

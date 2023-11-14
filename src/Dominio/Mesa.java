@@ -100,14 +100,12 @@ public class Mesa extends Observable implements Observador {
     public void setEstadoPagar() {
         this.estado = new EstadoMesaAbiertaPagar(this);
         estado.pagar();
-        avisar(Eventos.Pagar);
     }
 
     public void setEstadoLanzar() throws EfectoException {
         this.estado = new EstadoMesaLanzar(this);
         try {
             estado.lanzar();
-            avisar(Eventos.Lanzar);
         } catch (EfectoException ex) {
             estado = new EstadoMesaAbiertaPagar(this);
             throw ex;
@@ -118,7 +116,6 @@ public class Mesa extends Observable implements Observador {
         estado.habilitadoCierreDeMesa();
         this.estado = new EstadoMesaCerrar(this);
         estado.cerrar();
-        avisar(Eventos.CierraMesa);
     }
 
     public Mesa ingresarAmesa(Jugador jugador) throws UsuarioEnMesaException, MesaNoDisponibleException {

@@ -36,5 +36,6 @@ public final class EstadoMesaCerrar extends EstadoMesa {
         mesa.expulsarJugadores(); //elimino a los jugadores de la mesa
         Fachada.getInstancia().eliminarMesa(mesa);//elimino la mesa de disponibles
         Fachada.getInstancia().desloguearUsuarioCrupier(mesa.getCrupier());//deslogueo al crupier
+        mesa.avisar(Eventos.CierraMesa);
     }
 }
