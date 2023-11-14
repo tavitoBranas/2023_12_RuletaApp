@@ -151,108 +151,40 @@ public class Mesa extends Observable implements Observador {
         listaJugadores.clear();
     }
 
-    ////////////////////////////////////////////////////////////
-    
-    void validarApuesta(Apuesta apuesta) throws ApuestaInvalidaException {
-        //valido que e; casillero sea aceptado para apostar
-        validacionDeCasillero(apuesta.getCasillero());
-        //valido que la jugada anterior permita apuesta de color
-        if (tipoApuesta.stream().anyMatch(tipo -> tipo instanceof ApuestaColor)
-                && ListaUniversalCasilleros.apuestaInvolucraColor(apuesta.getCasillero())) {
-            validacionConUltimaJugada(apuesta.getJugador(), apuesta);
+    public void validarApuesta(Apuesta apuesta) throws ApuestaInvalidaException {
+        //valido que el casillero sea aceptado para apostar
+        casilleroAptoParaApostar(apuesta.getCasillero());
+        //valido condiciones del tipo de apuesta
+        tipoApuestaAdmiteCasillero(apuesta);
+    }
+
+    private void casilleroAptoParaApostar(int casillero) throws ApuestaInvalidaException {
+        if (!tipoApuesta.stream().anyMatch(ap -> ap instanceof ApuestaDirecta)
+                && ListaUniversalCasilleros.apuestaInvolucraDirecta(casillero)) {
+            throw new ApuestaInvalidaException("La apuesta no fue aceptada: la apuesta directa no esta disponible");
         }
-        //valido que solo se permita una sola apuesta a docena
-        if (tipoApuesta.stream().anyMatch(tipo -> tipo instanceof ApuestaDocena)
-                && ListaUniversalCasilleros.apuestaInvolucraDocena(apuesta.getCasillero())) {
-            validacionCantidadApuestasDocena(apuesta.getJugador(), apuesta);
+        if (!tipoApuesta.stream().anyMatch(ap -> ap instanceof ApuestaColor)
+                && ListaUniversalCasilleros.apuestaInvolucraColor(casillero)) {
+            throw new ApuestaInvalidaException("La apuesta no fue aceptada: el casillero color no esta disponible");
+        }
+        if (!tipoApuesta.stream().anyMatch(ap -> ap instanceof ApuestaDocena)
+                && ListaUniversalCasilleros.apuestaInvolucraDocena(casillero)) {
+            throw new ApuestaInvalidaException("La apuesta no fue aceptada: el casillero docena no esta disponible");
         }
     }
 
-    private void validacionDeCasillero(int casillero) throws ApuestaInvalidaException {
-        if (!this.tipoApuesta.stream().anyMatch(tipo -> tipo instanceof ApuestaDirecta)) {
-            if (ListaUniversalCasilleros.getCasillerosApuestaDirecta().stream().anyMatch(c -> c == casillero)) {
-                throw new ApuestaInvalidaException("La apuesta no fue aceptada: la apuesta directa no esta disponible");
+    private void tipoApuestaAdmiteCasillero(Apuesta apuesta) throws ApuestaInvalidaException {
+        for (TipoApuesta tipo : tipoApuesta) {
+            if (tipo instanceof ApuestaColor && ListaUniversalCasilleros.apuestaInvolucraColor(apuesta.getCasillero())) {
+                //valido condiciones de apuesta a color
+                tipo.validacionConUltimaJugada(apuesta, estadistica);
+            }
+            if (tipo instanceof ApuestaDocena
+                    && ListaUniversalCasilleros.apuestaInvolucraDocena(apuesta.getCasillero())) {
+                //valido condiciones de apuesta a docena
+                tipo.validacionCantidadApuestasDocena(apuesta, ronda);
             }
         }
-        if (!this.tipoApuesta.stream().anyMatch(tipo -> tipo instanceof ApuestaColor)) {
-            if (ListaUniversalCasilleros.getCasillerosApuestaColor().stream().anyMatch(c -> c == casillero)) {
-                throw new ApuestaInvalidaException("La apuesta no fue aceptada: el casillero color no esta disponible");
-            }
-        }
-        if (!this.tipoApuesta.stream().anyMatch(tipo -> tipo instanceof ApuestaDocena)) {
-            if (ListaUniversalCasilleros.getCasillerosApuestaDocena().stream().anyMatch(c -> c == casillero)) {
-                throw new ApuestaInvalidaException("La apuesta no fue aceptada: el casillero docena no esta disponible");
-            }
-        }
-    }
-
-    private void validacionCantidadApuestasDocena(Jugador jugador, Apuesta apuesta) throws ApuestaInvalidaException {
-        if (ronda.getApuestas().containsKey(jugador)) {
-            ArrayList<Apuesta> apuestasJugador = ronda.getApuestas().get(jugador);
-
-            for (int k = 0; k < apuestasJugador.size(); k++) {
-                for (int t = 0; t < ListaUniversalCasilleros.getCasillerosApuestaDocena().size(); t++) {
-                    if (apuestasJugador.get(k).getCasillero()
-                            == ListaUniversalCasilleros.getCasillerosApuestaDocena().get(t)
-                            && apuesta.getCasillero() != apuestasJugador.get(k).getCasillero()) {
-                        throw new ApuestaInvalidaException("No se puede apostar a mas de una docena por ronda");
-                    }
-                }
-            }
-        }
-
-    }
-
-    private void validacionConUltimaJugada(Jugador jugador, Apuesta apuesta) throws ApuestaInvalidaException {
-        //averiguo si el jugador aposto a color en la ronda anterior y obtengo los casilleros apostados y su monto
-        ArrayList<Apuesta> apuestasAanalizar = jugadorApostoColorEnRondaAnterior(jugador.getUltimasApuestas());
-
-        //consigo el ultimo casillero ganador
-        if (!estadistica.getNumerosSorteados().isEmpty()) {
-            int ultimoGanador = estadistica.getNumerosSorteados().get(0);
-            //analizo restricciones basado en el ultimo ganador
-            if (!apuestasAanalizar.isEmpty()) {
-                if (ultimoGanador != 0) {
-                    int colorBuscado = ListaUniversalCasilleros.colorDelCasillero(ultimoGanador);
-                    //el color que se aposto anteriormente no gano?
-                    if (apuestasAanalizar.size() == 1 && apuestasAanalizar.get(0).getCasillero() != colorBuscado) {
-                        //la apuesta es al mismo color que se aposto anteriormente Y apuesto por un monto mayor
-                        if (apuestasAanalizar.get(0).getMontoApostado() < apuesta.getMontoApostado()
-                                && apuesta.getCasillero() == apuestasAanalizar.get(0).getCasillero()) {
-                            throw new ApuestaInvalidaException("No esta permitido en este caso apostar un monto mayor al color"
-                                    + " que no gano la jugada anterior");
-                        }
-                    }
-                    //salio el cero, entonces se perdio. No se puede apostar un monto mayor al anterior
-                } else {
-                    if (apuestasAanalizar.size() == 2) {
-                        for (Apuesta apuestaHistorico : apuestasAanalizar) {
-                            if (apuestaHistorico.getCasillero() == apuesta.getCasillero()
-                                    && apuestaHistorico.getMontoApostado() < apuesta.getMontoApostado()) {
-                                throw new ApuestaInvalidaException("No esta permitido en este caso apostar un monto mayor al color"
-                                        + " que no gano la jugada anterior");
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private ArrayList<Apuesta> jugadorApostoColorEnRondaAnterior(ArrayList<Apuesta> apuestas) {
-        ArrayList<Apuesta> retorno = new ArrayList<>();
-        ArrayList<Integer> casillerosColores = ListaUniversalCasilleros.getCasillerosApuestaColor();
-        for (Integer i : casillerosColores) {
-            boolean colorEncontrado = false;
-
-            for (int j = 0; j < apuestas.size() && !colorEncontrado; j++) {
-                if (apuestas.get(j).getCasillero() == i) {
-                    retorno.add(apuestas.get(j));
-                    colorEncontrado = true;
-                }
-            }
-        }
-        return retorno;
     }
 
     @Override
@@ -264,5 +196,4 @@ public class Mesa extends Observable implements Observador {
             avisar(Eventos.ActualizacionSaldo);
         }
     }
-
 }

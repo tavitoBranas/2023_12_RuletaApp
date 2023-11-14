@@ -1,5 +1,6 @@
 package Dominio;
 
+import Excepciones.ApuestaInvalidaException;
 import java.util.Objects;
 
 public abstract class TipoApuesta {
@@ -47,5 +48,6 @@ public abstract class TipoApuesta {
         return Objects.equals(this.tipo, other.tipo);
     }
     
-    
+    protected void validacionCantidadApuestasDocena(Apuesta apuesta, Ronda ronda) throws ApuestaInvalidaException{}
+    protected void validacionConUltimaJugada(Apuesta apuesta, Estadistica estadistica) throws ApuestaInvalidaException {}
 }

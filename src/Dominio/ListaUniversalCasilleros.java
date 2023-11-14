@@ -169,4 +169,8 @@ public class ListaUniversalCasilleros {
     public static boolean apuestaInvolucraColor(int apuesta) {
         return ListaUniversalCasilleros.getCasillerosApuestaColor().stream().anyMatch(a -> a == apuesta);
     }
+
+    public static boolean apuestaInvolucraDirecta(int apuesta) {
+        return ListaUniversalCasilleros.getCasillerosApuestaDirecta().stream().anyMatch(a -> a == apuesta);
+    }
 }

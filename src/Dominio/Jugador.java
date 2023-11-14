@@ -82,4 +82,19 @@ public class Jugador extends Usuario {
         avisar(Eventos.ActualizacionSaldo);
     }
 
+    public ArrayList<Apuesta> jugadorApostoColorEnRondaAnterior() {
+        ArrayList<Apuesta> retorno = new ArrayList<>();
+        ArrayList<Integer> casillerosColores = ListaUniversalCasilleros.getCasillerosApuestaColor();
+        for (Integer i : casillerosColores) {
+            boolean colorEncontrado = false;
+
+            for (int j = 0; j < ultimasApuestas.size() && !colorEncontrado; j++) {
+                if (ultimasApuestas.get(j).getCasillero() == i) {
+                    retorno.add(ultimasApuestas.get(j));
+                    colorEncontrado = true;
+                }
+            }
+        }
+        return retorno;
+    }
 }
