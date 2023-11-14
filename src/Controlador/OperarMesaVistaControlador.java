@@ -60,7 +60,7 @@ public class OperarMesaVistaControlador implements Observador {
         modelo.getRonda().setEfecto(efecto);
         modelo.getRonda().setCasillerosSeleccionados();
         try {
-            modelo.setEstadoLanzar();
+            modelo.lanzar();
             estadoBotonLanzar(false);
             habilitarCerrarMesa(true);
         } catch (EfectoException ex) {
@@ -69,7 +69,7 @@ public class OperarMesaVistaControlador implements Observador {
     }
 
     public void pagar() {
-        modelo.setEstadoPagar();
+        modelo.pagar();
         vista.ocultarNumeroGanador();
         vista.actualizarEstadisticaYronda(modelo);
         estadoBotonLanzar(true);
@@ -78,7 +78,7 @@ public class OperarMesaVistaControlador implements Observador {
 
     public void cerrarMesa() {
         try {
-            modelo.setEstadoCerrar();
+            modelo.cerrar();
             vista.cerrarVentana();
         } catch (MesaEstadoException ex) {
             vista.mostrarMensajeError(ex.getMessage());

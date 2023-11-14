@@ -97,13 +97,15 @@ public class Mesa extends Observable implements Observador {
         ronda.habilitadoAbandono(jugador);
     }
 
-    public void setEstadoPagar() {
-        this.estado = new EstadoMesaAbiertaPagar(this);
+    public void setEstado(EstadoMesa estado) {
+        this.estado = estado;
+    }
+
+    public void pagar() {
         estado.pagar();
     }
 
-    public void setEstadoLanzar() throws EfectoException {
-        this.estado = new EstadoMesaLanzar(this);
+    public void lanzar() throws EfectoException {
         try {
             estado.lanzar();
         } catch (EfectoException ex) {
@@ -112,9 +114,9 @@ public class Mesa extends Observable implements Observador {
         }
     }
 
-    public void setEstadoCerrar() throws MesaEstadoException {
+    public void cerrar() throws MesaEstadoException {
         estado.habilitadoCierreDeMesa();
-        this.estado = new EstadoMesaCerrar(this);
+        //this.estado = new EstadoMesaCerrar(this);
         estado.cerrar();
     }
 

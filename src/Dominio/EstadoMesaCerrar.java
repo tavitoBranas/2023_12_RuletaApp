@@ -1,5 +1,6 @@
 package Dominio;
 
+import Excepciones.EfectoException;
 import Excepciones.MesaAbandonoException;
 import Excepciones.MesaEstadoException;
 import Excepciones.MesaNoDisponibleException;
@@ -9,6 +10,14 @@ public final class EstadoMesaCerrar extends EstadoMesa {
 
     public EstadoMesaCerrar(Mesa mesa) {
         super(mesa);
+    }
+
+    @Override
+    protected void lanzar() throws EfectoException {
+    }
+
+    @Override
+    protected void pagar() {
     }
 
     @Override
@@ -38,4 +47,5 @@ public final class EstadoMesaCerrar extends EstadoMesa {
         Fachada.getInstancia().desloguearUsuarioCrupier(mesa.getCrupier());//deslogueo al crupier
         mesa.avisar(Eventos.CierraMesa);
     }
+
 }

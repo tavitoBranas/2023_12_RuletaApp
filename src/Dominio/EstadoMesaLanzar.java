@@ -17,6 +17,18 @@ public final class EstadoMesaLanzar extends EstadoMesa {
     }
 
     @Override
+    protected void pagar() {
+        mesa.setEstado(new EstadoMesaAbiertaPagar(mesa));
+        mesa.pagar();
+    }
+
+    @Override
+    protected void cerrar() throws MesaEstadoException{
+        mesa.setEstado(new EstadoMesaCerrar(mesa));
+        mesa.cerrar();
+    }
+
+    @Override
     protected void habilitadoIngreso() throws MesaNoDisponibleException {
         throw new MesaNoDisponibleException("Esta mesa se encuentra pagando. Intente nuevamente en unos segundos");
     }

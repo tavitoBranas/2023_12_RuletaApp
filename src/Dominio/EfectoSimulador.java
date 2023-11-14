@@ -15,9 +15,10 @@ public class EfectoSimulador extends Efecto {
                     + "mediante Efecto Simulador");
         }
         int resultado;
+        ronda.apuestaDerecta().add(0);
         do {
             resultado = numeroGanador();
-        } while (!ronda.apuestaDerecta().contains(resultado) || resultado == 0);
+        } while (!ronda.apuestaDerecta().contains(resultado));
         setearNumeroGanador(resultado);
     }
 }

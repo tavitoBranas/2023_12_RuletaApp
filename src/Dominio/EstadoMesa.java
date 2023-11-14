@@ -15,14 +15,11 @@ public abstract class EstadoMesa {
         this.mesa = mesa;
     }
 
-    protected void lanzar() throws EfectoException {
-    }
+    protected abstract void lanzar() throws EfectoException;
 
-    protected void pagar() {
-    }
+    protected abstract void pagar();
 
-    protected void cerrar() {
-    }
+    protected abstract void cerrar() throws MesaEstadoException;
 
     protected abstract void habilitadoIngreso() throws MesaNoDisponibleException;
 

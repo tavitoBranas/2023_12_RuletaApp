@@ -1,5 +1,6 @@
 package Dominio;
 
+import Excepciones.EfectoException;
 import Excepciones.MesaEstadoException;
 import java.util.ArrayList;
 import java.util.Map;
@@ -8,6 +9,16 @@ public final class EstadoMesaAbiertaPagar extends EstadoMesa {
 
     public EstadoMesaAbiertaPagar(Mesa mesa) {
         super(mesa);
+    }
+
+    @Override
+    protected void lanzar() throws EfectoException {
+        mesa.setEstado(new EstadoMesaLanzar(mesa));
+        mesa.lanzar();
+    }
+
+    @Override
+    protected void cerrar() {
     }
 
     @Override
