@@ -1,16 +1,19 @@
 package Dominio;
 
+import Excepciones.ApuestaInvalidaException;
+
 public class Apuesta {
+
     private Jugador jugador;
     private int montoApostado;
     private int casillero;
 
-    public Apuesta(Jugador j, int monto, int casillero){
+    public Apuesta(Jugador j, int monto, int casillero) {
         this.jugador = j;
         this.montoApostado = monto;
         this.casillero = casillero;
     }
-    
+
     public Jugador getJugador() {
         return jugador;
     }
@@ -33,5 +36,11 @@ public class Apuesta {
 
     public void setCasillero(int casillero) {
         this.casillero = casillero;
+    }
+
+    public void validarMonto() throws ApuestaInvalidaException {
+        if (montoApostado <= 0) {
+            throw new ApuestaInvalidaException("El monto apostado debe de ser mayor a cero");
+        }
     }
 }

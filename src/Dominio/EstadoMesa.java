@@ -27,6 +27,7 @@ public abstract class EstadoMesa {
 
     private void pagarAlJugadorApuestaLiquidacionMesa(Jugador jugador, Apuesta apuesta, TipoApuesta tipo,
             BalanceMesa balanceMesa, BalanceJugador balanceJugador) {
+        
         int saldoAnterior = jugador.getSaldo();
         int ganancia = apuesta.getMontoApostado() * tipo.getFactorDePago();
         jugador.setSaldo(saldoAnterior + ganancia);

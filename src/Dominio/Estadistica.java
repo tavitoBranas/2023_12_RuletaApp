@@ -135,29 +135,29 @@ public class Estadistica {
 
         //cargo porcentaje de colores
         if (mesa.getTipoApuesta().stream().anyMatch(apuesta -> apuesta instanceof ApuestaColor)) {
-            porcentaje = (int) Math.ceil(this.historicoRojo * 100.0f / numeroDeRonda);
+            porcentaje = (int) Math.ceil(this.historicoRojo * 100.0f / (numeroDeRonda-1));
             estadisticasRetorno.put("Rojo", porcentaje);
 
-            porcentaje = (int) Math.ceil(this.historicoNegro * 100.0f / numeroDeRonda);
+            porcentaje = (int) Math.ceil(this.historicoNegro * 100.0f / (numeroDeRonda-1));
             estadisticasRetorno.put("Negro", porcentaje);
         }
 
         //cargo porcentajes de docenas
         if (mesa.getTipoApuesta().stream().anyMatch(apuesta -> apuesta instanceof ApuestaDocena)) {
-            porcentaje = (int) Math.ceil(this.historicoPrimeraDocena * 100.0f / numeroDeRonda);
+            porcentaje = (int) Math.ceil(this.historicoPrimeraDocena * 100.0f / (numeroDeRonda-1));
             estadisticasRetorno.put("Primera", porcentaje);
 
-            porcentaje = (int) Math.ceil(this.historicoSegundaDocena * 100.0f / numeroDeRonda);
+            porcentaje = (int) Math.ceil(this.historicoSegundaDocena * 100.0f / (numeroDeRonda-1));
             estadisticasRetorno.put("Segunda", porcentaje);
 
-            porcentaje = (int) Math.ceil(this.historicoTerceraDocena * 100.0f / numeroDeRonda);
+            porcentaje = (int) Math.ceil(this.historicoTerceraDocena * 100.0f / (numeroDeRonda-1));
             estadisticasRetorno.put("Tercera", porcentaje);
         }
 
         //cargo porcentaje de numeros sorteados
         if (mesa.getTipoApuesta().stream().anyMatch(apuesta -> apuesta instanceof ApuestaDirecta)) {
             for (int i = 0; i < 37; i++) {
-                porcentaje = (int) Math.ceil(this.frecuenciaDeNumerosSorteados.get(i) * 100.0f / numeroDeRonda);
+                porcentaje = (int) Math.ceil(this.frecuenciaDeNumerosSorteados.get(i) * 100.0f / (numeroDeRonda-1));
                 estadisticasRetorno.put(i + "", porcentaje);
             }
         }

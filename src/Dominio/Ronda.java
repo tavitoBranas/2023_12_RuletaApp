@@ -75,6 +75,8 @@ public class Ronda {
     }
 
     public void apostar(Apuesta apuesta) throws ApuestaInvalidaException, MontoInsuficienteException {
+        //el monto de la apuesta tiene que ser mayor a cero
+        apuesta.validarMonto();
         //1er valido si jugador puede apostar
         apuesta.getJugador().validaMontoApuesta(apuesta.getMontoApostado());
         //2er se valida apuesta a nivel de la mesa

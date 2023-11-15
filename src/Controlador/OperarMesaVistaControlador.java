@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class OperarMesaVistaControlador implements Observador {
 
@@ -78,7 +76,7 @@ public class OperarMesaVistaControlador implements Observador {
             estadoBotonLanzar(true);
             habilitarCerrarMesa(false);
         } catch (MesaEstadoException ex) {
-           vista.mostrarMensajeError(ex.getMessage());
+            vista.mostrarMensajeError(ex.getMessage());
         }
     }
 

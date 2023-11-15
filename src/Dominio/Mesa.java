@@ -15,7 +15,7 @@ public class Mesa extends Observable implements Observador {
     private String nombre;
     private ArrayList<TipoApuesta> tipoApuesta;
     private ArrayList<Jugador> listaJugadores;
-    private Ronda ronda;
+    private Ronda rondaActiva;
     private final Estadistica estadistica;
     private final Crupier crupier;
     private String mensaje;
@@ -25,7 +25,7 @@ public class Mesa extends Observable implements Observador {
         this.nombre = nombre;
         tipoApuesta = tipo;
         this.crupier = crupier;
-        ronda = new Ronda(this);
+        rondaActiva = new Ronda(this);
         listaJugadores = new ArrayList<>();
         this.mensaje = "";
         estadistica = new Estadistica(this);
@@ -81,11 +81,11 @@ public class Mesa extends Observable implements Observador {
     }
 
     public void setRonda(Ronda nuevaRonda) {
-        this.ronda = nuevaRonda;
+        this.rondaActiva = nuevaRonda;
     }
 
     public Ronda getRonda() {
-        return ronda;
+        return rondaActiva;
     }
 
     public Estadistica getEstadistica() {
@@ -94,7 +94,7 @@ public class Mesa extends Observable implements Observador {
 
     private void habilitadoAvandono(Jugador jugador) throws MesaAbandonoException {
         estado.habilitadoAvandono();
-        ronda.habilitadoAbandono(jugador);
+        rondaActiva.habilitadoAbandono(jugador);
     }
 
     public void setEstado(EstadoMesa estado) {
@@ -110,7 +110,6 @@ public class Mesa extends Observable implements Observador {
     }
 
     public void cerrar() throws MesaEstadoException {
-        //this.estado = new EstadoMesaCerrar(this);
         estado.cerrar();
     }
 
@@ -145,6 +144,7 @@ public class Mesa extends Observable implements Observador {
     }
 
     public void validarApuesta(Apuesta apuesta) throws ApuestaInvalidaException {
+        
         //valido que el casillero sea aceptado para apostar
         casilleroAptoParaApostar(apuesta.getCasillero());
         //valido condiciones del tipo de apuesta
@@ -175,7 +175,7 @@ public class Mesa extends Observable implements Observador {
             if (tipo instanceof ApuestaDocena
                     && ListaUniversalCasilleros.apuestaInvolucraDocena(apuesta.getCasillero())) {
                 //valido condiciones de apuesta a docena
-                tipo.validacionCantidadApuestasDocena(apuesta, ronda);
+                tipo.validacionCantidadApuestasDocena(apuesta, rondaActiva);
             }
         }
     }
