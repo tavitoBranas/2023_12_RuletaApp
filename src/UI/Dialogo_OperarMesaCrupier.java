@@ -356,12 +356,28 @@ public class Dialogo_OperarMesaCrupier extends Dialogo_GeneralVista implements O
         if (mesa.getTipoApuesta().stream().anyMatch(apuesta -> apuesta instanceof ApuestaColor)) {
             panelRuleta1.setVisible(PanelRuleta.NEGRO, true);
             panelRuleta1.setVisible(PanelRuleta.ROJO, true);
+        } else {
+            panelRuleta1.setVisible(PanelRuleta.NEGRO, false);
+            panelRuleta1.setVisible(PanelRuleta.ROJO, false);
         }
         if (mesa.getTipoApuesta().stream().anyMatch(apuesta -> apuesta instanceof ApuestaDocena)) {
             panelRuleta1.setVisible(PanelRuleta.PRIMERA_DOCENA, true);
             panelRuleta1.setVisible(PanelRuleta.SEGUNDA_DOCENA, true);
             panelRuleta1.setVisible(PanelRuleta.TERCERA_DOCENA, true);
+        } else {
+            panelRuleta1.setVisible(PanelRuleta.PRIMERA_DOCENA, false);
+            panelRuleta1.setVisible(PanelRuleta.SEGUNDA_DOCENA, false);
+            panelRuleta1.setVisible(PanelRuleta.TERCERA_DOCENA, false);
         }
+        panelRuleta1.setVisible(PanelRuleta.PRIMO, false);
+        panelRuleta1.setVisible(PanelRuleta.PAR, false);
+        panelRuleta1.setVisible(PanelRuleta.IMPAR, false);
+        panelRuleta1.setVisible(PanelRuleta.PRIMERA_COLUMNA, false);
+        panelRuleta1.setVisible(PanelRuleta.SEGUNDA_COLUMNA, false);
+        panelRuleta1.setVisible(PanelRuleta.TERCERA_COLUMNA, false);
+        panelRuleta1.setVisible(PanelRuleta.MENOR, false);
+        panelRuleta1.setVisible(PanelRuleta.MAYOR, false);
+        panelRuleta1.setVisible(PanelRuleta.COMPUESTO, false);
     }
 
     private void actualizarNumerosSorteados(ArrayList numeros) {

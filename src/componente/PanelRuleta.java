@@ -39,9 +39,6 @@ public class PanelRuleta extends javax.swing.JPanel {
         this.cells = buildCellSet();
         this.limpiar();
         this.reanudar();
-
-        for (int i = 37; i < 51; i++) {
-            cells.get(i).button.setVisible(false);}
     }
 
     protected class Cell {

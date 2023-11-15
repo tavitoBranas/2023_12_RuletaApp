@@ -251,7 +251,7 @@ public class Dialogo_Jugar extends Dialogo_GeneralVista implements JugarVista {
                 @Override
                 public void celdaSeleccionada(int universalCellCode) {
                     int apuesta = Integer.valueOf(jTextField1.getText());
-                    System.out.println("Id de celda seleccionada: " + universalCellCode + ". Apuesta anterior: " + panelRuleta2.getApuesta(universalCellCode) + ". Apuesta nueva:" + apuesta);
+                    //System.out.println("Id de celda seleccionada: " + universalCellCode + ". Apuesta anterior: " + panelRuleta2.getApuesta(universalCellCode) + ". Apuesta nueva:" + apuesta);
                     controlador.apostar(universalCellCode, apuesta);
                     //panelRuleta2.setApuesta(universalCellCode, apuesta);
                 }
@@ -321,15 +321,32 @@ public class Dialogo_Jugar extends Dialogo_GeneralVista implements JugarVista {
     }
 
     private void actualizarApuestas(Mesa mesa) {
+
         if (mesa.getTipoApuesta().stream().anyMatch(apuesta -> apuesta instanceof ApuestaColor)) {
             panelRuleta2.setVisible(PanelRuleta.NEGRO, true);
             panelRuleta2.setVisible(PanelRuleta.ROJO, true);
+        } else {
+            panelRuleta2.setVisible(PanelRuleta.NEGRO, false);
+            panelRuleta2.setVisible(PanelRuleta.ROJO, false);
         }
         if (mesa.getTipoApuesta().stream().anyMatch(apuesta -> apuesta instanceof ApuestaDocena)) {
             panelRuleta2.setVisible(PanelRuleta.PRIMERA_DOCENA, true);
             panelRuleta2.setVisible(PanelRuleta.SEGUNDA_DOCENA, true);
             panelRuleta2.setVisible(PanelRuleta.TERCERA_DOCENA, true);
+        } else {
+            panelRuleta2.setVisible(PanelRuleta.PRIMERA_DOCENA, false);
+            panelRuleta2.setVisible(PanelRuleta.SEGUNDA_DOCENA, false);
+            panelRuleta2.setVisible(PanelRuleta.TERCERA_DOCENA, false);
         }
+        panelRuleta2.setVisible(PanelRuleta.PRIMO, false);
+        panelRuleta2.setVisible(PanelRuleta.PAR, false);
+        panelRuleta2.setVisible(PanelRuleta.IMPAR, false);
+        panelRuleta2.setVisible(PanelRuleta.PRIMERA_COLUMNA, false);
+        panelRuleta2.setVisible(PanelRuleta.SEGUNDA_COLUMNA, false);
+        panelRuleta2.setVisible(PanelRuleta.TERCERA_COLUMNA, false);
+        panelRuleta2.setVisible(PanelRuleta.MENOR, false);
+        panelRuleta2.setVisible(PanelRuleta.MAYOR, false);
+        panelRuleta2.setVisible(PanelRuleta.COMPUESTO, false);
     }
 
     private void actualizarEstadistica(Map<String, Integer> estadisticasDeLaMesa) {
