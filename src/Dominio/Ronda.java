@@ -104,7 +104,7 @@ public class Ronda {
         return casillerosApostados;
     }
 
-    private void ingresoApuestasARonda(Apuesta apuesta) {
+    private void ingresoApuestasARonda(Apuesta apuesta) throws ApuestaInvalidaException {
         Jugador jugador = apuesta.getJugador();
         ArrayList<Apuesta> apuestasJugador = getApuestas().getOrDefault(jugador, new ArrayList<>());
         //veo si ya existe una apuesta anterior al mismo casillero
@@ -113,9 +113,16 @@ public class Ronda {
             boolean encontrado = false;
             for (int i = 0; i < apuestasJugador.size() && !encontrado; i++) {
                 if (apuestasJugador.get(i).getCasillero() == apuesta.getCasillero()) {
-                    int nuevoMonto = apuesta.getMontoApostado() + apuestasJugador.get(i).getMontoApostado();
-                    apuestasJugador.get(i).setMontoApostado(nuevoMonto);
                     encontrado = true;
+                    int nuevoMonto = apuesta.getMontoApostado() + apuestasJugador.get(i).getMontoApostado();
+                    int montoAnterior = apuestasJugador.get(i).getMontoApostado();
+                    apuestasJugador.get(i).setMontoApostado(nuevoMonto);
+                    try {
+                        mesa.tipoApuestaAdmiteCasillero(apuestasJugador.get(i));
+                    } catch (ApuestaInvalidaException ex) {
+                        apuestasJugador.get(i).setMontoApostado(montoAnterior);
+                        throw ex;
+                    }
                 }
             }
         } else {

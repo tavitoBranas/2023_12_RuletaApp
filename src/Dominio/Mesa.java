@@ -166,7 +166,7 @@ public class Mesa extends Observable implements Observador {
         }
     }
 
-    private void tipoApuestaAdmiteCasillero(Apuesta apuesta) throws ApuestaInvalidaException {
+    void tipoApuestaAdmiteCasillero(Apuesta apuesta) throws ApuestaInvalidaException {
         for (TipoApuesta tipo : tipoApuesta) {
             if (tipo instanceof ApuestaColor && ListaUniversalCasilleros.apuestaInvolucraColor(apuesta.getCasillero())) {
                 //valido condiciones de apuesta a color
