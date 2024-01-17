@@ -1,4 +1,6 @@
-RuletaApp
+# RuletaApp
+
+Quinta aplicación creada.
 
 Proyecto que involucro la creacion de una ruleta virtual que consta de una interfaz grafica y un backend desarrollados en Java Swing. Se empleó de MVC.
 Se tienen diferentes comportamiento segun los tipos de usuario:
